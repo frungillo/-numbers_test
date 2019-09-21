@@ -5,26 +5,39 @@ using UnityEngine;
 public class Comp_Esagono : MonoBehaviour
 {
     private Animator anim;
-    public bool selezionato;
+    private AudioSource aus;
+    
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
+        aus = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-      if( Input.GetMouseButton(0) && selezionato)
+       
+
+
+    }
+
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButton(0))
         {
             Debug.Log("Tasto Schiacciato");
             anim.SetBool("cliccato", true);
-        } else
-        {
-            Debug.Log("Tasto NON Schiacciato");
-            anim.SetBool("cliccato", false);
+            if (!aus.isPlaying) aus.Play();
         }
+       
+    }
+    private void OnMouseExit()
+    {
+        Debug.Log("Tasto NON Schiacciato");
+        anim.SetBool("cliccato", false);
     }
 
-    
+
+
 }
