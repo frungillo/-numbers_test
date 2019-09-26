@@ -5,9 +5,13 @@ using UnityEngine;
 public class GameManagerScript : MonoBehaviour
 {
     public GameObject exs;
+    
     // Start is called before the first frame update
     void Start()
     {
+        //GameObject obj = exs.GetComponentInChildren<GameObject>();
+        SpriteRenderer spr = exs.GetComponentInChildren<SpriteRenderer>();
+        spr.sprite = Resources.Load<Sprite>("/3");
         float x = (float)-7.3;
         float y = (float)3.5;
         for (int i = 1; i < 10; i++)
