@@ -10,12 +10,15 @@ public class GameManagerScript : MonoBehaviour
     void Start()
     {
         //GameObject obj = exs.GetComponentInChildren<GameObject>();
-        SpriteRenderer spr = exs.GetComponentInChildren<SpriteRenderer>();
-        spr.sprite = Resources.Load<Sprite>("/3");
+        SpriteRenderer spr = (SpriteRenderer)exs.GetComponentsInChildren(typeof(SpriteRenderer))[1];
+        System.Random rnd = new System.Random(); 
+       
         float x = (float)-7.3;
         float y = (float)3.5;
         for (int i = 1; i < 10; i++)
         {
+            int num = rnd.Next(0, 9);
+            spr.sprite = Resources.Load<Sprite>("Sprites/" + num.ToString());//GOAL!
             Instantiate(
                    exs,
                    new Vector3(x, y, 1),
