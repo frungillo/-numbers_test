@@ -10,6 +10,8 @@ public class GameManagerScript : MonoBehaviour
     public Text txt;
     public Text txtPunteggio;
     
+    public Animator txtAnimator;
+    
     List<GameObject> esagoniSelezionati;
     private static GameManagerScript _instance;
 
@@ -41,6 +43,7 @@ public class GameManagerScript : MonoBehaviour
         
         Comp_Esagono script_exs = exs.GetComponent<Comp_Esagono>();
         Comp_Esagono script_ops = ops.GetComponent<Comp_Esagono>();
+        //txtAnimator = txt.GetComponentInChildren<Animator>();
 
         float y = (float)5; //3.5
         
@@ -95,9 +98,13 @@ public class GameManagerScript : MonoBehaviour
     {
         if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
         {
+            double ev = Eval(txt.text);
+            txtPunteggio.text = ev.ToString();
+            txtAnimator.SetTrigger("fire");
+
             PlayerPrefs.DeleteAll();
             txt.text = "";
-            foreach(GameObject itm in esagoniSelezionati)
+            foreach (GameObject itm in esagoniSelezionati)
             {
                 Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
                 SpriteRenderer spr = itm.GetComponent<SpriteRenderer>();
@@ -105,9 +112,11 @@ public class GameManagerScript : MonoBehaviour
                 if (itm.tag != "op") spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_g");
             }
         }
+        
+                   
+        
+        
         txt.text = PlayerPrefs.GetString("tots");
-        double ev = Eval(txt.text);
-        txtPunteggio.text = ev.ToString();
     }
 
     private double Eval(string expression)
