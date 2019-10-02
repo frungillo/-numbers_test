@@ -47,15 +47,15 @@ public class GameManagerScript : MonoBehaviour
 
         float y = (float)5; //3.5
         
-        for (int row =7;row >1; row--)
+        for (int row =8;row >1; row--)
         {
             float x = (float)-5; //-7.3
             float x_op = (float)-3.53; //-7.3
 
-            int max_col = 5;
-            int max_col_op = 4;
-            if (row % 2 == 0) { max_col = 4; x = (float)-3.51; }
-            if (row % 2 == 0) { max_col_op = 5; x_op = (float)-4.99; }
+            int max_col = 4;
+            int max_col_op = 3;
+            if (row % 2 != 0) { max_col = 3; x = (float)-3.51; }
+            if (row % 2 != 0) { max_col_op = 4; x_op = (float)-4.99; }
             for (int col = 1; col < max_col; col++)
             {
                 int num = rnd.Next(0, 10);
@@ -98,9 +98,19 @@ public class GameManagerScript : MonoBehaviour
     {
         if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
         {
-            double ev = Eval(txt.text);
-            txtPunteggio.text = ev.ToString();
-            txtAnimator.SetTrigger("fire");
+            try
+            {
+                double ev = Eval(txt.text);
+                txtPunteggio.text = ev.ToString();
+                txtAnimator.SetTrigger("fire");
+            }
+            catch (System.Exception ex)
+            {
+
+                txtPunteggio.text = ex.Message;
+                txtAnimator.SetTrigger("fire");
+            }
+          
 
             PlayerPrefs.DeleteAll();
             txt.text = "";
@@ -119,13 +129,22 @@ public class GameManagerScript : MonoBehaviour
         txt.text = PlayerPrefs.GetString("tots");
     }
 
-    private double Eval(string expression)
+    private double Eval(string expression)  
     {
         System.Data.DataTable table = new System.Data.DataTable();
-        table.Columns.Add("expression", string.Empty.GetType(), expression);
-        System.Data.DataRow row = table.NewRow();
-        table.Rows.Add(row);
-        return double.Parse((string)row["expression"]);
+        try
+        {
+            table.Columns.Add("expression", string.Empty.GetType(), expression);
+            System.Data.DataRow row = table.NewRow();
+            table.Rows.Add(row);
+            return double.Parse((string)row["expression"]);
+        }
+        catch (System.Exception)
+        {
+
+            throw new System.Exception("????");
+        }
+        
     }
 
 }
