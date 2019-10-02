@@ -9,11 +9,14 @@ public class GameManagerScript : MonoBehaviour
     public GameObject ops;
     public Text txt;
     public Text txtPunteggio;
-    
     public Animator txtAnimator;
+    public ParticleSystem ps;
+
     
     List<GameObject> esagoniSelezionati;
     private static GameManagerScript _instance;
+    private Vector3 _mousePos;
+    private bool _isMousePressed = false;
 
     public static GameManagerScript Instance { get { return _instance; } }
 
@@ -91,17 +94,27 @@ public class GameManagerScript : MonoBehaviour
        
 
     }
-
+    
+    
 
     // Update is called once per frame
     void Update()
     {
-        if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
+        if (PlayerPrefs.GetString("Stato") == "G")
+        {
+
+            _mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            _mousePos.z = 0;
+            Debug.Log($"Aggiornamento -- X:{_mousePos.x.ToString()} -- Y:{_mousePos.y.ToString()}");
+            ps.transform.SetPositionAndRotation(_mousePos, Quaternion.identity);
+        }
+
+            if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
         {
             try
             {
                 double ev = Eval(txt.text);
-                txtPunteggio.text = ev.ToString();
+                txtPunteggio.text = ev.ToString("#.##");
                 txtAnimator.SetTrigger("fire");
             }
             catch (System.Exception ex)
@@ -122,13 +135,28 @@ public class GameManagerScript : MonoBehaviour
                 if (itm.tag != "op") spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_g");
             }
         }
+
+
         
-                   
-        
-        
+
         txt.text = PlayerPrefs.GetString("tots");
     }
 
+    /*
+    private void OnMouseDown()
+    {
+        Debug.Log("--> MouseDown");
+        if(Input.GetMouseButtonDown(0))
+            _isMousePressed = true;
+    }
+
+    private void OnMouseUp()
+    {
+        Debug.Log("--> MouseUp");
+        if (Input.GetMouseButtonUp(0))
+            _isMousePressed = false;
+    }
+    */
     private double Eval(string expression)  
     {
         System.Data.DataTable table = new System.Data.DataTable();
