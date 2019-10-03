@@ -9,11 +9,13 @@ public class Comp_Esagono : MonoBehaviour
     private SpriteRenderer spr;
     public bool Selected;
     public int Number;
-   
+    GameManagerScript _manger;
     
     // Start is called before the first frame update
     void Start()
     {
+        _manger = GameManagerScript.Instance;
+        
         anim = GetComponent<Animator>();
         aus = GetComponent<AudioSource>();
         spr = GetComponent<SpriteRenderer>();
