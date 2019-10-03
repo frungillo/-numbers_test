@@ -9,12 +9,16 @@ public class GameManagerScript : MonoBehaviour
     public GameObject ops;
     public Text txt;
     public Text txtPunteggio;
+    public Text txtObiettivo;
+    public Text txtPuntiTotali;
+
     public Animator txtAnimator;
+    public bool inError;
     //public ParticleSystem ps;
+
+    public List<GameObject> esagoniSelezionati;
     
-    
-    
-    List<GameObject> esagoniSelezionati;
+    List<GameObject> esagoniInGriglia;
     private static GameManagerScript _instance;
     //private Vector3 _mousePos;
     //private bool _isMousePressed = false;
@@ -31,7 +35,9 @@ public class GameManagerScript : MonoBehaviour
             _instance = this;
         }
         PlayerPrefs.DeleteAll();
+        esagoniInGriglia = new List<GameObject>();
         esagoniSelezionati = new List<GameObject>();
+        inError = false;
     }
 
     // Start is called before the first frame update
@@ -49,6 +55,10 @@ public class GameManagerScript : MonoBehaviour
         Comp_Esagono script_ops = ops.GetComponent<Comp_Esagono>();
         //txtAnimator = txt.GetComponentInChildren<Animator>();
 
+        System.Random rnd_obiettivo = new System.Random();
+        txtObiettivo.text = rnd_obiettivo.Next(10, 999).ToString();
+        txtPuntiTotali.text = "0";
+
         float y = (float)5; //3.5
         
         for (int row =8;row >1; row--)
@@ -65,7 +75,7 @@ public class GameManagerScript : MonoBehaviour
                 int num = rnd.Next(0, 10);
                 spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + num.ToString() + "_g");//GOAL!
                 script_exs.Number = num;
-                esagoniSelezionati.Add(Instantiate(
+                esagoniInGriglia.Add(Instantiate(
                        exs,
                        new Vector3(x, y, 1),
                        Quaternion.identity
@@ -80,7 +90,7 @@ public class GameManagerScript : MonoBehaviour
                 int num = rnd_op.Next(1, 5);
                 spr_op.sprite = Resources.Load<Sprite>("Sprites/operand/" + num.ToString());//GOAL!
                 script_ops.Number = num;
-               esagoniSelezionati.Add( Instantiate(
+               esagoniInGriglia.Add( Instantiate(
                        ops,
                        new Vector3(x_op, y, 1),
                        Quaternion.identity
@@ -92,7 +102,7 @@ public class GameManagerScript : MonoBehaviour
 
             y -= (float)1.5;
         }
-        foreach(GameObject itm in esagoniSelezionati)
+        foreach(GameObject itm in esagoniInGriglia)
         {
             Debug.Log("ITM:" + itm.GetInstanceID().ToString());
         }
@@ -110,9 +120,10 @@ public class GameManagerScript : MonoBehaviour
             /*
             _mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             _mousePos.z = 0;
-            Debug.Log($"Aggiornamento -- X:{_mousePos.x.ToString()} -- Y:{_mousePos.y.ToString()}");
+            
             ps.transform.SetPositionAndRotation(_mousePos, Quaternion.identity);
             */
+            Debug.Log($"Aggiornamento: { esagoniSelezionati.Count.ToString()}");
         }
 
             if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
@@ -130,11 +141,12 @@ public class GameManagerScript : MonoBehaviour
                 txtPunteggio.text = ex.Message;
                 txtAnimator.SetTrigger("fire");
             }
-          
 
+            esagoniSelezionati.Clear();
+            inError = false;
             PlayerPrefs.DeleteAll();
             txt.text = "";
-            foreach (GameObject itm in esagoniSelezionati)
+            foreach (GameObject itm in esagoniInGriglia)
             {
                 Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
                 SpriteRenderer spr = itm.GetComponent<SpriteRenderer>(); 
@@ -168,4 +180,10 @@ public class GameManagerScript : MonoBehaviour
         
     }
 
+/*
+    private string calcolaPunteggio(double risultatoOperazione, int passaggi, int obiettivo, int tolleranza =2)
+    {
+
+    }
+    */
 }
