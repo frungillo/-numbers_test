@@ -111,6 +111,27 @@ public class GameManagerScript : MonoBehaviour
     }
     
     
+    private void valuta(bool endSequence=false)
+    {
+        try
+        {
+            double ev = Eval(txtParziale.text);
+            if (!endSequence)
+            {
+                txtPunteggio.text = ev.ToString("#.##");
+                PlayerPrefs.SetString("tots", ev.ToString("#.##"));
+            }
+            txtAnimator.SetTrigger("fire");
+            /*Cambio Esagoni*/
+        }
+        catch (System.Exception ex)
+        {
+            
+            txtPunteggio.text = ex.Message;
+            txtAnimator.SetTrigger("fire");
+        }
+        
+    }
 
     // Update is called once per frame
     void Update()
@@ -124,17 +145,26 @@ public class GameManagerScript : MonoBehaviour
             ps.transform.SetPositionAndRotation(_mousePos, Quaternion.identity);
             */
             Debug.Log($"Aggiornamento: { esagoniSelezionati.Count.ToString()}");
-            
+            if (esagoniSelezionati.Count == 3)
+            {
+                valuta();
+                
+            }
+            if (esagoniSelezionati.Count > 3 && (esagoniSelezionati.Count-3) % 2 == 0)
+            {
+                valuta();
+            }
         }
 
             if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
         {
+            /*
             try
             {
                 double ev = Eval(txtParziale.text);
                 txtPunteggio.text = ev.ToString("#.##");
                 txtAnimator.SetTrigger("fire");
-                /*Cambio Esagoni*/
+              
             }
             catch (System.Exception ex)
             {
@@ -142,6 +172,7 @@ public class GameManagerScript : MonoBehaviour
                 txtPunteggio.text = ex.Message;
                 txtAnimator.SetTrigger("fire");
             }
+            */
 
             esagoniSelezionati.Clear();
             inError = false;
