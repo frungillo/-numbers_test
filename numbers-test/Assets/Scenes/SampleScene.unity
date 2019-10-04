@@ -516,8 +516,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1169960848}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.25, y: 8.69, z: 6}
-  m_LocalScale: {x: 0.551, y: 0.402, z: 1}
+  m_LocalPosition: {x: -4.295, y: 8.69, z: 6}
+  m_LocalScale: {x: 0.7831887, y: 0.402, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
@@ -847,7 +847,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exs: {fileID: 4590395367845957852, guid: 8f9e32cf1066e7742859b9c09eb4dae5, type: 3}
   ops: {fileID: 4590395367845957852, guid: 43e497dd49f123c44bbea0b0ce63b06d, type: 3}
-  txt: {fileID: 2083944662}
+  txtParziale: {fileID: 2083944662}
   txtPunteggio: {fileID: 1241703666}
   txtObiettivo: {fileID: 2099256798}
   txtPuntiTotali: {fileID: 26501186}
@@ -1037,8 +1037,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -82.9, y: 213.6}
-  m_SizeDelta: {x: 112.3, y: 58.81}
+  m_AnchoredPosition: {x: -53.67, y: 207.5}
+  m_SizeDelta: {x: 159.48, y: 48.43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2083944662
 MonoBehaviour:

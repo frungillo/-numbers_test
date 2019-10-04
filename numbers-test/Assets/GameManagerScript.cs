@@ -7,7 +7,7 @@ public class GameManagerScript : MonoBehaviour
 {
     public GameObject exs;
     public GameObject ops;
-    public Text txt;
+    public Text txtParziale;
     public Text txtPunteggio;
     public Text txtObiettivo;
     public Text txtPuntiTotali;
@@ -124,13 +124,14 @@ public class GameManagerScript : MonoBehaviour
             ps.transform.SetPositionAndRotation(_mousePos, Quaternion.identity);
             */
             Debug.Log($"Aggiornamento: { esagoniSelezionati.Count.ToString()}");
+            
         }
 
             if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
         {
             try
             {
-                double ev = Eval(txt.text);
+                double ev = Eval(txtParziale.text);
                 txtPunteggio.text = ev.ToString("#.##");
                 txtAnimator.SetTrigger("fire");
                 /*Cambio Esagoni*/
@@ -145,7 +146,7 @@ public class GameManagerScript : MonoBehaviour
             esagoniSelezionati.Clear();
             inError = false;
             PlayerPrefs.DeleteAll();
-            txt.text = "";
+            txtParziale.text = "";
             foreach (GameObject itm in esagoniInGriglia)
             {
                 Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
@@ -158,7 +159,7 @@ public class GameManagerScript : MonoBehaviour
 
         
 
-        txt.text = PlayerPrefs.GetString("tots");
+        txtParziale.text = PlayerPrefs.GetString("tots");
     }
 
     
