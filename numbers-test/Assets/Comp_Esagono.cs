@@ -36,13 +36,14 @@ public class Comp_Esagono : MonoBehaviour
             anim.SetBool("cliccato", true);
             if (!aus.isPlaying && !Selected)
             {
-                if(_manger.esagoniSelezionati.Count == 0 && this.tag == "op") { PlayerPrefs.SetString("tots", "Prima un numero!"); return; }
+                if(_manger.esagoniSelezionati.Count == 0 && this.tag == "op") { _manger.txtParziale.text = "Prima un numero"; return; }
                 if(_manger.esagoniSelezionati.Count >0 )
                 {
                     int idx_lastSel = _manger.esagoniSelezionati.Count - 1;
                     if(_manger.esagoniSelezionati[idx_lastSel].tag == this.tag)
                     {
-                        PlayerPrefs.SetString("tots", "Troppi numeri!");
+                        //PlayerPrefs.SetString("tots", "Troppi numeri!");
+                        _manger.txtParziale.text = "Troppi numeri!";
                         _manger.inError = true;
                         return;
                     }
@@ -50,6 +51,7 @@ public class Comp_Esagono : MonoBehaviour
                 if (_manger.inError) return;
                 Selected = true;
                 aus.Play();
+                /*
                 string toAdd = "";
                 if (this.tag == "op")
                 {
@@ -70,11 +72,12 @@ public class Comp_Esagono : MonoBehaviour
                         default:
                             break;
                     }
-                } else { toAdd = Number.ToString(); }
-                string tots = PlayerPrefs.GetString("tots");
-                tots = tots + toAdd;
-                PlayerPrefs.SetString("tots", tots);
-                PlayerPrefs.Save();
+                } */
+                //else { toAdd = Number.ToString(); }
+                //string tots = PlayerPrefs.GetString("tots");
+                //tots = tots + toAdd;
+                //PlayerPrefs.SetString("tots", tots);
+                //PlayerPrefs.Save();
                 if (this.tag != "op") spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + this.Number + "_v");
 
                 _manger.esagoniSelezionati.Add(this.gameObject);

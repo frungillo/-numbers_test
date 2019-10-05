@@ -11,6 +11,8 @@ public class GameManagerScript : MonoBehaviour
     public Text txtPunteggio;
     public Text txtObiettivo;
     public Text txtPuntiTotali;
+    public static int MAX_PUNTEGGIO = 100;
+    private int obiettivo;
 
     public Animator txtAnimator;
     public bool inError;
@@ -56,7 +58,8 @@ public class GameManagerScript : MonoBehaviour
         //txtAnimator = txt.GetComponentInChildren<Animator>();
 
         System.Random rnd_obiettivo = new System.Random();
-        txtObiettivo.text = rnd_obiettivo.Next(10, 999).ToString();
+        obiettivo = rnd_obiettivo.Next(10, 90);
+        txtObiettivo.text = obiettivo.ToString();
         txtPuntiTotali.text = "0";
 
         float y = (float)5; //3.5
@@ -133,6 +136,67 @@ public class GameManagerScript : MonoBehaviour
         
     }
 
+    private void Calcolo()
+    {
+        double tot=0;
+        int cnt = 1;
+        string operazione="";
+        foreach (GameObject itm in esagoniSelezionati)
+        {
+            
+            string toAdd = "";
+            Comp_Esagono src = itm.GetComponent<Comp_Esagono>();
+            if (itm.tag == "op")
+            {
+                switch (src.Number)
+                {
+                    case 1:
+                        toAdd = "*";
+                        break;
+                    case 2:
+                        toAdd = "/";
+                        break;
+                    case 3:
+                        toAdd = "-";
+                        break;
+                    case 4:
+                        toAdd = "+";
+                        break;
+                    default:
+                        break;
+                }
+            } else { toAdd = src.Number.ToString(); }
+
+            if (cnt < 3) { operazione += toAdd; goto exit; }
+
+            if (cnt==3) {
+                operazione += toAdd;
+                tot = Eval(operazione);
+                operazione = tot.ToString();
+            }
+
+            if (cnt > 3)
+            {
+               
+                if (itm.tag == "op")
+                {
+                    operazione +=  toAdd;
+                    Debug.Log($"Aggiornamento: { operazione}");
+                    goto exit;
+                }
+                operazione +=  toAdd;
+                tot = Eval(operazione);
+                operazione = tot.ToString("#.##");
+            }
+
+        exit:
+
+            txtParziale.text = tot.ToString("#.##");
+            cnt++;
+        }
+        txtPunteggio.text = tot.ToString("#.##");
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -144,7 +208,8 @@ public class GameManagerScript : MonoBehaviour
             
             ps.transform.SetPositionAndRotation(_mousePos, Quaternion.identity);
             */
-            Debug.Log($"Aggiornamento: { esagoniSelezionati.Count.ToString()}");
+            
+            /*
             if (esagoniSelezionati.Count == 3)
             {
                 valuta();
@@ -154,6 +219,8 @@ public class GameManagerScript : MonoBehaviour
             {
                 valuta();
             }
+            */
+            Calcolo();
         }
 
             if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
@@ -173,6 +240,8 @@ public class GameManagerScript : MonoBehaviour
                 txtAnimator.SetTrigger("fire");
             }
             */
+
+            txtPuntiTotali.text = calcolaPunteggio(txtPunteggio.text, esagoniSelezionati.Count, obiettivo);
 
             esagoniSelezionati.Clear();
             inError = false;
@@ -196,6 +265,7 @@ public class GameManagerScript : MonoBehaviour
     
     private double Eval(string expression)  
     {
+        expression = expression.Replace(",", ".");
         System.Data.DataTable table = new System.Data.DataTable();
         try
         {
@@ -204,18 +274,31 @@ public class GameManagerScript : MonoBehaviour
             table.Rows.Add(row);
             return double.Parse((string)row["expression"]);
         }
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
 
-            throw new System.Exception("????");
+            throw new System.Exception(ex.Message + "-->" + expression); //("????");
         }
         
     }
 
-/*
-    private string calcolaPunteggio(double risultatoOperazione, int passaggi, int obiettivo, int tolleranza =2)
+
+    private string calcolaPunteggio(string risultatoOperazione, int passaggi, int obiettivo, int tolleranza =2)
     {
+        
+        try
+        {
+            double risop = double.Parse(risultatoOperazione);
+            double D = MAX_PUNTEGGIO - risop;
+            double punteggioOttenuto = ((obiettivo - risop) * (D - MAX_PUNTEGGIO) / tolleranza)
+                + (MAX_PUNTEGGIO - D) + (D * (passaggi - 1) / 34);
+            if (punteggioOttenuto < 0) punteggioOttenuto = 0;
+            return punteggioOttenuto.ToString("#.##");
+        } catch(System.Exception ex)
+        {
+            return "ERRORE!";
+        }
 
     }
-    */
+  
 }
