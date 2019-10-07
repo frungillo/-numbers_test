@@ -252,7 +252,12 @@ public class GameManagerScript : MonoBehaviour
                 Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
                 SpriteRenderer spr = itm.GetComponent<SpriteRenderer>(); 
                 scr_e.Selected = false;
-                if (itm.tag != "op") spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_g");
+                if (itm.tag != "op") {
+                    spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_g");
+                   
+
+                }
+
             }
         }
 
