@@ -146,7 +146,7 @@ public class GameManagerScript : MonoBehaviour
             
             string toAdd = "";
             Comp_Esagono src = itm.GetComponent<Comp_Esagono>();
-            if (itm.tag == "op")
+            if (itm.tag == "op") //è un box operando
             {
                 switch (src.Number)
                 {
@@ -165,7 +165,10 @@ public class GameManagerScript : MonoBehaviour
                     default:
                         break;
                 }
-            } else { toAdd = src.Number.ToString(); }
+            } else { //è un box numerico
+                toAdd = src.Number.ToString();
+                itm.transform.position = new Vector3(itm.transform.position.x, itm.transform.position.y, -1);
+            }
 
             if (cnt < 3) { operazione += toAdd; goto exit; }
 
@@ -249,9 +252,13 @@ public class GameManagerScript : MonoBehaviour
             txtParziale.text = "";
             foreach (GameObject itm in esagoniInGriglia)
             {
+                itm.transform.position = new Vector3(itm.transform.position.x, itm.transform.position.y, 1);
                 Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
-                SpriteRenderer spr = itm.GetComponent<SpriteRenderer>(); 
+                SpriteRenderer spr = itm.GetComponent<SpriteRenderer>();
+                Animator box_anim = itm.GetComponent<Animator>();
                 scr_e.Selected = false;
+                box_anim.SetBool("inLista", false);
+                box_anim.Play("exs_idle");
                 if (itm.tag != "op") {
                     spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_g");
                    
@@ -290,19 +297,24 @@ public class GameManagerScript : MonoBehaviour
 
     private string calcolaPunteggio(string risultatoOperazione, int passaggi, int obiettivo, int tolleranza =2)
     {
-        
-        try
+        if (obiettivo - double.Parse(risultatoOperazione) == 0)
+            return "100";
+        if (System.Math.Abs(obiettivo - double.Parse(risultatoOperazione)) >= tolleranza)
         {
-            double risop = double.Parse(risultatoOperazione);
-            double D = MAX_PUNTEGGIO - risop;
-            double punteggioOttenuto = ((obiettivo - risop) * (D - MAX_PUNTEGGIO) / tolleranza)
-                + (MAX_PUNTEGGIO - D) + (D * (passaggi - 1) / 34);
-            if (punteggioOttenuto < 0) punteggioOttenuto = 0;
-            return punteggioOttenuto.ToString("#.##");
-        } catch(System.Exception ex)
-        {
-            return "ERRORE!";
-        }
+            try
+            {
+                double risop = double.Parse(risultatoOperazione);
+                double D = MAX_PUNTEGGIO - risop;
+                double punteggioOttenuto = ((obiettivo - risop) * (D - MAX_PUNTEGGIO) / tolleranza)
+                    + (MAX_PUNTEGGIO - D) + (D * (passaggi - 1) / 34);
+                if (punteggioOttenuto < 0) punteggioOttenuto = 0;
+                return punteggioOttenuto.ToString("#.##");
+            }
+            catch (System.Exception ex)
+            {
+                return "ERRORE!";
+            }
+        } else { return "0"; }
 
     }
   

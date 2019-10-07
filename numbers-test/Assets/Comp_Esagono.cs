@@ -34,6 +34,7 @@ public class Comp_Esagono : MonoBehaviour
         {
             //Debug.Log("Tasto Schiacciato");
             anim.SetBool("cliccato", true);
+            anim.SetBool("inLista", true);
             if (!aus.isPlaying && !Selected)
             {
                 if(_manger.esagoniSelezionati.Count == 0 && this.tag == "op") { _manger.txtParziale.text = "Prima un numero"; return; }
@@ -51,33 +52,7 @@ public class Comp_Esagono : MonoBehaviour
                 if (_manger.inError) return;
                 Selected = true;
                 aus.Play();
-                /*
-                string toAdd = "";
-                if (this.tag == "op")
-                {
-                    switch (Number)
-                    {
-                        case 1:
-                            toAdd = "*";
-                            break;
-                        case 2:
-                            toAdd = "/";
-                            break;
-                        case 3:
-                            toAdd = "-";
-                            break;
-                        case 4:
-                            toAdd = "+";
-                            break;
-                        default:
-                            break;
-                    }
-                } */
-                //else { toAdd = Number.ToString(); }
-                //string tots = PlayerPrefs.GetString("tots");
-                //tots = tots + toAdd;
-                //PlayerPrefs.SetString("tots", tots);
-                //PlayerPrefs.Save();
+              
                 if (this.tag != "op") spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + this.Number + "_v");
 
                 _manger.esagoniSelezionati.Add(this.gameObject);
