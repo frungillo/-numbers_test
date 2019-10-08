@@ -34,7 +34,7 @@ public class Comp_Esagono : MonoBehaviour
         {
             //Debug.Log("Tasto Schiacciato");
             anim.SetBool("cliccato", true);
-            anim.SetBool("inLista", true);
+            
             if (!aus.isPlaying && !Selected)
             {
                 if(_manger.esagoniSelezionati.Count == 0 && this.tag == "op") { _manger.txtParziale.text = "Prima un numero"; return; }

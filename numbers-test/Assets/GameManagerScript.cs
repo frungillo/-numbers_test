@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using System.Linq;
 public class GameManagerScript : MonoBehaviour
 {
     public GameObject exs;
@@ -255,10 +255,14 @@ public class GameManagerScript : MonoBehaviour
                 itm.transform.position = new Vector3(itm.transform.position.x, itm.transform.position.y, 1);
                 Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
                 SpriteRenderer spr = itm.GetComponent<SpriteRenderer>();
-                Animator box_anim = itm.GetComponent<Animator>();
+
+
+                if (scr_e.Selected)
+                    StartCoroutine(myAttesa(itm));
+
                 scr_e.Selected = false;
-                box_anim.SetBool("inLista", false);
-                box_anim.Play("exs_idle");
+                
+                //box_anim.Play("exs_idle");
                 if (itm.tag != "op") {
                     spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_g");
                    
@@ -274,6 +278,16 @@ public class GameManagerScript : MonoBehaviour
         txtParziale.text = PlayerPrefs.GetString("tots");
     }
 
+
+    IEnumerator myAttesa(GameObject itm)
+    {
+        Animator box_anim = itm.GetComponent<Animator>();
+        box_anim.Play("Exagon_destroy");
+        float cliplen = box_anim.runtimeAnimatorController.animationClips.First(clip => clip.name == "Exagon_destroy").length;
+        yield return new  WaitForSeconds(cliplen);
+        GameObject.Destroy(itm);
+
+    }
     
     private double Eval(string expression)  
     {
@@ -297,14 +311,17 @@ public class GameManagerScript : MonoBehaviour
 
     private string calcolaPunteggio(string risultatoOperazione, int passaggi, int obiettivo, int tolleranza =2)
     {
+        risultatoOperazione = risultatoOperazione.Replace(",", ".");
+        double TestOp = 0;
+        if (!double.TryParse(risultatoOperazione, out TestOp )) { return "Hey!"; }
         if (obiettivo - double.Parse(risultatoOperazione) == 0)
             return "100";
-        if (System.Math.Abs(obiettivo - double.Parse(risultatoOperazione)) >= tolleranza)
+        if (System.Math.Abs(obiettivo - double.Parse(risultatoOperazione)) < tolleranza)
         {
             try
             {
                 double risop = double.Parse(risultatoOperazione);
-                double D = MAX_PUNTEGGIO - risop;
+                double D = (MAX_PUNTEGGIO * 20) / 100;
                 double punteggioOttenuto = ((obiettivo - risop) * (D - MAX_PUNTEGGIO) / tolleranza)
                     + (MAX_PUNTEGGIO - D) + (D * (passaggi - 1) / 34);
                 if (punteggioOttenuto < 0) punteggioOttenuto = 0;
