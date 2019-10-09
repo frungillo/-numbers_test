@@ -205,54 +205,25 @@ public class GameManagerScript : MonoBehaviour
     {
         if (PlayerPrefs.GetString("Stato") == "G")
         {
-            /*
-            _mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            _mousePos.z = 0;
-            
-            ps.transform.SetPositionAndRotation(_mousePos, Quaternion.identity);
-            */
-            
-            /*
-            if (esagoniSelezionati.Count == 3)
-            {
-                valuta();
-                
-            }
-            if (esagoniSelezionati.Count > 3 && (esagoniSelezionati.Count-3) % 2 == 0)
-            {
-                valuta();
-            }
-            */
             Calcolo();
         }
 
             if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
         {
-            /*
-            try
-            {
-                double ev = Eval(txtParziale.text);
-                txtPunteggio.text = ev.ToString("#.##");
-                txtAnimator.SetTrigger("fire");
-              
-            }
-            catch (System.Exception ex)
-            {
-
-                txtPunteggio.text = ex.Message;
-                txtAnimator.SetTrigger("fire");
-            }
-            */
-
             txtPuntiTotali.text = calcolaPunteggio(txtPunteggio.text, esagoniSelezionati.Count, obiettivo);
 
-            esagoniSelezionati.Clear();
+            
             inError = false;
             PlayerPrefs.DeleteAll();
             txtParziale.text = "";
             foreach (GameObject itm in esagoniInGriglia)
             {
                 itm.transform.position = new Vector3(itm.transform.position.x, itm.transform.position.y, 1);
+               
+            }
+
+            foreach (GameObject itm in esagoniSelezionati)
+            {
                 Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
                 SpriteRenderer spr = itm.GetComponent<SpriteRenderer>();
 
@@ -261,15 +232,17 @@ public class GameManagerScript : MonoBehaviour
                     StartCoroutine(myAttesa(itm));
 
                 scr_e.Selected = false;
-                
+
                 //box_anim.Play("exs_idle");
-                if (itm.tag != "op") {
+                if (itm.tag != "op")
+                {
                     spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_g");
-                   
+
 
                 }
 
             }
+            esagoniSelezionati.Clear();
         }
 
 
@@ -282,8 +255,8 @@ public class GameManagerScript : MonoBehaviour
     IEnumerator myAttesa(GameObject itm)
     {
         Animator box_anim = itm.GetComponent<Animator>();
-        box_anim.Play("Exagon_destroy");
-        float cliplen = box_anim.runtimeAnimatorController.animationClips.First(clip => clip.name == "Exagon_destroy").length;
+        if(itm.tag != "op") box_anim.Play("Exagon_destroy"); else box_anim.Play("operand_destroy");
+        float cliplen = box_anim.runtimeAnimatorController.animationClips.First(clip => clip.name.Contains("_destroy")).length;
         yield return new  WaitForSeconds(cliplen);
         GameObject.Destroy(itm);
 
