@@ -47,10 +47,10 @@ public class GameManagerScript : MonoBehaviour
     {
 
         
-        //GameObject obj = exs.GetComponentInChildren<GameObject>();
-        SpriteRenderer spr = exs.GetComponent<SpriteRenderer>(); //(SpriteRenderer)exs.GetComponentsInChildren(typeof(SpriteRenderer))[1];
+        
+        SpriteRenderer spr = exs.GetComponent<SpriteRenderer>();
         System.Random rnd = new System.Random();
-        SpriteRenderer spr_op = ops.GetComponent<SpriteRenderer>(); //(SpriteRenderer)exs.GetComponentsInChildren(typeof(SpriteRenderer))[1];
+        SpriteRenderer spr_op = ops.GetComponent<SpriteRenderer>();
         System.Random rnd_op = new System.Random();
         
         Comp_Esagono script_exs = exs.GetComponent<Comp_Esagono>();
@@ -203,6 +203,7 @@ public class GameManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Esagoni in Griglia:" + esagoniInGriglia.Count.ToString());
         if (PlayerPrefs.GetString("Stato") == "G")
         {
             Calcolo();
@@ -210,7 +211,7 @@ public class GameManagerScript : MonoBehaviour
 
             if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
         {
-            txtPuntiTotali.text = calcolaPunteggio(txtPunteggio.text, esagoniSelezionati.Count, obiettivo);
+            txtPuntiTotali.text = (double.Parse(txtPuntiTotali.text) +  double.Parse(calcolaPunteggio(txtPunteggio.text, esagoniSelezionati.Count, obiettivo))).ToString();
 
             
             inError = false;
@@ -258,7 +259,43 @@ public class GameManagerScript : MonoBehaviour
         if(itm.tag != "op") box_anim.Play("Exagon_destroy"); else box_anim.Play("operand_destroy");
         float cliplen = box_anim.runtimeAnimatorController.animationClips.First(clip => clip.name.Contains("_destroy")).length;
         yield return new  WaitForSeconds(cliplen);
+        esagoniInGriglia.Remove(itm);
         GameObject.Destroy(itm);
+
+        /*Generazione Nuovo Item*/
+        SpriteRenderer spr = exs.GetComponent<SpriteRenderer>();
+        System.Random rnd = new System.Random();
+        SpriteRenderer spr_op = ops.GetComponent<SpriteRenderer>();
+        System.Random rnd_op = new System.Random();
+
+        Comp_Esagono script_exs = exs.GetComponent<Comp_Esagono>();
+        Comp_Esagono script_ops = ops.GetComponent<Comp_Esagono>();
+
+        if (itm.tag != "op")
+        {
+            int num = rnd.Next(0, 10);
+            spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + num.ToString() + "_g");//GOAL!
+            script_exs.Number = num;
+            esagoniInGriglia.Add(Instantiate(
+                   exs,
+                   itm.transform.position,
+                   Quaternion.identity
+                   )
+               );
+        }
+        else
+        {
+
+            int num = rnd_op.Next(1, 5);
+            spr_op.sprite = Resources.Load<Sprite>("Sprites/operand/" + num.ToString());//GOAL!
+            script_ops.Number = num;
+            esagoniInGriglia.Add(Instantiate(
+                    ops,
+                    itm.transform.position,
+                    Quaternion.identity
+                    )
+              );
+        }
 
     }
     
