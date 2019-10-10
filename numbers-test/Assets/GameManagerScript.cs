@@ -211,8 +211,11 @@ public class GameManagerScript : MonoBehaviour
 
             if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
         {
-            txtPuntiTotali.text = (double.Parse(txtPuntiTotali.text) +  double.Parse(calcolaPunteggio(txtPunteggio.text, esagoniSelezionati.Count, obiettivo))).ToString();
-
+            try
+            {
+                txtPuntiTotali.text = (double.Parse(txtPuntiTotali.text) + double.Parse(calcolaPunteggio(txtPunteggio.text, esagoniSelezionati.Count, obiettivo))).ToString();
+            }
+            catch { }
             
             inError = false;
             PlayerPrefs.DeleteAll();
