@@ -10,7 +10,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{47526840-511D-AEB6-A2E6-BAFC27A56A8A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -54,6 +55,7 @@
     <UnityVersion>2019.2.6f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="UnityEngine">
       <HintPath>F:\Unity\Editors\2019.2.6f1\Editor\Data\Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
@@ -67,8 +69,21 @@
     <Compile Include="Assets\LightRays2D\Script\LightRays2D.cs" />
     <Compile Include="Assets\LightRays2D\Script\LightRays2DAbstract.cs" />
     <Compile Include="Assets\LightRays2D\Script\LightRays2DCanvas.cs" />
+    <Compile Include="Connected Services\NumberService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <None Include="app.config" />
     <None Include="Assets\LightRays2D\Readme.txt" />
     <None Include="Assets\LightRays2D\Shaders\LightRays.shader" />
+    <None Include="Connected Services\NumberService\NumberService.Grids.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\NumberService\NumberService.Solutions.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\NumberService\NumberService.wsdl" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/frungillo/source/repos/numbers_test/numbers-test/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
@@ -672,6 +687,27 @@
     <Reference Include="Boo.Lang">
       <HintPath>F:/Unity/Editors/2019.2.6f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\NumberService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\NumberService\NumberService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\NumberService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\NumberService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\NumberService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using NumberService;
 public class GameManagerScript : MonoBehaviour
 {
     public GameObject exs;

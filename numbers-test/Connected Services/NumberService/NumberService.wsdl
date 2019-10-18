@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="getSolutionsbyGrid">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="idGrid" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getSolutionsbyGridResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getSolutionsbyGridResult" type="tns:ArrayOfSolutions" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfSolutions">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Solutions" nillable="true" type="tns:Solutions" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Solutions">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id_solution" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Id_grid" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Number" type="s:float" />
+          <s:element minOccurs="0" maxOccurs="1" name="Sequence" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Difficulty" type="s:float" />
+          <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getGrid">
+        <s:complexType />
+      </s:element>
+      <s:element name="getGridResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getGridResult" type="tns:Grids" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Grids">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id_grid" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Item" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Data_creation" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Difficulty" type="s:float" />
+          <s:element minOccurs="0" maxOccurs="1" name="Solutions" type="tns:Solutions" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ArrayOfSolutions" nillable="true" type="tns:ArrayOfSolutions" />
+      <s:element name="Grids" nillable="true" type="tns:Grids" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getSolutionsbyGridSoapIn">
+    <wsdl:part name="parameters" element="tns:getSolutionsbyGrid" />
+  </wsdl:message>
+  <wsdl:message name="getSolutionsbyGridSoapOut">
+    <wsdl:part name="parameters" element="tns:getSolutionsbyGridResponse" />
+  </wsdl:message>
+  <wsdl:message name="getGridSoapIn">
+    <wsdl:part name="parameters" element="tns:getGrid" />
+  </wsdl:message>
+  <wsdl:message name="getGridSoapOut">
+    <wsdl:part name="parameters" element="tns:getGridResponse" />
+  </wsdl:message>
+  <wsdl:message name="getSolutionsbyGridHttpGetIn">
+    <wsdl:part name="idGrid" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="getSolutionsbyGridHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfSolutions" />
+  </wsdl:message>
+  <wsdl:message name="getGridHttpGetIn" />
+  <wsdl:message name="getGridHttpGetOut">
+    <wsdl:part name="Body" element="tns:Grids" />
+  </wsdl:message>
+  <wsdl:message name="getSolutionsbyGridHttpPostIn">
+    <wsdl:part name="idGrid" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="getSolutionsbyGridHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfSolutions" />
+  </wsdl:message>
+  <wsdl:message name="getGridHttpPostIn" />
+  <wsdl:message name="getGridHttpPostOut">
+    <wsdl:part name="Body" element="tns:Grids" />
+  </wsdl:message>
+  <wsdl:portType name="ServizioNumbersSoap">
+    <wsdl:operation name="getSolutionsbyGrid">
+      <wsdl:input message="tns:getSolutionsbyGridSoapIn" />
+      <wsdl:output message="tns:getSolutionsbyGridSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getGrid">
+      <wsdl:input message="tns:getGridSoapIn" />
+      <wsdl:output message="tns:getGridSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ServizioNumbersHttpGet">
+    <wsdl:operation name="getSolutionsbyGrid">
+      <wsdl:input message="tns:getSolutionsbyGridHttpGetIn" />
+      <wsdl:output message="tns:getSolutionsbyGridHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getGrid">
+      <wsdl:input message="tns:getGridHttpGetIn" />
+      <wsdl:output message="tns:getGridHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ServizioNumbersHttpPost">
+    <wsdl:operation name="getSolutionsbyGrid">
+      <wsdl:input message="tns:getSolutionsbyGridHttpPostIn" />
+      <wsdl:output message="tns:getSolutionsbyGridHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getGrid">
+      <wsdl:input message="tns:getGridHttpPostIn" />
+      <wsdl:output message="tns:getGridHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServizioNumbersSoap" type="tns:ServizioNumbersSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getSolutionsbyGrid">
+      <soap:operation soapAction="http://tempuri.org/getSolutionsbyGrid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getGrid">
+      <soap:operation soapAction="http://tempuri.org/getGrid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServizioNumbersSoap12" type="tns:ServizioNumbersSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getSolutionsbyGrid">
+      <soap12:operation soapAction="http://tempuri.org/getSolutionsbyGrid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getGrid">
+      <soap12:operation soapAction="http://tempuri.org/getGrid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServizioNumbersHttpGet" type="tns:ServizioNumbersHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="getSolutionsbyGrid">
+      <http:operation location="/getSolutionsbyGrid" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getGrid">
+      <http:operation location="/getGrid" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServizioNumbersHttpPost" type="tns:ServizioNumbersHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="getSolutionsbyGrid">
+      <http:operation location="/getSolutionsbyGrid" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getGrid">
+      <http:operation location="/getGrid" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ServizioNumbers">
+    <wsdl:port name="ServizioNumbersSoap" binding="tns:ServizioNumbersSoap">
+      <soap:address location="http://numbers.jemaka.it/NumberService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServizioNumbersSoap12" binding="tns:ServizioNumbersSoap12">
+      <soap12:address location="http://numbers.jemaka.it/NumberService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServizioNumbersHttpGet" binding="tns:ServizioNumbersHttpGet">
+      <http:address location="http://numbers.jemaka.it/NumberService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServizioNumbersHttpPost" binding="tns:ServizioNumbersHttpPost">
+      <http:address location="http://numbers.jemaka.it/NumberService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
