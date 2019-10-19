@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-using NumberService;
+
 public class GameManagerScript : MonoBehaviour
 {
     public GameObject exs;
@@ -18,7 +18,7 @@ public class GameManagerScript : MonoBehaviour
     public Animator txtAnimator;
     public bool inError;
     //public ParticleSystem ps;
-
+    ServizioNumbers srv;
     public List<GameObject> esagoniSelezionati;
     
     List<GameObject> esagoniInGriglia;
@@ -41,13 +41,15 @@ public class GameManagerScript : MonoBehaviour
         esagoniInGriglia = new List<GameObject>();
         esagoniSelezionati = new List<GameObject>();
         inError = false;
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
 
-        
+
+        srv = new ServizioNumbers();
         
         SpriteRenderer spr = exs.GetComponent<SpriteRenderer>();
         System.Random rnd = new System.Random();
