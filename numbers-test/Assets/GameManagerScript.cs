@@ -53,7 +53,7 @@ public class GameManagerScript : MonoBehaviour
         srv = new ServizioNumbers();
         Grids g = srv.getGrid();
         Debug.Log("GRIGLIA:" + g.Item);
-        txtParziale.text = "Griglia #" + g.Id_grid.ToString()+"\r\n";
+        txtParziale.text = "Griglia #" + g.Id_grid.ToString();// +"\r\n";
 
         string[] arrGridTmp = g.Item.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -61,72 +61,34 @@ public class GameManagerScript : MonoBehaviour
 
         foreach (Solutions item in sol)
         {
-            txtParziale.text += item.Number.ToString() + "->" +item.Difficulty.ToString()+";";
+          //  txtParziale.text += item.Number.ToString() + "->" +item.Difficulty.ToString()+";";
 
         }
-
-        
-        SpriteRenderer spr = exs.GetComponent<SpriteRenderer>();
-        System.Random rnd = new System.Random();
-        SpriteRenderer spr_op = ops.GetComponent<SpriteRenderer>();
-        System.Random rnd_op = new System.Random();
-        
-        Comp_Esagono script_exs = exs.GetComponent<Comp_Esagono>();
-        Comp_Esagono script_ops = ops.GetComponent<Comp_Esagono>();
-        //txtAnimator = txt.GetComponentInChildren<Animator>();
-
-        System.Random rnd_obiettivo = new System.Random();
-        obiettivo = rnd_obiettivo.Next(10, 90);
-        txtObiettivo.text = obiettivo.ToString();
-        txtPuntiTotali.text = "0";
-
-        float y = (float)5; //3.5
-        
-        for (int row =8;row >1; row--)
+        int idxArrayGrid = 0;
+        for (int r = 0; r < 7; r++)
         {
-            float x = (float)-5; //-7.3
-            float x_op = (float)-3.53; //-7.3
-
-            int max_col = 4;
-            int max_col_op = 3;
-            if (row % 2 != 0) { max_col = 3; x = (float)-3.51; }
-            if (row % 2 != 0) { max_col_op = 4; x_op = (float)-4.99; }
-            for (int col = 1; col < max_col; col++)
+            for (int c = 0; c < 5; c++)
             {
-                int num = rnd.Next(0, 10);
-                spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + num.ToString() + "_g");//GOAL!
-                script_exs.Number = num;
-                esagoniInGriglia.Add(Instantiate(
-                       exs,
-                       new Vector3(x, y, 1),
-                       Quaternion.identity
-                       )
-                   );
- 
-                 x += (float)3.0;
+                GameObject octagono = GameObject.Find($"t{r}_{c}");
+                SpriteRenderer spr = octagono.GetComponent<SpriteRenderer>();
+                Comp_Esagono script_exs = octagono.GetComponent<Comp_Esagono>();
+                if (octagono.tag != "op")
+                {
+                    spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + arrGridTmp[idxArrayGrid] + "_g");//GOAL!
+                    script_exs.Number = int.Parse(arrGridTmp[idxArrayGrid]);
+
+                } else
+                {
+                    spr.sprite = Resources.Load<Sprite>("Sprites/operand/" + DecodeOperands(arrGridTmp[idxArrayGrid]));//GOAL!
+                    script_exs.Number = int.Parse(DecodeOperands(arrGridTmp[idxArrayGrid]));
+                }
+                idxArrayGrid++;
+                esagoniInGriglia.Add(octagono);
             }
-
-            for (int col = 1; col < max_col_op; col++)
-            {
-                int num = rnd_op.Next(1, 5);
-                spr_op.sprite = Resources.Load<Sprite>("Sprites/operand/" + num.ToString());//GOAL!
-                script_ops.Number = num;
-               esagoniInGriglia.Add( Instantiate(
-                       ops,
-                       new Vector3(x_op, y, 1),
-                       Quaternion.identity
-                       )
-                 );
-
-                x_op += (float)3.0;
-            }
-
-            y -= (float)1.5;
+            
         }
-        foreach(GameObject itm in esagoniInGriglia)
-        {
-            Debug.Log("ITM:" + itm.GetInstanceID().ToString());
-        }
+        
+        /**/
        
 
     }
@@ -152,6 +114,27 @@ public class GameManagerScript : MonoBehaviour
             txtAnimator.SetTrigger("fire");
         }
         
+    }
+
+    private string DecodeOperands(string simbol)
+    {
+        string toAdd="";
+        switch (simbol)
+        {
+            case "*":
+                toAdd = "1";
+                break;
+            case "/":
+                toAdd = "2";
+                break;
+            case "-":
+                toAdd = "3";
+                break;
+            case "+":
+                toAdd = "4";
+                break;
+        }
+        return toAdd;
     }
 
     private void Calcolo()
@@ -221,7 +204,7 @@ public class GameManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Esagoni in Griglia:" + esagoniInGriglia.Count.ToString());
+        //Debug.Log("Esagoni in Griglia:" + esagoniInGriglia.Count.ToString());
         if (PlayerPrefs.GetString("Stato") == "G")
         {
             Calcolo();
@@ -237,7 +220,7 @@ public class GameManagerScript : MonoBehaviour
             
             inError = false;
             PlayerPrefs.DeleteAll();
-            txtParziale.text = "";
+           // txtParziale.text = "";
             foreach (GameObject itm in esagoniInGriglia)
             {
                 itm.transform.position = new Vector3(itm.transform.position.x, itm.transform.position.y, 1);
@@ -248,10 +231,10 @@ public class GameManagerScript : MonoBehaviour
             {
                 Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
                 SpriteRenderer spr = itm.GetComponent<SpriteRenderer>();
-
-
-                if (scr_e.Selected)
-                    StartCoroutine(myAttesa(itm));
+                
+                /*Disattivato il cambio di esagoni al rilascio del mouse*/
+                /* if (scr_e.Selected)
+                /*******************************************************/
 
                 scr_e.Selected = false;
 
@@ -270,7 +253,7 @@ public class GameManagerScript : MonoBehaviour
 
         
 
-        txtParziale.text = PlayerPrefs.GetString("tots");
+        //txtParziale.text = PlayerPrefs.GetString("tots");
     }
 
 
