@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -50,6 +51,20 @@ public class GameManagerScript : MonoBehaviour
 
 
         srv = new ServizioNumbers();
+        Grids g = srv.getGrid();
+        Debug.Log("GRIGLIA:" + g.Item);
+        txtParziale.text = "Griglia #" + g.Id_grid.ToString()+"\r\n";
+
+        string[] arrGridTmp = g.Item.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+
+        Solutions[] sol = srv.getSolutionsbyGrid(g.Id_grid);
+
+        foreach (Solutions item in sol)
+        {
+            txtParziale.text += item.Number.ToString() + "->" +item.Difficulty.ToString()+";";
+
+        }
+
         
         SpriteRenderer spr = exs.GetComponent<SpriteRenderer>();
         System.Random rnd = new System.Random();

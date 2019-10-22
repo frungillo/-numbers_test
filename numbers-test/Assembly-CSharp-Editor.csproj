@@ -354,6 +354,9 @@
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>C:/Users/frungillo/source/repos/numbers_test/numbers-test/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Services">
+      <HintPath>C:/Users/frungillo/source/repos/numbers_test/numbers-test/Assets/WebClient/System.Web.Services.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>C:/Users/frungillo/source/repos/numbers_test/numbers-test/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
     </Reference>

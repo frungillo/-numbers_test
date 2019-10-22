@@ -319,6 +319,9 @@
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>C:/Users/frungillo/source/repos/numbers_test/numbers-test/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Services">
+      <HintPath>C:/Users/frungillo/source/repos/numbers_test/numbers-test/Assets/WebClient/System.Web.Services.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>F:/Unity/Editors/2019.2.6f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
     </Reference>
