@@ -13,8 +13,9 @@ public class GameManagerScript : MonoBehaviour
     
     public List<Text> GoalsTexts;
     public static int MAX_PUNTEGGIO = 100;
-    private int obiettivo;
-    float timeleft = 30;
+   // private int obiettivo;
+    float timeleft = 120;
+    private string numeroTrovatoDalGiocatore;
 
     public Animator txtAnimator;
     public bool inError;
@@ -22,6 +23,7 @@ public class GameManagerScript : MonoBehaviour
     public List<GameObject> esagoniSelezionati;
     private Time t;
     List<GameObject> esagoniInGriglia;
+    Solutions[] soluzioniGriglia;
     private static GameManagerScript _instance;
     
     public static GameManagerScript Instance { get { return _instance; } }
@@ -46,7 +48,7 @@ public class GameManagerScript : MonoBehaviour
     void Start()
     {
 
-        
+        txtPunteggio.text = "0";
         srv = new ServizioNumbers();
         Grids g = srv.getGrid();
         Debug.Log("GRIGLIA:" + g.Item);
@@ -55,6 +57,7 @@ public class GameManagerScript : MonoBehaviour
         string[] arrGridTmp = g.Item.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
         Solutions[] sol = srv.getSolutionsbyGrid(g.Id_grid);
+        soluzioniGriglia = sol;
 
         int idxTxts = 0;
         foreach (Solutions item in sol)
@@ -97,7 +100,7 @@ public class GameManagerScript : MonoBehaviour
     }
     
     
-    private void valuta(bool endSequence=false)
+    private void Valuta(bool endSequence=false)
     {
         try
         {
@@ -140,7 +143,7 @@ public class GameManagerScript : MonoBehaviour
         return toAdd;
     }
 
-    private void Calcolo()
+    private string Calcolo()
     {
         double tot=0;
         int cnt = 1;
@@ -208,7 +211,8 @@ public class GameManagerScript : MonoBehaviour
             //txtParziale.text = tot.ToString("#.##");
             cnt++;
         }
-       // txtPunteggio.text = tot.ToString("#.##");
+        // txtPunteggio.text = tot.ToString("#.##");
+        return operazione;
     }
 
     // Update is called once per frame
@@ -229,14 +233,14 @@ public class GameManagerScript : MonoBehaviour
         //Debug.Log("Esagoni in Griglia:" + esagoniInGriglia.Count.ToString());
         if (PlayerPrefs.GetString("Stato") == "G")
         {
-            Calcolo();
+           numeroTrovatoDalGiocatore= Calcolo();
         }
 
             if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
         {
             try
             {
-                //txtPuntiTotali.text = (double.Parse(txtPuntiTotali.text) + double.Parse(calcolaPunteggio(txtPunteggio.text, esagoniSelezionati.Count, obiettivo))).ToString();
+                txtPunteggio.text = (double.Parse(txtPunteggio.text) + double.Parse(calcolaPunteggio(numeroTrovatoDalGiocatore, esagoniSelezionati.Count,soluzioniGriglia))).ToString();
             }
             catch { }
             
@@ -308,30 +312,29 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
-    private string calcolaPunteggio(string risultatoOperazione, int passaggi, int obiettivo, int tolleranza =2)
+    private string calcolaPunteggio(string risultatoOperazione, int passaggi, Solutions[] soluzioni)
     {
         risultatoOperazione = risultatoOperazione.Replace(",", ".");
-        double TestOp = 0;
-        if (!double.TryParse(risultatoOperazione, out TestOp )) { return "Hey!"; }
-        if (obiettivo - double.Parse(risultatoOperazione) == 0)
-            return "100";
-        if (System.Math.Abs(obiettivo - double.Parse(risultatoOperazione)) < tolleranza)
+        int punteggioAssegnatoAlGiocatore = 0;
+        double numeroTrovatoDalGiocatore;
+        if (!double.TryParse(risultatoOperazione, out numeroTrovatoDalGiocatore )) { return "Hey!"; }
+        Solutions SoluzioneTrovata = null;
+        foreach (Solutions item in soluzioni)
         {
-            try
+            if(item.Number == numeroTrovatoDalGiocatore)
             {
-                double risop = double.Parse(risultatoOperazione);
-                double D = (MAX_PUNTEGGIO * 20) / 100;
-                double punteggioOttenuto = ((obiettivo - risop) * (D - MAX_PUNTEGGIO) / tolleranza)
-                    + (MAX_PUNTEGGIO - D) + (D * (passaggi - 1) / 34);
-                if (punteggioOttenuto < 0) punteggioOttenuto = 0;
-                return punteggioOttenuto.ToString("#.##");
+                SoluzioneTrovata = item;
+                break;
             }
-            catch (System.Exception ex)
-            {
-                return "ERRORE!";
-            }
-        } else { return "0"; }
-
+        }
+        if (SoluzioneTrovata!=null)
+        {
+            punteggioAssegnatoAlGiocatore = passaggi * (int)SoluzioneTrovata.Difficulty;
+            GameObject box = GameObject.Find(SoluzioneTrovata.Id_solution.ToString());
+            SpriteRenderer spr = box.GetComponent<SpriteRenderer>();
+            spr.sprite = Resources.Load<Sprite>("Sprites/boxes/box_v");
+        }
+        return punteggioAssegnatoAlGiocatore.ToString();
     }
   
 }
