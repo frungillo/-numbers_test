@@ -7,26 +7,23 @@ using System;
 
 public class GameManagerScript : MonoBehaviour
 {
-    public GameObject exs;
-    public GameObject ops;
     public Text txtParziale;
     public Text txtPunteggio;
-    public Text txtObiettivo;
-    public Text txtPuntiTotali;
+    public Text txtTimer;
+    
+    public List<Text> GoalsTexts;
     public static int MAX_PUNTEGGIO = 100;
     private int obiettivo;
+    float timeleft = 30;
 
     public Animator txtAnimator;
     public bool inError;
-    //public ParticleSystem ps;
     ServizioNumbers srv;
     public List<GameObject> esagoniSelezionati;
-    
+    private Time t;
     List<GameObject> esagoniInGriglia;
     private static GameManagerScript _instance;
-    //private Vector3 _mousePos;
-    //private bool _isMousePressed = false;
-
+    
     public static GameManagerScript Instance { get { return _instance; } }
 
     private void Awake()
@@ -49,7 +46,7 @@ public class GameManagerScript : MonoBehaviour
     void Start()
     {
 
-
+        
         srv = new ServizioNumbers();
         Grids g = srv.getGrid();
         Debug.Log("GRIGLIA:" + g.Item);
@@ -59,8 +56,12 @@ public class GameManagerScript : MonoBehaviour
 
         Solutions[] sol = srv.getSolutionsbyGrid(g.Id_grid);
 
+        int idxTxts = 0;
         foreach (Solutions item in sol)
         {
+            GoalsTexts[idxTxts].text = item.Number.ToString();
+            GoalsTexts[idxTxts].name = "Goal_"+item.Id_solution.ToString();
+            idxTxts++;
           //  txtParziale.text += item.Number.ToString() + "->" +item.Difficulty.ToString()+";";
 
         }
@@ -87,6 +88,8 @@ public class GameManagerScript : MonoBehaviour
             }
             
         }
+
+      
         
         /**/
        
@@ -142,6 +145,7 @@ public class GameManagerScript : MonoBehaviour
         double tot=0;
         int cnt = 1;
         string operazione="";
+        txtParziale.text = "";
         foreach (GameObject itm in esagoniSelezionati)
         {
             
@@ -165,18 +169,22 @@ public class GameManagerScript : MonoBehaviour
                         break;
                     default:
                         break;
+
                 }
+                txtParziale.text += toAdd;
             } else { //è un box numerico
                 toAdd = src.Number.ToString();
                 itm.transform.position = new Vector3(itm.transform.position.x, itm.transform.position.y, -1);
+                txtParziale.text += toAdd;
             }
-
+            
             if (cnt < 3) { operazione += toAdd; goto exit; }
 
             if (cnt==3) {
                 operazione += toAdd;
                 tot = Eval(operazione);
                 operazione = tot.ToString();
+                txtParziale.text += "="+operazione;
             }
 
             if (cnt > 3)
@@ -185,25 +193,39 @@ public class GameManagerScript : MonoBehaviour
                 if (itm.tag == "op")
                 {
                     operazione +=  toAdd;
-                    Debug.Log($"Aggiornamento: { operazione}");
+                    txtParziale.text = operazione;
+                   
                     goto exit;
                 }
                 operazione +=  toAdd;
                 tot = Eval(operazione);
                 operazione = tot.ToString("#.##");
+                txtParziale.text +="="+operazione;
             }
-
+            
         exit:
-
-            txtParziale.text = tot.ToString("#.##");
+            
+            //txtParziale.text = tot.ToString("#.##");
             cnt++;
         }
-        txtPunteggio.text = tot.ToString("#.##");
+       // txtPunteggio.text = tot.ToString("#.##");
     }
 
     // Update is called once per frame
     void Update()
     {
+        Animator timerAnim = txtTimer.GetComponent<Animator>();
+        timeleft -= Time.deltaTime;
+        txtTimer.text = Math.Truncate((timeleft)).ToString();
+        if (timeleft>20 )
+        {
+            timerAnim.SetTrigger("tick");
+        }
+        if (timeleft<20)
+        {
+
+            timerAnim.SetBool("warn", true);
+        }
         //Debug.Log("Esagoni in Griglia:" + esagoniInGriglia.Count.ToString());
         if (PlayerPrefs.GetString("Stato") == "G")
         {
@@ -214,16 +236,17 @@ public class GameManagerScript : MonoBehaviour
         {
             try
             {
-                txtPuntiTotali.text = (double.Parse(txtPuntiTotali.text) + double.Parse(calcolaPunteggio(txtPunteggio.text, esagoniSelezionati.Count, obiettivo))).ToString();
+                //txtPuntiTotali.text = (double.Parse(txtPuntiTotali.text) + double.Parse(calcolaPunteggio(txtPunteggio.text, esagoniSelezionati.Count, obiettivo))).ToString();
             }
             catch { }
             
             inError = false;
             PlayerPrefs.DeleteAll();
-           // txtParziale.text = "";
+            txtParziale.text = "";
+
             foreach (GameObject itm in esagoniInGriglia)
             {
-                itm.transform.position = new Vector3(itm.transform.position.x, itm.transform.position.y, 1);
+               // itm.transform.position = new Vector3(itm.transform.position.x, itm.transform.position.y, 1);
                
             }
 
@@ -260,47 +283,9 @@ public class GameManagerScript : MonoBehaviour
     IEnumerator myAttesa(GameObject itm)
     {
         Animator box_anim = itm.GetComponent<Animator>();
-        if(itm.tag != "op") box_anim.Play("Exagon_destroy"); else box_anim.Play("operand_destroy");
+        if (itm.tag != "op") box_anim.Play("Exagon_destroy"); else box_anim.Play("operand_destroy");
         float cliplen = box_anim.runtimeAnimatorController.animationClips.First(clip => clip.name.Contains("_destroy")).length;
-        yield return new  WaitForSeconds(cliplen);
-        esagoniInGriglia.Remove(itm);
-        GameObject.Destroy(itm);
-
-        /*Generazione Nuovo Item*/
-        SpriteRenderer spr = exs.GetComponent<SpriteRenderer>();
-        System.Random rnd = new System.Random();
-        SpriteRenderer spr_op = ops.GetComponent<SpriteRenderer>();
-        System.Random rnd_op = new System.Random();
-
-        Comp_Esagono script_exs = exs.GetComponent<Comp_Esagono>();
-        Comp_Esagono script_ops = ops.GetComponent<Comp_Esagono>();
-
-        if (itm.tag != "op")
-        {
-            int num = rnd.Next(0, 10);
-            spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + num.ToString() + "_g");//GOAL!
-            script_exs.Number = num;
-            esagoniInGriglia.Add(Instantiate(
-                   exs,
-                   itm.transform.position,
-                   Quaternion.identity
-                   )
-               );
-        }
-        else
-        {
-
-            int num = rnd_op.Next(1, 5);
-            spr_op.sprite = Resources.Load<Sprite>("Sprites/operand/" + num.ToString());//GOAL!
-            script_ops.Number = num;
-            esagoniInGriglia.Add(Instantiate(
-                    ops,
-                    itm.transform.position,
-                    Quaternion.identity
-                    )
-              );
-        }
-
+        yield return new WaitForSeconds(cliplen);
     }
     
     private double Eval(string expression)  
