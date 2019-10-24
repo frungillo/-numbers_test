@@ -47,10 +47,11 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
         txtPunteggio.text = "0";
         srv = new ServizioNumbers();
         Grids g = srv.getGrid();
+        
         Debug.Log("GRIGLIA:" + g.Item);
         txtParziale.text = "Griglia #" + g.Id_grid.ToString();// +"\r\n";
 
@@ -63,7 +64,9 @@ public class GameManagerScript : MonoBehaviour
         foreach (Solutions item in sol)
         {
             GoalsTexts[idxTxts].text = item.Number.ToString();
-            GoalsTexts[idxTxts].name = "Goal_"+item.Id_solution.ToString();
+            GameObject boxSolution = GameObject.Find("Goal_" + idxTxts.ToString());
+            GoalsTexts[idxTxts].name = "txtGoal_"+item.Id_solution.ToString();
+            boxSolution.name = "Goal_" + item.Id_solution.ToString();
             idxTxts++;
           //  txtParziale.text += item.Number.ToString() + "->" +item.Difficulty.ToString()+";";
 
@@ -330,7 +333,7 @@ public class GameManagerScript : MonoBehaviour
         if (SoluzioneTrovata!=null)
         {
             punteggioAssegnatoAlGiocatore = passaggi * (int)SoluzioneTrovata.Difficulty;
-            GameObject box = GameObject.Find(SoluzioneTrovata.Id_solution.ToString());
+            GameObject box = GameObject.Find("Goal_"+SoluzioneTrovata.Id_solution.ToString());
             SpriteRenderer spr = box.GetComponent<SpriteRenderer>();
             spr.sprite = Resources.Load<Sprite>("Sprites/boxes/box_v");
         }
