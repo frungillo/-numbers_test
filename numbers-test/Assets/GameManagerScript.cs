@@ -5,8 +5,13 @@ using UnityEngine.UI;
 using System.Linq;
 using System;
 
+
 public class GameManagerScript : MonoBehaviour
 {
+    string toastString;
+    AndroidJavaObject currentActivity;
+
+
     public Text txtParziale;
     public Text txtPunteggio;
     public Text txtTimer;
@@ -47,12 +52,23 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        txtParziale.text = "--> VAI_0";
         txtPunteggio.text = "0";
         srv = new ServizioNumbers();
+        try
+        {
+            srv = new ServizioNumbers();
+          
+        }
+        catch ( Exception ex)
+        {
+            txtParziale.text = ex.StackTrace;
+            return;
+        }
+        txtParziale.text = "--> VAI_1";
         Grids g = srv.getGrid();
-        
-        Debug.Log("GRIGLIA:" + g.Item);
+        txtParziale.text = "--> VAI_2";
+        //Debug.Log("GRIGLIA:" + g.Item);
         txtParziale.text = "Griglia #" + g.Id_grid.ToString();// +"\r\n";
 
         string[] arrGridTmp = g.Item.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
@@ -339,5 +355,10 @@ public class GameManagerScript : MonoBehaviour
         }
         return punteggioAssegnatoAlGiocatore.ToString();
     }
+
+
+
   
+
+
 }
