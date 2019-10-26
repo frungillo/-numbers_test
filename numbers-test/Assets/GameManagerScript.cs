@@ -54,7 +54,7 @@ public class GameManagerScript : MonoBehaviour
     {
         txtParziale.text = "--> VAI_0";
         txtPunteggio.text = "0";
-        srv = new ServizioNumbers();
+        //srv = new ServizioNumbers();
         try
         {
             srv = new ServizioNumbers();
@@ -62,7 +62,7 @@ public class GameManagerScript : MonoBehaviour
         }
         catch ( Exception ex)
         {
-            txtParziale.text = ex.StackTrace;
+            txtParziale.text = ex.Message;
             return;
         }
         txtParziale.text = "--> VAI_1";
