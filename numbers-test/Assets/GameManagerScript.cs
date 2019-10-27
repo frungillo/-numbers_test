@@ -6,15 +6,12 @@ using System.Linq;
 using System;
 
 
-public class GameManagerScript : MonoBehaviour
+public class GameManagerScript : MonoBehaviour, IDisposable
 {
-    string toastString;
-    AndroidJavaObject currentActivity;
-
-
     public Text txtParziale;
     public Text txtPunteggio;
     public Text txtTimer;
+  
     
     public List<Text> GoalsTexts;
     public static int MAX_PUNTEGGIO = 100;
@@ -26,7 +23,7 @@ public class GameManagerScript : MonoBehaviour
     public bool inError;
     ServizioNumbers srv;
     public List<GameObject> esagoniSelezionati;
-    private Time t;
+    //private Time t;
     List<GameObject> esagoniInGriglia;
     Solutions[] soluzioniGriglia;
     private static GameManagerScript _instance;
@@ -46,6 +43,10 @@ public class GameManagerScript : MonoBehaviour
         esagoniInGriglia = new List<GameObject>();
         esagoniSelezionati = new List<GameObject>();
         inError = false;
+        srv = new ServizioNumbers();
+    
+
+
 
     }
 
@@ -57,8 +58,8 @@ public class GameManagerScript : MonoBehaviour
         //srv = new ServizioNumbers();
         try
         {
-            srv = new ServizioNumbers();
-          
+            //  srv = new ServizioNumbers();
+         
         }
         catch ( Exception ex)
         {
@@ -66,14 +67,14 @@ public class GameManagerScript : MonoBehaviour
             return;
         }
         txtParziale.text = "--> VAI_1";
-        Grids g = srv.getGrid();
+        Grids g = new Grids(); // srv.getGrid();
         txtParziale.text = "--> VAI_2";
         //Debug.Log("GRIGLIA:" + g.Item);
         txtParziale.text = "Griglia #" + g.Id_grid.ToString();// +"\r\n";
 
         string[] arrGridTmp = g.Item.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
-        Solutions[] sol = srv.getSolutionsbyGrid(g.Id_grid);
+        Solutions[] sol = new List<Solutions>().ToArray(); ; //srv.getSolutionsbyGrid(g.Id_grid);
         soluzioniGriglia = sol;
 
         int idxTxts = 0;
@@ -259,7 +260,7 @@ public class GameManagerScript : MonoBehaviour
         {
             try
             {
-                txtPunteggio.text = (double.Parse(txtPunteggio.text) + double.Parse(calcolaPunteggio(numeroTrovatoDalGiocatore, esagoniSelezionati.Count,soluzioniGriglia))).ToString();
+                txtPunteggio.text = (double.Parse(txtPunteggio.text) + double.Parse(CalcolaPunteggio(numeroTrovatoDalGiocatore, esagoniSelezionati.Count,soluzioniGriglia))).ToString();
             }
             catch { }
             
@@ -303,7 +304,7 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
-    IEnumerator myAttesa(GameObject itm)
+    IEnumerator MyAttesa(GameObject itm)
     {
         Animator box_anim = itm.GetComponent<Animator>();
         if (itm.tag != "op") box_anim.Play("Exagon_destroy"); else box_anim.Play("operand_destroy");
@@ -331,12 +332,11 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
-    private string calcolaPunteggio(string risultatoOperazione, int passaggi, Solutions[] soluzioni)
+    private string CalcolaPunteggio(string risultatoOperazione, int passaggi, Solutions[] soluzioni)
     {
         risultatoOperazione = risultatoOperazione.Replace(",", ".");
         int punteggioAssegnatoAlGiocatore = 0;
-        double numeroTrovatoDalGiocatore;
-        if (!double.TryParse(risultatoOperazione, out numeroTrovatoDalGiocatore )) { return "Hey!"; }
+        if (!double.TryParse(risultatoOperazione, out double numeroTrovatoDalGiocatore)) { return "Hey!"; }
         Solutions SoluzioneTrovata = null;
         foreach (Solutions item in soluzioni)
         {
@@ -356,9 +356,9 @@ public class GameManagerScript : MonoBehaviour
         return punteggioAssegnatoAlGiocatore.ToString();
     }
 
-
-
-  
-
-
+    public void Dispose()
+    {
+        srv.Dispose();
+        
+    }
 }
