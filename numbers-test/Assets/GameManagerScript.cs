@@ -58,6 +58,7 @@ public class GameManagerScript : MonoBehaviour, IDisposable
         //srv = new ServizioNumbers();
         try
         {
+            txtParziale.text = srv.getGrid();
             //  srv = new ServizioNumbers();
          
         }

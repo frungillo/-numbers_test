@@ -43,7 +43,7 @@ public partial class ServizioNumbers : UnityEngine.Networking.UnityWebRequest  /
     }
     */
 
-    public Grids getGrid() {
+    public string getGrid() {
         string val = @"POST /NumberService.asmx HTTP/1.1
     Host: numbers.jemaka.it
     Content - Type: text / xml; charset = utf - 8
@@ -59,7 +59,7 @@ public partial class ServizioNumbers : UnityEngine.Networking.UnityWebRequest  /
                    </ soap:Body >
                   </ soap:Envelope > ";
         this.SetRequestHeader("1", val);
-        this.get;
+       return this.GetResponseHeader("1");
     }
 
     
