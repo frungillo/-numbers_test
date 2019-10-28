@@ -6,7 +6,7 @@ using System.Linq;
 using System;
 
 
-public class GameManagerScript : MonoBehaviour, IDisposable
+public class GameManagerScript : MonoBehaviour
 {
     public Text txtParziale;
     public Text txtPunteggio;
@@ -49,17 +49,22 @@ public class GameManagerScript : MonoBehaviour, IDisposable
 
 
     }
+    
 
     // Start is called before the first frame update
     void Start()
     {
         txtParziale.text = "--> VAI_0";
         txtPunteggio.text = "0";
+        
         //srv = new ServizioNumbers();
         try
         {
-            txtParziale.text = srv.getGrid();
+
+
+            txtParziale.text = srv.GetGrid();
             //  srv = new ServizioNumbers();
+           
          
         }
         catch ( Exception ex)
@@ -67,6 +72,7 @@ public class GameManagerScript : MonoBehaviour, IDisposable
             txtParziale.text = ex.Message;
             return;
         }
+        return;
         txtParziale.text = "--> VAI_1";
         Grids g = new Grids(); // srv.getGrid();
         txtParziale.text = "--> VAI_2";
@@ -357,9 +363,5 @@ public class GameManagerScript : MonoBehaviour, IDisposable
         return punteggioAssegnatoAlGiocatore.ToString();
     }
 
-    public void Dispose()
-    {
-        srv.Dispose();
-        
-    }
+    
 }
