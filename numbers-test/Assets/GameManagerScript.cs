@@ -43,7 +43,7 @@ public class GameManagerScript : MonoBehaviour
         esagoniInGriglia = new List<GameObject>();
         esagoniSelezionati = new List<GameObject>();
         inError = false;
-        srv = new ServizioNumbers();
+        
     
 
 
@@ -54,35 +54,38 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        txtParziale.text = "--> VAI_0";
-        txtPunteggio.text = "0";
         
-        //srv = new ServizioNumbers();
+        txtPunteggio.text = "0";
+
+        
         try
         {
 
 
-            txtParziale.text = srv.GetGrid();
-            //  srv = new ServizioNumbers();
-           
-         
+            txtParziale.text = "";
+            srv = new ServizioNumbers();
+            
+
         }
         catch ( Exception ex)
         {
             txtParziale.text = ex.Message;
             return;
         }
-        return;
-        txtParziale.text = "--> VAI_1";
-        Grids g = new Grids(); // srv.getGrid();
-        txtParziale.text = "--> VAI_2";
-        //Debug.Log("GRIGLIA:" + g.Item);
+
+        txtParziale.text = "Step1";
+        Grids g = srv.getGrid();
+
+        txtParziale.text = "Step2";
+
         txtParziale.text = "Griglia #" + g.Id_grid.ToString();// +"\r\n";
 
         string[] arrGridTmp = g.Item.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
-        Solutions[] sol = new List<Solutions>().ToArray(); ; //srv.getSolutionsbyGrid(g.Id_grid);
+        Solutions[] sol = srv.getSolutionsbyGrid(g.Id_grid);
         soluzioniGriglia = sol;
+
+        txtParziale.text = "Step3";
 
         int idxTxts = 0;
         foreach (Solutions item in sol)
@@ -92,9 +95,10 @@ public class GameManagerScript : MonoBehaviour
             GoalsTexts[idxTxts].name = "txtGoal_"+item.Id_solution.ToString();
             boxSolution.name = "Goal_" + item.Id_solution.ToString();
             idxTxts++;
-          //  txtParziale.text += item.Number.ToString() + "->" +item.Difficulty.ToString()+";";
-
         }
+
+       
+
         int idxArrayGrid = 0;
         for (int r = 0; r < 7; r++)
         {
@@ -118,11 +122,11 @@ public class GameManagerScript : MonoBehaviour
             }
             
         }
-
-      
         
+
+
         /**/
-       
+
 
     }
     

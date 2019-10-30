@@ -3339,7 +3339,7 @@ MonoBehaviour:
   - {fileID: 1960387489}
   - {fileID: 1299683540}
   - {fileID: 2080914895}
-  txtAnimator: {fileID: 1241703668}
+  txtAnimator: {fileID: 0}
   inError: 0
   esagoniSelezionati: []
 --- !u!4 &1481932989
