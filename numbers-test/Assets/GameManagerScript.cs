@@ -4,16 +4,35 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System;
-
+using UnityEngine.Networking;
 
 public class GameManagerScript : MonoBehaviour
 {
+    /// <summary>
+    /// Testo punteggio parziale
+    /// </summary>
     public Text txtParziale;
+
+    /// <summary>
+    /// Testo punteggio Totale
+    /// </summary>
     public Text txtPunteggio;
+
+    /// <summary>
+    /// Timer countdown
+    /// </summary>
     public Text txtTimer;
-  
-    
+
+    /// <summary>
+    /// Elengo campi testo delle soluzioni possibili.
+    /// </summary>
     public List<Text> GoalsTexts;
+
+    /// <summary>
+    /// Griglia di gioco
+    /// </summary>
+    public Grids griglia;
+
     public static int MAX_PUNTEGGIO = 100;
    // private int obiettivo;
     float timeleft = 120;
@@ -21,7 +40,7 @@ public class GameManagerScript : MonoBehaviour
 
     public Animator txtAnimator;
     public bool inError;
-    ServizioNumbers srv;
+    UnityWebRequest srv;
     public List<GameObject> esagoniSelezionati;
     //private Time t;
     List<GameObject> esagoniInGriglia;
@@ -43,7 +62,7 @@ public class GameManagerScript : MonoBehaviour
         esagoniInGriglia = new List<GameObject>();
         esagoniSelezionati = new List<GameObject>();
         inError = false;
-        
+        griglia = DatiGioco.GrigliaDiGioco;
     
 
 
@@ -63,7 +82,7 @@ public class GameManagerScript : MonoBehaviour
 
 
             txtParziale.text = "";
-            srv = new ServizioNumbers();
+            srv = UnityWebRequest.Get("http://numbers.jemaka.it/api/grids");
             
 
         }
@@ -74,7 +93,7 @@ public class GameManagerScript : MonoBehaviour
         }
 
         txtParziale.text = "Step1";
-        Grids g = srv.getGrid();
+        Grids g = griglia;
 
         txtParziale.text = "Step2";
 
@@ -82,7 +101,7 @@ public class GameManagerScript : MonoBehaviour
 
         string[] arrGridTmp = g.Item.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
-        Solutions[] sol = srv.getSolutionsbyGrid(g.Id_grid);
+        Solutions[] sol = g.Soluzioni;
         soluzioniGriglia = sol;
 
         txtParziale.text = "Step3";
