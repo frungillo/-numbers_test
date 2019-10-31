@@ -1,81 +1,21 @@
 
 
+//using Boo.Lang;
+using System;
+using UnityEngine;
+
+[Serializable]
 public class Solutions {
-    
-    private int id_solutionField;
-    
-    private int id_gridField;
-    
-    private float numberField;
-    
-    private string sequenceField;
-    
-    private float difficultyField;
-    
-    private string noteField;
-    
-    /// <remarks/>
-    public int Id_solution {
-        get {
-            return this.id_solutionField;
-        }
-        set {
-            this.id_solutionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public int Id_grid {
-        get {
-            return this.id_gridField;
-        }
-        set {
-            this.id_gridField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public float Number {
-        get {
-            return this.numberField;
-        }
-        set {
-            this.numberField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Sequence {
-        get {
-            return this.sequenceField;
-        }
-        set {
-            this.sequenceField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public float Difficulty {
-        get {
-            return this.difficultyField;
-        }
-        set {
-            this.difficultyField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Note {
-        get {
-            return this.noteField;
-        }
-        set {
-            this.noteField = value;
-        }
-    }
+
+    public int Id_solution;
+    public int Id_grid;
+    public float Number;
+    public string Sequence;
+    public float Difficulty;
+    public string Note;
 }
 
-public partial class Users {
+public  class Users {
     
     private int id_userField;
     
@@ -222,66 +162,15 @@ public partial class Users {
     }
 }
 
-public partial class Grids {
-    
-    private int id_gridField;
-    
-    private string itemField;
-    
-    private System.DateTime data_creationField;
-    
-    private float difficultyField;
-    
-    private Solutions[] solutionsField;
-    
-    /// <remarks/>
-    public int Id_grid {
-        get {
-            return this.id_gridField;
-        }
-        set {
-            this.id_gridField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Item {
-        get {
-            return this.itemField;
-        }
-        set {
-            this.itemField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public System.DateTime Data_creation {
-        get {
-            return this.data_creationField;
-        }
-        set {
-            this.data_creationField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public float Difficulty {
-        get {
-            return this.difficultyField;
-        }
-        set {
-            this.difficultyField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public Solutions[] Soluzioni {
-        get {
-            return this.solutionsField;
-        }
-        set {
-            this.solutionsField = value;
-        }
-    }
-}
+[Serializable]
+public  class Grids {
 
+   
+
+    public int Id_grid;
+    public string Item;
+    public DateTime Data_creation;
+    public float Difficulty;
+    public Solutions[] Soluzioni;
+
+}

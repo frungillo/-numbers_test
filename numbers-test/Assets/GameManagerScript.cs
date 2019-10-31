@@ -76,22 +76,8 @@ public class GameManagerScript : MonoBehaviour
         
         txtPunteggio.text = "0";
 
+        txtParziale.text = "";
         
-        try
-        {
-
-
-            txtParziale.text = "";
-            srv = UnityWebRequest.Get("http://numbers.jemaka.it/api/grids");
-            
-
-        }
-        catch ( Exception ex)
-        {
-            txtParziale.text = ex.Message;
-            return;
-        }
-
         txtParziale.text = "Step1";
         Grids g = griglia;
 
@@ -101,7 +87,7 @@ public class GameManagerScript : MonoBehaviour
 
         string[] arrGridTmp = g.Item.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
-        Solutions[] sol = g.Soluzioni;
+        Solutions[] sol = DatiGioco.soluzioni; // g.Soluzioni.ToArray();
         soluzioniGriglia = sol;
 
         txtParziale.text = "Step3";
