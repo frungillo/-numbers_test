@@ -31,6 +31,7 @@ public class DowloadGridData : MonoBehaviour
             }
             else
             {
+                
                 string JsonText = request.downloadHandler.text;
 
                 Grids gr = (Grids) JsonUtility.FromJson(JsonText, typeof(Grids) );

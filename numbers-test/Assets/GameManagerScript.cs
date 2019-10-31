@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -77,20 +78,17 @@ public class GameManagerScript : MonoBehaviour
         txtPunteggio.text = "0";
 
         txtParziale.text = "";
-        
-        txtParziale.text = "Step1";
+
         Grids g = griglia;
 
-        txtParziale.text = "Step2";
-
-        txtParziale.text = "Griglia #" + g.Id_grid.ToString();// +"\r\n";
+        txtParziale.text = "Griglia #" + g.Id_grid.ToString();
 
         string[] arrGridTmp = g.Item.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
         Solutions[] sol = DatiGioco.soluzioni; // g.Soluzioni.ToArray();
         soluzioniGriglia = sol;
 
-        txtParziale.text = "Step3";
+        
 
         int idxTxts = 0;
         foreach (Solutions item in sol)
@@ -266,6 +264,10 @@ public class GameManagerScript : MonoBehaviour
 
             timerAnim.SetBool("warn", true);
         }
+        if(timeleft <= 0)
+        {
+            SceneManager.LoadScene("EndGame");
+        }
         //Debug.Log("Esagoni in Griglia:" + esagoniInGriglia.Count.ToString());
         if (PlayerPrefs.GetString("Stato") == "G")
         {
@@ -305,8 +307,9 @@ public class GameManagerScript : MonoBehaviour
                 if (itm.tag != "op")
                 {
                     spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_g");
-
-
+                } else
+                {
+                    spr.color = new Color(255, 255, 255, 255);
                 }
 
             }

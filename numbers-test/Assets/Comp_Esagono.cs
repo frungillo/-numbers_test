@@ -53,8 +53,12 @@ public class Comp_Esagono : MonoBehaviour
                 if (_manger.inError) return;
                 Selected = true;
                 aus.Play();
-              
-                if (this.tag != "op") spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + this.Number + "_v");
+
+                if (this.tag != "op") {
+                    spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + this.Number + "_v");
+                } else {
+                    spr.color = new Color(20, 231, 0, 255);
+                }
 
                 _manger.esagoniSelezionati.Add(this.gameObject);
             }

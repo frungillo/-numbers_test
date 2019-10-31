@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/ScenaDownload.unity
+    guid: 274d939484e372a4182214e6563bd4a2
+  - enabled: 1
     path: Assets/Scenes/ScenaDiGioco.unity
     guid: 8877409cdf1b0274098c0f3ee03dc5b5
   - enabled: 1
-    path: Assets/Scenes/ScenaDownload.unity
-    guid: 274d939484e372a4182214e6563bd4a2
+    path: Assets/Scenes/EndGame.unity
+    guid: 75234b18d74b9774faeb25a4452b7e5d
   m_configObjects: {}
