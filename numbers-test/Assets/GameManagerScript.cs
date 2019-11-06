@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using Newtonsoft.Json;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -46,6 +47,7 @@ public class GameManagerScript : MonoBehaviour
     //private Time t;
     List<GameObject> esagoniInGriglia;
     Solutions[] soluzioniGriglia;
+    List<Solutions> soluzioniTrovate;
     private static GameManagerScript _instance;
     
     public static GameManagerScript Instance { get { return _instance; } }
@@ -74,11 +76,11 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        soluzioniTrovate = new List<Solutions>();
+
         txtPunteggio.text = "0";
-
+        if (DatiGioco.PuntiGiocatore > 0) txtPunteggio.text = DatiGioco.PuntiGiocatore.ToString();
         txtParziale.text = "";
-
         Grids g = griglia;
 
         txtParziale.text = "Griglia #" + g.Id_grid.ToString();
@@ -88,11 +90,18 @@ public class GameManagerScript : MonoBehaviour
         Solutions[] sol = DatiGioco.soluzioni; // g.Soluzioni.ToArray();
         soluzioniGriglia = sol;
 
-        for (int l = 1; l < griglia.Difficulty+1; l++)
+        for (int l = 1; l < griglia.Difficulty + 1; l++)
         {
             GameObject levels = GameObject.Find("lvl_" + l);
             SpriteRenderer lvlspr = levels.GetComponent<SpriteRenderer>();
-            lvlspr.sprite = Resources.Load<Sprite>("Sprites/liv_selector/SVG/Giallo/Giallo " + l);
+            if (DatiGioco.LivelloCorrente == l)
+            {
+                lvlspr.sprite = Resources.Load<Sprite>("Sprites/liv_selector/SVG/Verde/Verde " + l);
+            }
+            else
+            {
+                lvlspr.sprite = Resources.Load<Sprite>("Sprites/liv_selector/SVG/Giallo/Giallo " + l);
+            }
         }
         
 
@@ -261,6 +270,13 @@ public class GameManagerScript : MonoBehaviour
         Animator timerAnim = txtTimer.GetComponent<Animator>();
         timeleft -= Time.deltaTime;
         txtTimer.text = Math.Truncate((timeleft)).ToString();
+
+        if(soluzioniTrovate.Count == 5)
+        {
+            DatiGioco.PuntiGiocatore += Convert.ToInt32(timeleft);
+            SceneManager.LoadScene("EndGame");
+        }
+
         if (timeleft>20 )
         {
             timerAnim.SetTrigger("tick");
@@ -285,6 +301,7 @@ public class GameManagerScript : MonoBehaviour
             try
             {
                 txtPunteggio.text = (double.Parse(txtPunteggio.text) + double.Parse(CalcolaPunteggio(numeroTrovatoDalGiocatore, esagoniSelezionati.Count,soluzioniGriglia))).ToString();
+                DatiGioco.PuntiGiocatore += int.Parse(txtPunteggio.text);
             }
             catch { }
             
@@ -329,14 +346,7 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
-    IEnumerator MyAttesa(GameObject itm)
-    {
-        Animator box_anim = itm.GetComponent<Animator>();
-        if (itm.tag != "op") box_anim.Play("Exagon_destroy"); else box_anim.Play("operand_destroy");
-        float cliplen = box_anim.runtimeAnimatorController.animationClips.First(clip => clip.name.Contains("_destroy")).length;
-        yield return new WaitForSeconds(cliplen);
-    }
-    
+   
     private double Eval(string expression)  
     {
         expression = expression.Replace(",", ".");
@@ -365,14 +375,17 @@ public class GameManagerScript : MonoBehaviour
         Solutions SoluzioneTrovata = null;
         foreach (Solutions item in soluzioni)
         {
-            if(item.Number == numeroTrovatoDalGiocatore)
+            
+            if(item.Number == numeroTrovatoDalGiocatore && !soluzioniTrovate.Contains(item))
             {
+                 
                 SoluzioneTrovata = item;
                 break;
             }
         }
         if (SoluzioneTrovata!=null)
         {
+            soluzioniTrovate.Add(SoluzioneTrovata);
             punteggioAssegnatoAlGiocatore = passaggi * (int)SoluzioneTrovata.Difficulty;
             GameObject box = GameObject.Find("Goal_"+SoluzioneTrovata.Id_solution.ToString());
             SpriteRenderer spr = box.GetComponent<SpriteRenderer>();

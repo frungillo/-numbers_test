@@ -13,6 +13,17 @@ public class Solutions {
     public string Sequence;
     public float Difficulty;
     public string Note;
+
+    public override bool Equals(object obj)
+    {
+        Solutions inputSol = obj as Solutions;
+        if (inputSol.Id_solution == this.Id_solution) return true; else return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return this.GetHashCode();
+    }
 }
 
 public  class Users {

@@ -10,7 +10,13 @@ public class DowloadGridData : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(GetGrids("http://numbers.jemaka.it/api/grids"));
+        Debug.Log("Livello:" + DatiGioco.LivelloCorrente);
+        string GridSelection = "";
+        if(DatiGioco.LivelloCorrente > 0)
+        {
+            GridSelection = "?idGrid=" + DatiGioco.GrigliaDiGioco.Id_grid;
+        } 
+        StartCoroutine(GetGrids("http://numbers.jemaka.it/api/grids" + GridSelection));
     }
 
     // Update is called once per frame
@@ -36,7 +42,8 @@ public class DowloadGridData : MonoBehaviour
 
                 Grids gr = (Grids) JsonUtility.FromJson(JsonText, typeof(Grids) );
                 DatiGioco.GrigliaDiGioco = gr;
-                StartCoroutine(GetSolutions("http://numbers.jemaka.it/api/Soluzioni/" + gr.Id_grid.ToString()+"?liv=1" ));
+                if (DatiGioco.LivelloCorrente == 0) DatiGioco.LivelloCorrente = 1;
+                StartCoroutine(GetSolutions("http://numbers.jemaka.it/api/Soluzioni/" + gr.Id_grid.ToString()+"?liv="+DatiGioco.LivelloCorrente));
 
                
             }

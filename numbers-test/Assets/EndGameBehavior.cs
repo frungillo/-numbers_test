@@ -16,7 +16,13 @@ public class EndGameBehavior : MonoBehaviour
     {
         
         yield return new WaitForSeconds(1);
+
         
+        if (DatiGioco.GrigliaDiGioco.Difficulty == DatiGioco.LivelloCorrente)
+            DatiGioco.LivelloCorrente = 0;
+        else
+            DatiGioco.LivelloCorrente++;
+       // Debug.Log("Livello_fine:" + DatiGioco.LivelloCorrente);
         SceneManager.LoadScene("ScenaDownload");
     }
 
