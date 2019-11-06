@@ -15,7 +15,7 @@ public class EndGameBehavior : MonoBehaviour
     IEnumerator att()
     {
         
-        yield return new WaitForSeconds(9);
+        yield return new WaitForSeconds(1);
         
         SceneManager.LoadScene("ScenaDownload");
     }

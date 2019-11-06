@@ -36,7 +36,7 @@ public class DowloadGridData : MonoBehaviour
 
                 Grids gr = (Grids) JsonUtility.FromJson(JsonText, typeof(Grids) );
                 DatiGioco.GrigliaDiGioco = gr;
-                StartCoroutine(GetSolutions("http://numbers.jemaka.it/api/Soluzioni/" + gr.Id_grid.ToString()));
+                StartCoroutine(GetSolutions("http://numbers.jemaka.it/api/Soluzioni/" + gr.Id_grid.ToString()+"?liv=1" ));
 
                
             }

@@ -88,6 +88,12 @@ public class GameManagerScript : MonoBehaviour
         Solutions[] sol = DatiGioco.soluzioni; // g.Soluzioni.ToArray();
         soluzioniGriglia = sol;
 
+        for (int l = 1; l < griglia.Difficulty+1; l++)
+        {
+            GameObject levels = GameObject.Find("lvl_" + l);
+            SpriteRenderer lvlspr = levels.GetComponent<SpriteRenderer>();
+            lvlspr.sprite = Resources.Load<Sprite>("Sprites/liv_selector/SVG/Giallo/Giallo " + l);
+        }
         
 
         int idxTxts = 0;
