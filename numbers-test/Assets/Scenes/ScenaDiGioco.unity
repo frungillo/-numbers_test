@@ -1552,7 +1552,6 @@ GameObject:
   m_Component:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
-  - component: {fileID: 519420029}
   - component: {fileID: 519420030}
   m_Layer: 2
   m_Name: Main Camera
@@ -1561,14 +1560,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &519420029
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
 --- !u!114 &519420030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3371,7 +3362,7 @@ MonoBehaviour:
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
-    m_RichText: 1
+    m_RichText: 0
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
@@ -3901,6 +3892,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1481932989}
   - component: {fileID: 1481932988}
+  - component: {fileID: 1481932990}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3924,6 +3916,7 @@ MonoBehaviour:
   txtPunteggio: {fileID: 26501186}
   txtTimer: {fileID: 2083944662}
   txtBonus: {fileID: 1974129861}
+  numberDone: {fileID: 8300000, guid: c8bf66e1514a54598b1265e0d7e91132, type: 3}
   GoalsTexts:
   - {fileID: 2099256798}
   - {fileID: 380949019}
@@ -3952,6 +3945,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 45
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &1481932990
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481932987}
+  m_Enabled: 1
 --- !u!1001 &1485557806
 PrefabInstance:
   m_ObjectHideFlags: 0

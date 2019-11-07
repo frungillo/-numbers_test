@@ -26,6 +26,7 @@ public class GameManagerScript : MonoBehaviour
     [Tooltip("Testo del campo BONUS")]
     public Text txtBonus;
 
+    public AudioSource numberDone;
 
 
     /// <summary>
@@ -63,6 +64,7 @@ public class GameManagerScript : MonoBehaviour
 
     private void Awake()
     {
+        
         if (_instance != null && _instance != this)
         {
             Destroy(this.gameObject);
@@ -313,8 +315,9 @@ public class GameManagerScript : MonoBehaviour
         {
             try
             {
-                txtPunteggio.text = (double.Parse(txtPunteggio.text) + double.Parse(CalcolaPunteggio(numeroTrovatoDalGiocatore, esagoniSelezionati.Count,soluzioniGriglia))).ToString();
-                DatiGioco.PuntiGiocatore += int.Parse(txtPunteggio.text);
+                DatiGioco.PuntiGiocatore += (int)double.Parse(CalcolaPunteggio(numeroTrovatoDalGiocatore, soluzioniGriglia));
+                txtPunteggio.text = DatiGioco.PuntiGiocatore.ToString();
+                
             }
             catch { }
             
@@ -380,7 +383,7 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
-    private string CalcolaPunteggio(string risultatoOperazione, int passaggi, Solutions[] soluzioni)
+    private string CalcolaPunteggio(string risultatoOperazione, Solutions[] soluzioni)
     {
         risultatoOperazione = risultatoOperazione.Replace(",", ".");
         int punteggioAssegnatoAlGiocatore = 0;
@@ -398,8 +401,9 @@ public class GameManagerScript : MonoBehaviour
         }
         if (SoluzioneTrovata!=null)
         {
+            
             soluzioniTrovate.Add(SoluzioneTrovata);
-            punteggioAssegnatoAlGiocatore += BASE_POINTS+BONUS_X;
+            punteggioAssegnatoAlGiocatore += BASE_POINTS*BONUS_X;
             GameObject box = GameObject.Find("Goal_"+SoluzioneTrovata.Id_solution.ToString());
             SpriteRenderer spr = box.GetComponent<SpriteRenderer>();
             spr.sprite = Resources.Load<Sprite>("Sprites/boxes/box_v");
