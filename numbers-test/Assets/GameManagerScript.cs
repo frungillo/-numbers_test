@@ -13,29 +13,38 @@ public class GameManagerScript : MonoBehaviour
     /// <summary>
     /// Testo punteggio parziale
     /// </summary>
+    //[Header("Provamia")]
+    [Tooltip("Testo punteggio parziale")]
     public Text txtParziale;
 
-    /// <summary>
-    /// Testo punteggio Totale
-    /// </summary>
+    [Tooltip("Punteggio totale")]
     public Text txtPunteggio;
 
-    /// <summary>
-    /// Timer countdown
-    /// </summary>
+    [Tooltip("Timer")]
     public Text txtTimer;
+
+    [Tooltip("Testo del campo BONUS")]
+    public Text txtBonus;
+
+
 
     /// <summary>
     /// Elengo campi testo delle soluzioni possibili.
     /// </summary>
     public List<Text> GoalsTexts;
 
+
+
     /// <summary>
     /// Griglia di gioco
     /// </summary>
     public Grids griglia;
 
-    public static int MAX_PUNTEGGIO = 100;
+    private static int BASE_POINTS = 2;
+
+    private int BONUS_X=1;
+
+    
    // private int obiettivo;
     float timeleft = 120;
     private string numeroTrovatoDalGiocatore;
@@ -264,16 +273,20 @@ public class GameManagerScript : MonoBehaviour
         return operazione;
     }
 
+    private bool pointAdded = false;
     // Update is called once per frame
     void Update()
     {
+        txtBonus.text = "X " + BONUS_X;
         Animator timerAnim = txtTimer.GetComponent<Animator>();
         timeleft -= Time.deltaTime;
         txtTimer.text = Math.Truncate((timeleft)).ToString();
 
         if(soluzioniTrovate.Count == 5)
         {
-            DatiGioco.PuntiGiocatore += Convert.ToInt32(timeleft);
+            if (!pointAdded)
+                DatiGioco.PuntiGiocatore += Convert.ToInt32(timeleft);
+            pointAdded = true;
             SceneManager.LoadScene("EndGame");
         }
 
@@ -386,10 +399,15 @@ public class GameManagerScript : MonoBehaviour
         if (SoluzioneTrovata!=null)
         {
             soluzioniTrovate.Add(SoluzioneTrovata);
-            punteggioAssegnatoAlGiocatore = passaggi * (int)SoluzioneTrovata.Difficulty;
+            punteggioAssegnatoAlGiocatore += BASE_POINTS+BONUS_X;
             GameObject box = GameObject.Find("Goal_"+SoluzioneTrovata.Id_solution.ToString());
             SpriteRenderer spr = box.GetComponent<SpriteRenderer>();
             spr.sprite = Resources.Load<Sprite>("Sprites/boxes/box_v");
+            BONUS_X *= 2;
+        } else
+        {
+            BONUS_X = 1;
+            
         }
         return punteggioAssegnatoAlGiocatore.ToString();
     }
