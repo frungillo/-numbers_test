@@ -41,14 +41,39 @@ public class Comp_Esagono : MonoBehaviour
                 if(_manger.esagoniSelezionati.Count == 0 && this.tag == "op") { _manger.txtParziale.text = "Prima un numero"; return; }
                 if(_manger.esagoniSelezionati.Count >0 )
                 {
-                    int idx_lastSel = _manger.esagoniSelezionati.Count - 1;
-                    if(_manger.esagoniSelezionati[idx_lastSel].tag == this.tag)
+                    int idx_lastSel = _manger.esagoniSelezionati.Count - 1; //indice utimo selezionato
+                    string nomeLastSelected = _manger.esagoniSelezionati[idx_lastSel].name.ToString(); // nome ultimo selezionato
+                    nomeLastSelected = nomeLastSelected.Remove(0, 1); //il nome è in formato tx_y, ora rimuovo la "t"
+                    string[] arrNomeLastSelected = nomeLastSelected.Split(new string[] { "_" }, System.StringSplitOptions.RemoveEmptyEntries); //divido per "_"
+                    int last_i = int.Parse(arrNomeLastSelected[0]);
+                    int last_j = int.Parse(arrNomeLastSelected[1]);
+                   // Debug.Log($"Last_IDX:{last_i}_{last_j}");
+
+                    string nomeCorrente = this.name.ToString().Remove(0, 1); //il nome è in formato tx_y, ora rimuovo la "t"
+                    string[] arrNomeCorrente = nomeCorrente.Split(new string[] { "_" }, System.StringSplitOptions.RemoveEmptyEntries); //divido per "_"
+                    int corrente_i = int.Parse(arrNomeCorrente[0]);
+                    int corrente_j = int.Parse(arrNomeCorrente[1]);
+                   // Debug.Log($"Curr_IDX:{corrente_i}_{corrente_j}");
+
+                    //Debug.Log($"Condizione::{(last_i - corrente_i > 1 && last_j - corrente_j > 1).ToString()}");
+                    if (_manger.esagoniSelezionati[idx_lastSel].tag == this.tag)
                     {
                         //PlayerPrefs.SetString("tots", "Troppi numeri!");
                         _manger.txtParziale.text = "Troppi numeri!";
-                        _manger.inError = true;
+                        //_manger.inError = true;
                         return;
                     }
+
+                    if ((last_i-corrente_i)*-1 > 1 || (last_j-corrente_j)*-1 > 1)
+                    {
+                        //_manger.txtParziale.text = "Troppi numeri!";
+                        //_manger.inError = true;
+                        Debug.Log("Troppi numeri");
+                        return;
+                    }
+                    
+                    
+                    
                 }
                 if (_manger.inError) return;
                 Selected = true;
