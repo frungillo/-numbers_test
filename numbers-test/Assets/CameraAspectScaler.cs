@@ -2,10 +2,54 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CameraAspectScaler : MonoBehaviour
 {
+
+    /*
+    private void CalcAspect()
+    {
+      float r = screenWidth / screenHeight;
+      string _r = r.ToString("F2");
+      string ratio = _r.Substring(0,4);
+     
+      switch(ratio)
+      {
+        case "1.33":  //4:3
+            break;
+        case "1.50": //3:2
+            break;
+        case "0.67": //2:3
+            break;
+        case "0.56": //9:16
+            break;
+      }
+    }
+    */
+
     void Start()
     {
+        float aspect = (float)Screen.height / (float)Screen.width; // Portrait
+                //aspect = (float)Screen.width / (float)Screen.height; // Landscape
+                Debug.Log("Aspect Ratio:" + aspect);
+                if (aspect >= 1.87)
+                {
+                    Debug.Log("19.5:9"); // iPhone X                  
+                }
+                else if (aspect >= 1.74)  // 16:9
+                {
+                    Debug.Log("16:9");
+                }
+                else if (aspect > 1.6)// 5:3
+                    Debug.Log("5:3");
+                else if (Mathf.Abs(aspect - (float)1.6) < Mathf.Epsilon)// 16:10
+                    Debug.Log("16:10");
+                else if (aspect >= 1.5)// 3:2
+                    Debug.Log("3:2");
+                else
+                { // 4:3
+                    Debug.Log("4:3 or other");                  
+                }
         // set the desired aspect ratio (the values in this example are
         // hard-coded for 16:9, but you could make them into public
         // variables instead so you can set them at design time)
@@ -45,5 +89,29 @@ public class CameraAspectScaler : MonoBehaviour
 
             camera.rect = rect;
         }
+    }
+
+    void Update() {
+        float aspect = (float)Screen.height / (float)Screen.width; // Portrait
+                //aspect = (float)Screen.width / (float)Screen.height; // Landscape
+                Debug.Log("Aspect Ratio:" + aspect);
+                if (aspect >= 1.87)
+                {
+                    Debug.Log("19.5:9"); // iPhone X                  
+                }
+                else if (aspect >= 1.74)  // 16:9
+                {
+                    Debug.Log("16:9");
+                }
+                else if (aspect > 1.6)// 5:3
+                    Debug.Log("5:3");
+                else if (Mathf.Abs(aspect - (float)1.6) < Mathf.Epsilon)// 16:10
+                    Debug.Log("16:10");
+                else if (aspect >= 1.5)// 3:2
+                    Debug.Log("3:2");
+                else
+                { // 4:3
+                    Debug.Log("4:3 or other");                  
+                }
     }
 }
