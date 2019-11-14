@@ -29,11 +29,11 @@ public class GameManagerScript : MonoBehaviour
     public AudioSource numberDone;
 
 
-    /// <summary>
-    /// Elengo campi testo delle soluzioni possibili.
-    /// </summary>
+    [Header("Campi Soluzioni")]
     public List<Text> GoalsTexts;
 
+    [Header("Lista Effetti Sonori")]
+    public List<AudioClip> EffettiSonori;
 
 
     /// <summary>
@@ -58,6 +58,10 @@ public class GameManagerScript : MonoBehaviour
     List<GameObject> esagoniInGriglia;
     Solutions[] soluzioniGriglia;
     List<Solutions> soluzioniTrovate;
+
+    AudioSource audio;
+    
+
     private static GameManagerScript _instance;
     
     public static GameManagerScript Instance { get { return _instance; } }
@@ -88,6 +92,10 @@ public class GameManagerScript : MonoBehaviour
     void Start()
     {
         soluzioniTrovate = new List<Solutions>();
+
+        audio = GetComponent<AudioSource>();
+
+        
 
         txtPunteggio.text = "0";
         if (DatiGioco.PuntiGiocatore > 0) txtPunteggio.text = DatiGioco.PuntiGiocatore.ToString();
@@ -295,11 +303,15 @@ public class GameManagerScript : MonoBehaviour
         if (timeleft>20 )
         {
             timerAnim.SetTrigger("tick");
+            
+
         }
-        if (timeleft<20)
+        if (timeleft<10)
         {
 
             timerAnim.SetBool("warn", true);
+            if (!audio.isPlaying)
+                audio.PlayOneShot(EffettiSonori[0], 1F);
         }
         if(timeleft <= 0)
         {
@@ -408,13 +420,33 @@ public class GameManagerScript : MonoBehaviour
             SpriteRenderer spr = box.GetComponent<SpriteRenderer>();
             spr.sprite = Resources.Load<Sprite>("Sprites/boxes/box_v");
             BONUS_X *= 2;
+            audio.PlayOneShot(EffettiSonori[1], 1F);
+            if (soluzioniTrovate.Count == 5)
+            {
+                audio.PlayOneShot(EffettiSonori[3], 1F);
+                StartCoroutine(att());
+            }
         } else
         {
             BONUS_X = 1;
-            
+            audio.PlayOneShot(EffettiSonori[2], 1F);
         }
         return punteggioAssegnatoAlGiocatore.ToString();
     }
 
-    
+    IEnumerator att()
+    {
+
+        yield return new WaitForSeconds(4);
+
+
+        if (DatiGioco.GrigliaDiGioco.Difficulty == DatiGioco.LivelloCorrente)
+            DatiGioco.LivelloCorrente = 0;
+        else
+            DatiGioco.LivelloCorrente++;
+        // Debug.Log("Livello_fine:" + DatiGioco.LivelloCorrente);
+        SceneManager.LoadScene("ScenaDownload");
+    }
+
+
 }
