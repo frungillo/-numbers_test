@@ -2035,6 +2035,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: t0_4
       objectReference: {fileID: 0}
+    - target: {fileID: 4590395367845957852, guid: 8f9e32cf1066e7742859b9c09eb4dae5,
+        type: 3}
+      propertyPath: m_TagString
+      value: numbers
+      objectReference: {fileID: 0}
     - target: {fileID: 4590395367845957849, guid: 8f9e32cf1066e7742859b9c09eb4dae5,
         type: 3}
       propertyPath: m_LocalPosition.x

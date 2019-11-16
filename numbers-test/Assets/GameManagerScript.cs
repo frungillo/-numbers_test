@@ -59,7 +59,9 @@ public class GameManagerScript : MonoBehaviour
     Solutions[] soluzioniGriglia;
     List<Solutions> soluzioniTrovate;
 
-    AudioSource audio;
+    private bool pointAdded = false; //flag aggiunta punti
+    private bool levelWin = false; //flag  di controllo vincita livello
+    AudioSource audio_s;
     
 
     private static GameManagerScript _instance;
@@ -93,7 +95,7 @@ public class GameManagerScript : MonoBehaviour
     {
         soluzioniTrovate = new List<Solutions>();
 
-        audio = GetComponent<AudioSource>();
+        audio_s = GetComponent<AudioSource>();
 
         
 
@@ -282,8 +284,8 @@ public class GameManagerScript : MonoBehaviour
         // txtPunteggio.text = tot.ToString("#.##");
         return operazione;
     }
-
-    private bool pointAdded = false;
+    
+    
     // Update is called once per frame
     void Update()
     {
@@ -291,11 +293,12 @@ public class GameManagerScript : MonoBehaviour
         Animator timerAnim = txtTimer.GetComponent<Animator>();
         timeleft -= Time.deltaTime;
         txtTimer.text = Math.Truncate((timeleft)).ToString();
-
+        
         if(soluzioniTrovate.Count == 5)
         {
 
-            audio.PlayOneShot(EffettiSonori[3], 1F);
+            audio_s.PlayOneShot(EffettiSonori[3], 1F);
+            levelWin = true;
             StartCoroutine(GameWin_async());
 
             if (!pointAdded)
@@ -314,23 +317,23 @@ public class GameManagerScript : MonoBehaviour
         {
 
             timerAnim.SetBool("warn", true);
-            if (!audio.isPlaying)
-                audio.PlayOneShot(EffettiSonori[0], 1F);
+            if (!audio_s.isPlaying)
+                audio_s.PlayOneShot(EffettiSonori[0], 1F);
         }
-        if(timeleft <= 0)
+        if(timeleft <= 0 && !levelWin)
         {
             SceneManager.LoadScene("EndGame");
         }
         
         /*****************Valutazione in caso di stato SCHIACCIATO del dito giocatore*****************/
-        if (PlayerPrefs.GetString("Stato") == "G")
+        if (PlayerPrefs.GetString("Stato") == "G") /*dito sullo schermo*/
         {
            numeroTrovatoDalGiocatore= Calcolo();
         }
-
+        /*********************************************************************************************/
 
         /***************Valutazione in caso di stato ALTAZO del dito del giocatore********************/
-        if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
+        if (PlayerPrefs.GetString("Stato") == "S") //Dito alzato
         {
             try
             {
@@ -349,15 +352,17 @@ public class GameManagerScript : MonoBehaviour
                /*Tutti gli esagoni*/
                
             }
+            
 
+            /*
             foreach (GameObject itm in esagoniSelezionati)
             {
                 Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
                 SpriteRenderer spr = itm.GetComponent<SpriteRenderer>();
                 
-                /*Disattivato il cambio di esagoni al rilascio del mouse*/
-                /* if (scr_e.Selected)
-                /*******************************************************/
+                //Disattivato il cambio di esagoni al rilascio del mouse
+                // if (scr_e.Selected)
+                
 
                 scr_e.Selected = false;
 
@@ -367,11 +372,12 @@ public class GameManagerScript : MonoBehaviour
                     spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_g");
                 } else
                 {
-                    spr.color = new Color(255, 255, 255, 255);
+                    spr.sprite = Resources.Load<Sprite>("Sprites/operand/" + scr_e.Number.ToString());
                 }
 
             }
-            esagoniSelezionati.Clear();
+            */
+            //esagoniSelezionati.Clear();
         }
 
 
@@ -427,14 +433,51 @@ public class GameManagerScript : MonoBehaviour
             SpriteRenderer spr = box.GetComponent<SpriteRenderer>();
             spr.sprite = Resources.Load<Sprite>("Sprites/boxes/box_v");
             BONUS_X *= 2;
-            audio.PlayOneShot(EffettiSonori[1], 1F);
+            audio_s.PlayOneShot(EffettiSonori[1], 1F);
+
+            colora("v");
+            StartCoroutine(ColoraSelezionati(.5F, "g"));
+            
             
         } else
         {
             BONUS_X = 1;
-            audio.PlayOneShot(EffettiSonori[2], 1F);
+            audio_s.PlayOneShot(EffettiSonori[2], 1F);
+
+            colora("r");
+            StartCoroutine(ColoraSelezionati(.5F, "g"));
+            
         }
         return punteggioAssegnatoAlGiocatore.ToString();
+    }
+
+    private void colora(string col)
+    {
+        foreach (GameObject itm in esagoniSelezionati)
+        {
+            Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
+            SpriteRenderer spr = itm.GetComponent<SpriteRenderer>();
+
+            /*Disattivato il cambio di esagoni al rilascio del mouse*/
+            /* if (scr_e.Selected)
+            /*******************************************************/
+
+            scr_e.Selected = false;
+
+            //box_anim.Play("exs_idle");
+            if (itm.tag != "op")
+            {
+                spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_"+col);
+            }
+            else
+            {
+                if (col=="g")
+                    spr.sprite = Resources.Load<Sprite>("Sprites/operand/" + scr_e.Number.ToString());
+                else
+                    spr.sprite = Resources.Load<Sprite>("Sprites/operand/" + scr_e.Number.ToString() + "_" + col);
+            }
+
+        }
     }
 
     IEnumerator GameWin_async()
@@ -451,9 +494,12 @@ public class GameManagerScript : MonoBehaviour
         SceneManager.LoadScene("ScenaDownload");
     }
 
-    IEnumerator Attesa(float seconds)
+    IEnumerator ColoraSelezionati(float seconds, string col)
     {
-        yield return new WaitForSeconds(seconds);              
+        
+        yield return new WaitForSeconds(seconds);
+        colora(col);
+        esagoniSelezionati.Clear();
     }
 
 

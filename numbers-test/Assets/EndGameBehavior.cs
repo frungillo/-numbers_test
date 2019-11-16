@@ -15,7 +15,8 @@ public class EndGameBehavior : MonoBehaviour
     IEnumerator att()
     {
         
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
+        DatiGioco.LivelloCorrente = 0;
 
         /*
         if (DatiGioco.GrigliaDiGioco.Difficulty == DatiGioco.LivelloCorrente)
@@ -23,7 +24,7 @@ public class EndGameBehavior : MonoBehaviour
         else
             DatiGioco.LivelloCorrente++;
             */
-       // Debug.Log("Livello_fine:" + DatiGioco.LivelloCorrente);
+        // Debug.Log("Livello_fine:" + DatiGioco.LivelloCorrente);
         SceneManager.LoadScene("ScenaMenu");
     }
 

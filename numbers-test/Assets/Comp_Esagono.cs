@@ -8,6 +8,7 @@ public class Comp_Esagono : MonoBehaviour
     private Animator anim;
     private AudioSource aus;
     private SpriteRenderer spr;
+ 
     public bool Selected;
     public int Number;
     GameManagerScript _manger;
@@ -20,6 +21,8 @@ public class Comp_Esagono : MonoBehaviour
         anim = GetComponent<Animator>();
         aus = GetComponent<AudioSource>();
         spr = GetComponent<SpriteRenderer>();
+ 
+        
     }
 
     // Update is called once per frame
@@ -47,15 +50,15 @@ public class Comp_Esagono : MonoBehaviour
                     string[] arrNomeLastSelected = nomeLastSelected.Split(new string[] { "_" }, System.StringSplitOptions.RemoveEmptyEntries); //divido per "_"
                     int last_i = int.Parse(arrNomeLastSelected[0]);
                     int last_j = int.Parse(arrNomeLastSelected[1]);
-                   // Debug.Log($"Last_IDX:{last_i}_{last_j}");
+                   
 
                     string nomeCorrente = this.name.ToString().Remove(0, 1); //il nome è in formato tx_y, ora rimuovo la "t"
                     string[] arrNomeCorrente = nomeCorrente.Split(new string[] { "_" }, System.StringSplitOptions.RemoveEmptyEntries); //divido per "_"
                     int corrente_i = int.Parse(arrNomeCorrente[0]);
                     int corrente_j = int.Parse(arrNomeCorrente[1]);
-                   // Debug.Log($"Curr_IDX:{corrente_i}_{corrente_j}");
+                   
 
-                    //Debug.Log($"Condizione::{(last_i - corrente_i > 1 && last_j - corrente_j > 1).ToString()}");
+                   
                     if (_manger.esagoniSelezionati[idx_lastSel].tag == this.tag)
                     {
                         //PlayerPrefs.SetString("tots", "Troppi numeri!");
@@ -82,9 +85,9 @@ public class Comp_Esagono : MonoBehaviour
                 if (this.tag != "op") {
                     spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + this.Number + "_o");
                 } else {
-                    Debug.Log("COLORE:" + spr.color.ToString());
-                    spr.color = new Color(249, 179, 57, 255);
-                    Debug.Log("COLORE _ ORA:" + spr.color.ToString());
+                    spr.sprite = Resources.Load<Sprite>("Sprites/operand/" + this.Number + "_o");
+                    
+
                 }
 
                 _manger.esagoniSelezionati.Add(this.gameObject);
