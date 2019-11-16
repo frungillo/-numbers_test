@@ -294,10 +294,14 @@ public class GameManagerScript : MonoBehaviour
 
         if(soluzioniTrovate.Count == 5)
         {
+
+            audio.PlayOneShot(EffettiSonori[3], 1F);
+            StartCoroutine(GameWin_async());
+
             if (!pointAdded)
                 DatiGioco.PuntiGiocatore += Convert.ToInt32(timeleft);
             pointAdded = true;
-            SceneManager.LoadScene("EndGame");
+            //SceneManager.LoadScene("EndGame");
         }
 
         if (timeleft>20 )
@@ -317,13 +321,16 @@ public class GameManagerScript : MonoBehaviour
         {
             SceneManager.LoadScene("EndGame");
         }
-        //Debug.Log("Esagoni in Griglia:" + esagoniInGriglia.Count.ToString());
+        
+        /*****************Valutazione in caso di stato SCHIACCIATO del dito giocatore*****************/
         if (PlayerPrefs.GetString("Stato") == "G")
         {
            numeroTrovatoDalGiocatore= Calcolo();
         }
 
-            if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
+
+        /***************Valutazione in caso di stato ALTAZO del dito del giocatore********************/
+        if (PlayerPrefs.GetString("Stato") == "S") //Dito del mouse alzato
         {
             try
             {
@@ -339,7 +346,7 @@ public class GameManagerScript : MonoBehaviour
 
             foreach (GameObject itm in esagoniInGriglia)
             {
-               // itm.transform.position = new Vector3(itm.transform.position.x, itm.transform.position.y, 1);
+               /*Tutti gli esagoni*/
                
             }
 
@@ -421,11 +428,7 @@ public class GameManagerScript : MonoBehaviour
             spr.sprite = Resources.Load<Sprite>("Sprites/boxes/box_v");
             BONUS_X *= 2;
             audio.PlayOneShot(EffettiSonori[1], 1F);
-            if (soluzioniTrovate.Count == 5)
-            {
-                audio.PlayOneShot(EffettiSonori[3], 1F);
-                StartCoroutine(att());
-            }
+            
         } else
         {
             BONUS_X = 1;
@@ -434,7 +437,7 @@ public class GameManagerScript : MonoBehaviour
         return punteggioAssegnatoAlGiocatore.ToString();
     }
 
-    IEnumerator att()
+    IEnumerator GameWin_async()
     {
 
         yield return new WaitForSeconds(4);
@@ -446,6 +449,11 @@ public class GameManagerScript : MonoBehaviour
             DatiGioco.LivelloCorrente++;
         // Debug.Log("Livello_fine:" + DatiGioco.LivelloCorrente);
         SceneManager.LoadScene("ScenaDownload");
+    }
+
+    IEnumerator Attesa(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);              
     }
 
 

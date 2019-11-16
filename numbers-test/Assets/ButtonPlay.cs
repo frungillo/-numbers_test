@@ -14,6 +14,11 @@ public class ButtonPlay : MonoBehaviour
         
     }
 
+   public void ClickOptions()
+    {
+
+    }
+
    public  void TaskOnClickPlaySolo()
     {
         SceneManager.LoadScene("ScenaDownload");

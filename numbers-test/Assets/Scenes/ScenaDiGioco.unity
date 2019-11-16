@@ -859,6 +859,21 @@ PrefabInstance:
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: c8bf66e1514a54598b1265e0d7e91132, type: 3}
+    - target: {fileID: 4590395367845957854, guid: 43e497dd49f123c44bbea0b0ce63b06d,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4590395367845957854, guid: 43e497dd49f123c44bbea0b0ce63b06d,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4590395367845957854, guid: 43e497dd49f123c44bbea0b0ce63b06d,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43e497dd49f123c44bbea0b0ce63b06d, type: 3}
 --- !u!1 &263277251
@@ -2991,12 +3006,12 @@ PrefabInstance:
     - target: {fileID: -3762260317470485628, guid: d6b1598005016fe429a2ae9b3de898c8,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5204977
+      value: 0.52
       objectReference: {fileID: 0}
     - target: {fileID: -3762260317470485628, guid: d6b1598005016fe429a2ae9b3de898c8,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.38883573
+      value: 0.38
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 7243324766535440047, guid: d6b1598005016fe429a2ae9b3de898c8,

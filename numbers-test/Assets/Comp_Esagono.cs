@@ -80,9 +80,11 @@ public class Comp_Esagono : MonoBehaviour
                 aus.Play();
 
                 if (this.tag != "op") {
-                    spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + this.Number + "_v");
+                    spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + this.Number + "_o");
                 } else {
-                    spr.color = new Color(20, 231, 0, 255);
+                    Debug.Log("COLORE:" + spr.color.ToString());
+                    spr.color = new Color(249, 179, 57, 255);
+                    Debug.Log("COLORE _ ORA:" + spr.color.ToString());
                 }
 
                 _manger.esagoniSelezionati.Add(this.gameObject);
