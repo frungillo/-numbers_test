@@ -294,7 +294,7 @@ public class GameManagerScript : MonoBehaviour
         timeleft -= Time.deltaTime;
         txtTimer.text = Math.Truncate((timeleft)).ToString();
         
-        if(soluzioniTrovate.Count == 5)
+        if(soluzioniTrovate.Count == 5 && !levelWin)
         {
 
             audio_s.PlayOneShot(EffettiSonori[3], 1F);
