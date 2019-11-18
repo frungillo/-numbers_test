@@ -37,7 +37,7 @@ public class DowloadGridData : MonoBehaviour
             }
             else
             {
-                
+                yield return new WaitForSeconds(1);
                 string JsonText = request.downloadHandler.text;
 
                 Grids gr = (Grids) JsonUtility.FromJson(JsonText, typeof(Grids) );
@@ -62,8 +62,8 @@ public class DowloadGridData : MonoBehaviour
             }
             else
             {
+                yield return new WaitForSeconds(1);
                 string JsonText = request.downloadHandler.text;
-
                 Solutions[] sols = JsonConvert.DeserializeObject<Solutions[]>(JsonText);
                 DatiGioco.soluzioni = sols;
                 SceneManager.LoadScene("ScenaDiGioco");
