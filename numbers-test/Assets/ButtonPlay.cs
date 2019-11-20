@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Newtonsoft.Json;
 
 public class ButtonPlay : MonoBehaviour
 {
@@ -22,22 +25,60 @@ public class ButtonPlay : MonoBehaviour
                 showToast("Connessione internet OK", 2);
             }
         }));
+
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.Activate();
+        SignIn();
     }
 
-   public void ClickOptions()
+    void SignIn()
     {
-
+        Social.localUser.Authenticate(success => {
+            showToast("Stato connessione:" + success.ToString(), 2);
+            Debug.Log("Connesso a PLAY");
+        });
     }
 
+    #region Risultati
+
+    public void SbloccaRisultati(string id)
+    {
+        Social.ReportProgress(id, 100, success => { });
+    }
+
+    public static void IncrementaRisultati(string id, int StepDaIncrementare)
+    {
+        PlayGamesPlatform.Instance.IncrementAchievement(id, StepDaIncrementare, success => { });
+    }
+
+    public static void MostraRisultatiUI()
+    {
+        Social.ShowAchievementsUI();
+        Debug.Log("UI ATTIVATA");
+    }
+    #endregion /Risultati
+
+    /*Pulsante Opzioni*/
+    public void ClickOptions()
+    {
+        Debug.Log("Options Clicked!");
+        MostraRisultatiUI();
+    }
+
+    /*Pulsante SOLO*/
    public  void TaskOnClickPlaySolo()
     {
         SceneManager.LoadScene("ScenaDownload");
     }
-    
+
+    /*Pulsante SFIDA*/
     public void TaskOnClickMutiplayer()
     {
 
     }
+
+
     // Update is called once per frame
     void Update()
     {
@@ -61,7 +102,49 @@ public class ButtonPlay : MonoBehaviour
 
     }
 
-   
+    private IEnumerator GetUser(string url)
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(url))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.isNetworkError || request.isHttpError)
+            {
+                Debug.LogError("Request Error: " + request.error);
+            }
+            else
+            {
+                yield return new WaitForSeconds(1);
+                string JsonText = request.downloadHandler.text;
+                Solutions[] sols = JsonConvert.DeserializeObject<Solutions[]>(JsonText);
+                DatiGioco.soluzioni = sols;
+                SceneManager.LoadScene("ScenaDiGioco");
+            }
+        }
+    }
+
+    private IEnumerator SetUser(string url, Users u)
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(url))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.isNetworkError || request.isHttpError)
+            {
+                Debug.LogError("Request Error: " + request.error);
+            }
+            else
+            {
+                yield return new WaitForSeconds(1);
+                string JsonText = request.downloadHandler.text;
+                Solutions[] sols = JsonConvert.DeserializeObject<Solutions[]>(JsonText);
+                DatiGioco.soluzioni = sols;
+                SceneManager.LoadScene("ScenaDiGioco");
+            }
+        }
+    }
+
+
 
     void showToast(string text, int duration)
     {
