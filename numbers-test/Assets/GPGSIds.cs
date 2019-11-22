@@ -24,7 +24,7 @@
 
 public static class GPGSIds
 {
-        public const string achievement_progressi = "CgkInoTksMwCEAIQAA"; // <GPGSID>
+        public const string achievement_obbiettivo_di_prova = "CgkI9dSGoqQZEAIQAA"; // <GPGSID>
 
 }
 

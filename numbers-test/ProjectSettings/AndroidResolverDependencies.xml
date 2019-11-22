@@ -42,7 +42,7 @@
     <file>Assets/Plugins/Android/com.google.games.gpgs-plugin-support-0.10.06.aar</file>
   </files>
   <settings>
-    <setting name="androidAbis" value="armeabi-v7a,x86" />
+    <setting name="androidAbis" value="arm64-v8a,armeabi-v7a" />
     <setting name="bundleId" value="com.dinoale.numbers" />
     <setting name="explodeAars" value="False" />
     <setting name="gradleBuildEnabled" value="True" />
