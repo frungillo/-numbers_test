@@ -22,7 +22,7 @@ public class ButtonPlay : MonoBehaviour
                 showToast("Connessione internet assente...", 2);
             } else
             {
-                showToast("Connessione internet OK", 2);
+                //showToast("Connessione internet OK", 2);
             }
         }));
 
