@@ -11,7 +11,8 @@ using Newtonsoft.Json;
 
 public class ButtonPlay : MonoBehaviour
 {
-    public Text txt;
+    public Text txtToastLabel;
+    public Text txtMonitor;
 
     // Start is called before the first frame update
     void Start()
@@ -30,13 +31,19 @@ public class ButtonPlay : MonoBehaviour
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.Activate();
         SignIn();
+        
     }
 
     void SignIn()
     {
         Social.localUser.Authenticate(success => {
             showToast("Stato connessione:" + success.ToString(), 2);
-            Debug.Log("Connesso a PLAY");
+            
+            PlayGamesPlatform.Instance.Authenticate(suc => {
+                showToast("Stato Play auth:" + suc.ToString(), 2);
+                txtMonitor.text = "UserID:" + PlayGamesPlatform.Instance.GetUserId();
+
+            });
         });
     }
 
@@ -153,13 +160,13 @@ public class ButtonPlay : MonoBehaviour
 
     private IEnumerator showToastCOR(string text,int duration)
     {
-        Color orginalColor = txt.color;
+        Color orginalColor = txtToastLabel.color;
 
-        txt.text = text;
-        txt.enabled = true;
+        txtToastLabel.text = text;
+        txtToastLabel.enabled = true;
 
         //Fade in
-        yield return fadeInAndOut(txt, true, 0.5f);
+        yield return fadeInAndOut(txtToastLabel, true, 0.5f);
 
         //Wait for the duration
         float counter = 0;
@@ -170,10 +177,10 @@ public class ButtonPlay : MonoBehaviour
         }
 
         //Fade out
-        yield return fadeInAndOut(txt, false, 0.5f);
+        yield return fadeInAndOut(txtToastLabel, false, 0.5f);
 
-        txt.enabled = false;
-        txt.color = orginalColor;
+        txtToastLabel.enabled = false;
+        txtToastLabel.color = orginalColor;
     }
 
     IEnumerator fadeInAndOut(Text targetText, bool fadeIn, float duration)

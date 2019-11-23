@@ -698,7 +698,8 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
-    Collab: 1
+    Build: 0
+    Collab: 0
     UNet: 1
   luminIcon:
     m_Name: 
@@ -719,7 +720,7 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: ec145a88-eed1-4876-90b1-15e1d6b1aee8
+  cloudProjectId: b61bc81e-85bd-476a-b9cd-35c7f4ab989a
   framebufferDepthMemorylessMode: 0
   projectName: numbers
   organizationId: gennyfrungillo
