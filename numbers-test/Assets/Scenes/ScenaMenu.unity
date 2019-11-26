@@ -454,7 +454,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856794889}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.818, y: 4.7, z: 0}
+  m_LocalPosition: {x: 1.818, y: 4.7, z: -2}
   m_LocalScale: {x: 0.15, y: 0.15, z: 0.236}
   m_Children: []
   m_Father: {fileID: 0}
@@ -534,7 +534,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 862793689}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.074, y: 0.006, z: 0}
+  m_LocalPosition: {x: 0.02, y: 0.006, z: 0}
   m_LocalScale: {x: 0.3021128, y: 0.3021128, z: 0.3021128}
   m_Children: []
   m_Father: {fileID: 0}
@@ -783,10 +783,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 39af81cdd427447b5bb98db589d6c70c, type: 3}
-    m_FontSize: 14
+    m_FontSize: 3
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -794,7 +794,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: GENNY FRUNGILLO
 --- !u!222 &1618928913
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -819,8 +819,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6.32, y: 238}
-  m_SizeDelta: {x: 313.23, y: 30}
+  m_AnchoredPosition: {x: 123.74, y: 288.91}
+  m_SizeDelta: {x: 77.73, y: 13.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1635852196
 GameObject:
