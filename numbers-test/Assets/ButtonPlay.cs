@@ -41,7 +41,7 @@ public class ButtonPlay : MonoBehaviour
             
             PlayGamesPlatform.Instance.Authenticate(suc => {
                 showToast("Stato Play auth:" + suc.ToString(), 2);
-                txtMonitor.text = "UserID:" + PlayGamesPlatform.Instance.GetUserId();
+                txtMonitor.text = "USER: " + PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper();
 
             });
         });
