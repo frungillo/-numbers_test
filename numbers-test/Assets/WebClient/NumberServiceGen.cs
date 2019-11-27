@@ -185,3 +185,22 @@ public  class Grids {
     public Solutions[] Soluzioni;
 
 }
+[Serializable]
+public class Matchmaking
+{
+    public int Id_matchmaking;
+    public int Idplayer;
+    public DateTime Data_matching;
+    public int Level_match;
+    public DateTime Data_waiting;
+}
+[Serializable]
+public class versus
+{
+    public int IdVersus;
+    public int IdPlayer1;
+    public int IdPlayer2;
+    public DateTime DataStart;
+    public int IdGrid;
+    public DateTime DataStop;
+}
