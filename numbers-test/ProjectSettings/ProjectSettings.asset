@@ -169,7 +169,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier: {}
   buildNumber: {}
-  AndroidBundleVersionCode: 2
+  AndroidBundleVersionCode: 3
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -262,7 +262,7 @@ PlayerSettings:
   AndroidTargetArchitectures: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/frungillo/OneDrive/APK/Numbers/user.keystore
+  AndroidKeystoreName: /Users/genny/OneDrive/APK/Numbers/user.keystore
   AndroidKeyaliasName: numberskey
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
@@ -283,7 +283,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: a3cf30dc99540644e948b9ee6118f03c, type: 3}
+      m_Icon: {fileID: 2800000, guid: 5d1ebadcf932148c091e07a6ccaffb7a, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0

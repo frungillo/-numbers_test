@@ -297,8 +297,10 @@ public class GameManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
 
+        GameObject timerGraph = GameObject.Find("timer");
+        SpriteRenderer timerSpr = timerGraph.GetComponent<SpriteRenderer>();
+        
         Animator timerAnim = txtTimer.GetComponent<Animator>();
         timeleft -= Time.deltaTime;
         txtTimer.text = Math.Truncate((timeleft)).ToString();
@@ -314,6 +316,12 @@ public class GameManagerScript : MonoBehaviour
                 DatiGioco.PuntiGiocatore += Convert.ToInt32(timeleft);
             pointAdded = true;
             //SceneManager.LoadScene("EndGame");
+        }
+        if(Mathf.FloorToInt(timeleft) % 12 == 0 )
+        {
+            timerSpr.sprite = Resources.Load<Sprite>("Sprites/TimerAnim/t_" + (Mathf.FloorToInt(timeleft)/12).ToString());
+            if (Mathf.FloorToInt(timeleft) / 12 == 0)
+                txtTimer.text = "";
         }
 
         if (timeleft>20 )
