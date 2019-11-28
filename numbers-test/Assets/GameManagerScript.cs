@@ -23,10 +23,9 @@ public class GameManagerScript : MonoBehaviour
     [Tooltip("Timer")]
     public Text txtTimer;
 
-    [Tooltip("Testo del campo BONUS")]
-    public Text txtBonus;
+    [Tooltip("Livello")]
+    public Text txtLevel;
 
-    public AudioSource numberDone;
 
 
     [Header("Campi Soluzioni")]
@@ -50,7 +49,8 @@ public class GameManagerScript : MonoBehaviour
     float timeleft = 120;
     private string numeroTrovatoDalGiocatore;
 
-    public Animator txtAnimator;
+    public Animator txtAnimator; /*???????????????????????*/
+
     public bool inError;
     UnityWebRequest srv;
     public List<GameObject> esagoniSelezionati;
@@ -62,6 +62,8 @@ public class GameManagerScript : MonoBehaviour
     private bool pointAdded = false; //flag aggiunta punti
     private bool levelWin = false; //flag  di controllo vincita livello
     AudioSource audio_s;
+
+    private GameObject bonusSpc;
     
 
     private static GameManagerScript _instance;
@@ -93,6 +95,11 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*Elemento Bonus_spc*/
+        bonusSpc = GameObject.Find("bonus_spc");
+        SpriteRenderer spr_bonus = bonusSpc.GetComponent<SpriteRenderer>();
+        spr_bonus.sprite = null; //azzero losprite
+        /* ********************* */
         soluzioniTrovate = new List<Solutions>();
 
         audio_s = GetComponent<AudioSource>();
@@ -110,7 +117,8 @@ public class GameManagerScript : MonoBehaviour
 
         Solutions[] sol = DatiGioco.soluzioni; // g.Soluzioni.ToArray();
         soluzioniGriglia = sol;
-
+        txtLevel.text = DatiGioco.LivelloCorrente.ToString();
+        /*
         for (int l = 1; l < griglia.Difficulty + 1; l++)
         {
             GameObject levels = GameObject.Find("lvl_" + l);
@@ -124,7 +132,7 @@ public class GameManagerScript : MonoBehaviour
                 lvlspr.sprite = Resources.Load<Sprite>("Sprites/liv_selector/SVG/Giallo/Giallo " + l);
             }
         }
-        
+        */
 
         int idxTxts = 0;
         foreach (Solutions item in sol)
@@ -289,7 +297,8 @@ public class GameManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        txtBonus.text = "X " + BONUS_X;
+       
+
         Animator timerAnim = txtTimer.GetComponent<Animator>();
         timeleft -= Time.deltaTime;
         txtTimer.text = Math.Truncate((timeleft)).ToString();
@@ -437,12 +446,23 @@ public class GameManagerScript : MonoBehaviour
 
             colora("v");
             StartCoroutine(ColoraSelezionati(.5F, "g"));
-            
-            
+            if (BONUS_X > 1)
+            {
+                string spr_bonus_name = "x" + BONUS_X;
+                SpriteRenderer spr_bonus = bonusSpc.GetComponent<SpriteRenderer>();
+               
+                Animator bonus_anim = bonusSpc.GetComponent<Animator>();
+                bonus_anim.SetTrigger("test");
+                spr_bonus.sprite = Resources.Load<Sprite>("Sprites/bonus/" + spr_bonus_name);
+            }
+
         } else
         {
             BONUS_X = 1;
             audio_s.PlayOneShot(EffettiSonori[2], 1F);
+            string spr_bonus_name = "x" + BONUS_X;
+            SpriteRenderer spr_bonus = bonusSpc.GetComponent<SpriteRenderer>();
+            spr_bonus.sprite = null;
 
             colora("r");
             StartCoroutine(ColoraSelezionati(.5F, "g"));

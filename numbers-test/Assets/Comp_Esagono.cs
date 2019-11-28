@@ -18,7 +18,7 @@ public class Comp_Esagono : MonoBehaviour
     {
         _manger = GameManagerScript.Instance;
         
-        anim = GetComponent<Animator>();
+       // anim = GetComponent<Animator>();
         aus = GetComponent<AudioSource>();
         spr = GetComponent<SpriteRenderer>();
  
@@ -37,7 +37,7 @@ public class Comp_Esagono : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             //Debug.Log("Tasto Schiacciato");
-            anim.SetBool("cliccato", true);
+           // anim.SetBool("cliccato", true);
             //Debug.Log("Cliccato:"+this.name.ToString());//
             if (!aus.isPlaying && !Selected)
             {
@@ -99,7 +99,7 @@ public class Comp_Esagono : MonoBehaviour
     private void OnMouseExit()
     {
         //Debug.Log("Tasto NON Schiacciato");
-        anim.SetBool("cliccato", false);
+        //anim.SetBool("cliccato", false);
     }
 
   
