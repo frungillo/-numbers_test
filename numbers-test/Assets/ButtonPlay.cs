@@ -14,6 +14,9 @@ public class ButtonPlay : MonoBehaviour
     public Text txtToastLabel;
     public Text txtMonitor;
 
+    public Button btnSolo;
+    public Button btnMultiPlay;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +24,8 @@ public class ButtonPlay : MonoBehaviour
             if(!isConnected)
             {
                 showToast("Connessione internet assente...", 2);
+                btnSolo.enabled = false;
+                btnMultiPlay.enabled = false;
             } else
             {
                 //showToast("Connessione internet OK", 2);

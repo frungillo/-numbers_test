@@ -45,11 +45,14 @@ public class GameManagerScript : MonoBehaviour
     private int BONUS_X=1;
 
     
-   // private int obiettivo;
+   
     float timeleft = 120;
     private string numeroTrovatoDalGiocatore;
 
-    public Animator txtAnimator; /*???????????????????????*/
+    /*Componenti Fumetto*/
+    public GameObject Comic;
+    private Animator ComicAnimator;
+    private SpriteRenderer ComicSprite;
 
     public bool inError;
     UnityWebRequest srv;
@@ -85,6 +88,7 @@ public class GameManagerScript : MonoBehaviour
         esagoniSelezionati = new List<GameObject>();
         inError = false;
         griglia = DatiGioco.GrigliaDiGioco;
+
     
 
 
@@ -98,8 +102,15 @@ public class GameManagerScript : MonoBehaviour
         /*Elemento Bonus_spc*/
         bonusSpc = GameObject.Find("bonus_spc");
         SpriteRenderer spr_bonus = bonusSpc.GetComponent<SpriteRenderer>();
-        spr_bonus.sprite = null; //azzero losprite
+        spr_bonus.sprite = null; //azzero lo sprite
         /* ********************* */
+
+        /*inizializzazione fumetto*/
+        ComicAnimator = Comic.GetComponent<Animator>();
+        ComicSprite = Comic.GetComponent<SpriteRenderer>();
+        ComicSprite.sprite = null;
+        /***/
+
         soluzioniTrovate = new List<Solutions>();
 
         audio_s = GetComponent<AudioSource>();
@@ -108,10 +119,10 @@ public class GameManagerScript : MonoBehaviour
 
         txtPunteggio.text = "0";
         if (DatiGioco.PuntiGiocatore > 0) txtPunteggio.text = DatiGioco.PuntiGiocatore.ToString();
-        txtParziale.text = "";
+        ScriviParziale("", false); // txtParziale.text = "";
         Grids g = griglia;
 
-        txtParziale.text = "Griglia #" + g.Id_grid.ToString();
+        ScriviParziale("Griglia #" + g.Id_grid.ToString()); //  txtParziale.text = "Griglia #" + g.Id_grid.ToString();
 
         string[] arrGridTmp = g.Item.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -188,14 +199,14 @@ public class GameManagerScript : MonoBehaviour
                 txtPunteggio.text = ev.ToString("#.##");
                 PlayerPrefs.SetString("tots", ev.ToString("#.##"));
             }
-            txtAnimator.SetTrigger("fire");
+           // ComicAnimator.SetTrigger("fire");
             /*Cambio Esagoni*/
         }
         catch (System.Exception ex)
         {
             
             txtPunteggio.text = ex.Message;
-            txtAnimator.SetTrigger("fire");
+            //ComicAnimator.SetTrigger("fire");
         }
         
     }
@@ -221,12 +232,33 @@ public class GameManagerScript : MonoBehaviour
         return toAdd;
     }
 
+    private bool FumettoVisibile = false;
+    private void ScriviParziale(string msg, bool add = true)
+    {
+        if (msg != "")
+        {
+            if (!FumettoVisibile)
+            {
+                ComicSprite.sprite = Resources.Load<Sprite>("Sprites/albert/Fumetto-vuoto");
+                ComicAnimator.SetTrigger("fire");
+                FumettoVisibile = true;
+            }
+            
+
+        } else
+        {
+            //
+            
+        }
+        if (!add) txtParziale.text = msg; else txtParziale.text += msg;
+    }
+
     private string Calcolo()
     {
         double tot=0;
         int cnt = 1;
         string operazione="";
-        txtParziale.text = "";
+        ScriviParziale("", false);
         foreach (GameObject itm in esagoniSelezionati)
         {
             
@@ -252,11 +284,11 @@ public class GameManagerScript : MonoBehaviour
                         break;
 
                 }
-                txtParziale.text += toAdd;
+                 ScriviParziale(toAdd); //txtParziale.text += toAdd;
             } else { //è un box numerico
                 toAdd = src.Number.ToString();
                 itm.transform.position = new Vector3(itm.transform.position.x, itm.transform.position.y, -1);
-                txtParziale.text += toAdd;
+                ScriviParziale(toAdd); // txtParziale.text += toAdd;
             }
             
             if (cnt < 3) { operazione += toAdd; goto exit; }
@@ -265,7 +297,7 @@ public class GameManagerScript : MonoBehaviour
                 operazione += toAdd;
                 tot = Eval(operazione);
                 operazione = tot.ToString();
-                txtParziale.text += "="+operazione;
+                ScriviParziale("=" + operazione); // txtParziale.text += "="+operazione;
             }
 
             if (cnt > 3)
@@ -274,14 +306,14 @@ public class GameManagerScript : MonoBehaviour
                 if (itm.tag == "op")
                 {
                     operazione +=  toAdd;
-                    txtParziale.text = operazione;
+                    ScriviParziale(operazione, false); // txtParziale.text = operazione;
                    
                     goto exit;
                 }
                 operazione +=  toAdd;
                 tot = Eval(operazione);
                 operazione = tot.ToString("#.##");
-                txtParziale.text +="="+operazione;
+                ScriviParziale("=" + operazione); // txtParziale.text +="="+operazione;
             }
             
         exit:
@@ -352,6 +384,10 @@ public class GameManagerScript : MonoBehaviour
         /***************Valutazione in caso di stato ALTAZO del dito del giocatore********************/
         if (PlayerPrefs.GetString("Stato") == "S") //Dito alzato
         {
+
+            ComicSprite.sprite = null;
+            FumettoVisibile = false;
+
             try
             {
                 DatiGioco.PuntiGiocatore += (int)double.Parse(CalcolaPunteggio(numeroTrovatoDalGiocatore, soluzioniGriglia));
@@ -362,7 +398,7 @@ public class GameManagerScript : MonoBehaviour
             
             inError = false;
             PlayerPrefs.DeleteAll();
-            txtParziale.text = "";
+            ScriviParziale("", false); //txtParziale.text = "";
 
             foreach (GameObject itm in esagoniInGriglia)
             {
