@@ -31,14 +31,16 @@ public class ButtonPlay : MonoBehaviour
                 //showToast("Connessione internet OK", 2);
             }
         }));
-
+#if !PLATFORM_IOS
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.Activate();
         SignIn();
+#endif
         
     }
 
+#if !PLATFORM_IOS
     void SignIn()
     {
         Social.localUser.Authenticate(success => {
@@ -51,9 +53,11 @@ public class ButtonPlay : MonoBehaviour
             });
         });
     }
+#endif
 
-    #region Risultati
+#region Risultati
 
+#if !PLATFORM_IOS
     public void SbloccaRisultati(string id)
     {
         Social.ReportProgress(id, 100, success => { });
@@ -69,13 +73,17 @@ public class ButtonPlay : MonoBehaviour
         Social.ShowAchievementsUI();
         Debug.Log("UI ATTIVATA");
     }
-    #endregion /Risultati
+#endif
+#endregion /Risultati
 
     /*Pulsante Opzioni*/
     public void ClickOptions()
     {
         Debug.Log("Options Clicked!");
+#if !PLATFORM_IOS
         MostraRisultatiUI();
+#endif
+
     }
 
     /*Pulsante SOLO*/
