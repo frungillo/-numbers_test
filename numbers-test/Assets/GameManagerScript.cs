@@ -34,6 +34,8 @@ public class GameManagerScript : MonoBehaviour
     [Header("Lista Effetti Sonori")]
     public List<AudioClip> EffettiSonori;
 
+    [Header("Canvas disegno Proposta di Game Over")]
+    public GameObject CanvasGameOver;
 
     /// <summary>
     /// Griglia di gioco
@@ -64,6 +66,8 @@ public class GameManagerScript : MonoBehaviour
 
     private bool pointAdded = false; //flag aggiunta punti
     private bool levelWin = false; //flag  di controllo vincita livello
+    private bool overTime = false; //Flag di gestione fine tempo
+
     AudioSource audio_s;
 
     private GameObject bonusSpc;
@@ -94,11 +98,13 @@ public class GameManagerScript : MonoBehaviour
 
 
     }
-    
+
 
     // Start is called before the first frame update
     void Start()
     {
+        CanvasGameOver.SetActive(false);
+        
         /*Elemento Bonus_spc*/
         bonusSpc = GameObject.Find("bonus_spc");
         SpriteRenderer spr_bonus = bonusSpc.GetComponent<SpriteRenderer>();
@@ -324,7 +330,13 @@ public class GameManagerScript : MonoBehaviour
         // txtPunteggio.text = tot.ToString("#.##");
         return operazione;
     }
-    
+
+    public void btnAbbandonaClick()
+    {
+        DatiGioco.LivelloCorrente = 0;
+        SceneManager.LoadScene("ScenaMenu");
+    }
+
     
     // Update is called once per frame
     void Update()
@@ -334,8 +346,10 @@ public class GameManagerScript : MonoBehaviour
         SpriteRenderer timerSpr = timerGraph.GetComponent<SpriteRenderer>();
         
         Animator timerAnim = txtTimer.GetComponent<Animator>();
-        timeleft -= Time.deltaTime;
-        txtTimer.text = Math.Truncate((timeleft)).ToString();
+        if (!overTime && !levelWin) {
+            timeleft -= Time.deltaTime;
+            txtTimer.text = Math.Truncate((timeleft)).ToString();
+        }
         
         if(soluzioniTrovate.Count == 5 && !levelWin)
         {
@@ -345,7 +359,7 @@ public class GameManagerScript : MonoBehaviour
             StartCoroutine(GameWin_async());
 
             if (!pointAdded)
-                DatiGioco.PuntiGiocatore += Convert.ToInt32(timeleft);
+                DatiGioco.PuntiGiocatore += Mathf.FloorToInt(timeleft);
             pointAdded = true;
             //SceneManager.LoadScene("EndGame");
         }
@@ -364,14 +378,19 @@ public class GameManagerScript : MonoBehaviour
         }
         if (timeleft<10)
         {
-
-            timerAnim.SetBool("warn", true);
-            if (!audio_s.isPlaying)
-                audio_s.PlayOneShot(EffettiSonori[0], 1F);
+            if (!overTime)
+            {
+                timerAnim.SetBool("warn", true);
+                if (!audio_s.isPlaying)
+                    audio_s.PlayOneShot(EffettiSonori[0], 1F);
+            }
         }
         if(timeleft <= 0 && !levelWin)
         {
-            SceneManager.LoadScene("EndGame");
+            txtTimer.text = "";
+            overTime = true;
+            CanvasGameOver.SetActive(true);
+            //SceneManager.LoadScene("EndGame");
         }
         
         /*****************Valutazione in caso di stato SCHIACCIATO del dito giocatore*****************/
