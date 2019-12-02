@@ -125,7 +125,7 @@ public class ButtonPlay : MonoBehaviour
     private IEnumerator SetUser(string uuid)
     {
         bool state = false;
-        using (UnityWebRequest request = UnityWebRequest.Get("http://numbers.jemaka.it/api/Utenti?uuid="+uuid))
+        using (UnityWebRequest request = UnityWebRequest.Get("http://localhost:42812/api/Utenti?uuid=" + uuid))
         {
             yield return request.SendWebRequest();
 
@@ -145,6 +145,7 @@ public class ButtonPlay : MonoBehaviour
         if (!state)
         {
             WWWForm form = new WWWForm();
+            /*
             form.AddField("Id_user", "");
             form.AddField("Nickname", PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper());
             form.AddField("Imei", "no");
@@ -157,8 +158,21 @@ public class ButtonPlay : MonoBehaviour
             form.AddField("Score2", "0");
             form.AddField("Bonus1", "0");
             form.AddField("Bonus2", "0");
+            */
 
-            using (UnityWebRequest request = UnityWebRequest.Post("http://numbers.jemaka.it/api/Utenti", form))
+            form.AddField("Id_user", "");
+            form.AddField("Nickname", "Genny Frungillo");
+            form.AddField("Imei", "no");
+            form.AddField("Uuid", "ABCDE13999293CFED39209mfds930192jd9832d21de");
+            form.AddField("Data_setup", DateTime.UtcNow.ToString() );
+            form.AddField("Email", "gennyfrungillo@gmail.com");
+            form.AddField("Service_id", "654465156516");
+            form.AddField("Note", "Google Play User");
+            form.AddField("Score1", "0");
+            form.AddField("Score2", "0");
+            form.AddField("Bonus1", "0");
+            form.AddField("Bonus2", "0");
+            using (UnityWebRequest request = UnityWebRequest.Post("http://localhost:42812//api/Utenti", form))
             {
                 yield return request.SendWebRequest();
 
