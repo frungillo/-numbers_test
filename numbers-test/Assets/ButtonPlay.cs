@@ -49,7 +49,7 @@ public class ButtonPlay : MonoBehaviour
             PlayGamesPlatform.Instance.Authenticate(suc => {
                 showToast("Stato Play auth:" + suc.ToString(), 2);
                 txtMonitor.text = "USER: " + PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper();
-
+                StartCoroutine(SetUser(PlayGamesPlatform.Instance.GetIdToken()));
             });
         });
     }
@@ -122,9 +122,10 @@ public class ButtonPlay : MonoBehaviour
 
     }
 
-    private IEnumerator GetUser(string url)
+    private IEnumerator SetUser(string uuid)
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(url))
+        bool state = false;
+        using (UnityWebRequest request = UnityWebRequest.Get("http://numbers.jemaka.it/api/Utenti?uuid="+uuid))
         {
             yield return request.SendWebRequest();
 
@@ -136,33 +137,41 @@ public class ButtonPlay : MonoBehaviour
             {
                 yield return new WaitForSeconds(1);
                 string JsonText = request.downloadHandler.text;
-                Solutions[] sols = JsonConvert.DeserializeObject<Solutions[]>(JsonText);
-                DatiGioco.soluzioni = sols;
-                SceneManager.LoadScene("ScenaDiGioco");
+                state = JsonConvert.DeserializeObject<bool>(JsonText);
             }
-        }
-    }
 
-    private IEnumerator SetUser(string url, Users u)
-    {
-        using (UnityWebRequest request = UnityWebRequest.Get(url))
+        }
+
+        if (!state)
         {
-            yield return request.SendWebRequest();
+            WWWForm form = new WWWForm();
+            form.AddField("Id_user", "");
+            form.AddField("Nickname", PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper());
+            form.AddField("Imei", "no");
+            form.AddField("Uuid", PlayGamesPlatform.Instance.GetIdToken());
+            form.AddField("Data_setup", DateTime.Now.ToLongDateString());
+            form.AddField("Email", PlayGamesPlatform.Instance.GetUserEmail());
+            form.AddField("Service_id", PlayGamesPlatform.Instance.GetUserId());
+            form.AddField("Note", "Google Play User");
+            form.AddField("Score1", "0");
+            form.AddField("Score2", "0");
+            form.AddField("Bonus1", "0");
+            form.AddField("Bonus2", "0");
 
-            if (request.isNetworkError || request.isHttpError)
+            using (UnityWebRequest request = UnityWebRequest.Post("http://numbers.jemaka.it/api/Utenti", form))
             {
-                Debug.LogError("Request Error: " + request.error);
-            }
-            else
-            {
-                yield return new WaitForSeconds(1);
-                string JsonText = request.downloadHandler.text;
-                Solutions[] sols = JsonConvert.DeserializeObject<Solutions[]>(JsonText);
-                DatiGioco.soluzioni = sols;
-                SceneManager.LoadScene("ScenaDiGioco");
+                yield return request.SendWebRequest();
+
+                if (request.isNetworkError || request.isHttpError)
+                {
+                    Debug.LogError("Request Error: " + request.error);
+                }
+               
+
             }
         }
     }
+
 
 
 
