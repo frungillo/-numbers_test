@@ -145,7 +145,7 @@ public class ButtonPlay : MonoBehaviour
         if (!state)
         {
             WWWForm form = new WWWForm();
-            /*
+            
             form.AddField("Id_user", "");
             form.AddField("Nickname", PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper());
             form.AddField("Imei", "no");
@@ -158,8 +158,8 @@ public class ButtonPlay : MonoBehaviour
             form.AddField("Score2", "0");
             form.AddField("Bonus1", "0");
             form.AddField("Bonus2", "0");
-            */
-
+            
+            /*
             form.AddField("Id_user", "");
             form.AddField("Nickname", "Genny Frungillo");
             form.AddField("Imei", "no");
@@ -172,6 +172,7 @@ public class ButtonPlay : MonoBehaviour
             form.AddField("Score2", "0");
             form.AddField("Bonus1", "0");
             form.AddField("Bonus2", "0");
+            */
             using (UnityWebRequest request = UnityWebRequest.Post("http://localhost:42812//api/Utenti", form))
             {
                 yield return request.SendWebRequest();
