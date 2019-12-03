@@ -125,7 +125,7 @@ public class ButtonPlay : MonoBehaviour
     private IEnumerator SetUser(string uuid)
     {
         bool state = false;
-        using (UnityWebRequest request = UnityWebRequest.Get("http://localhost:42812/api/Utenti?uuid=" + uuid))
+        using (UnityWebRequest request = UnityWebRequest.Get("http://numbers.jemaka.it/api/Utenti?uuid=" + uuid))
         {
             yield return request.SendWebRequest();
 
@@ -150,7 +150,7 @@ public class ButtonPlay : MonoBehaviour
             form.AddField("Nickname", PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper());
             form.AddField("Imei", "no");
             form.AddField("Uuid", PlayGamesPlatform.Instance.GetIdToken());
-            form.AddField("Data_setup", DateTime.Now.ToLongDateString());
+            form.AddField("Data_setup", DateTime.UtcNow.ToString());
             form.AddField("Email", PlayGamesPlatform.Instance.GetUserEmail());
             form.AddField("Service_id", PlayGamesPlatform.Instance.GetUserId());
             form.AddField("Note", "Google Play User");
@@ -173,7 +173,7 @@ public class ButtonPlay : MonoBehaviour
             form.AddField("Bonus1", "0");
             form.AddField("Bonus2", "0");
             */
-            using (UnityWebRequest request = UnityWebRequest.Post("http://localhost:42812//api/Utenti", form))
+            using (UnityWebRequest request = UnityWebRequest.Post("http://numbers.jemaka.it/api/Utenti", form))
             {
                 yield return request.SendWebRequest();
 
