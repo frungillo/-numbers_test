@@ -31,13 +31,25 @@ public class ButtonPlay : MonoBehaviour
                 //showToast("Connessione internet OK", 2);
             }
         }));
+
+        
+    }
+
+
+    private void btnConnectGoogle()
+    {
 #if !PLATFORM_IOS
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.Activate();
         SignIn();
 #endif
-        
+    }
+
+    private void btnConnetcFacebook()
+    {
+        /*Routine di connessione con facebook*/
+
     }
 
 #if !PLATFORM_IOS
