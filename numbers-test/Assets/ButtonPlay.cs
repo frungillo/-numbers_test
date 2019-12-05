@@ -68,6 +68,8 @@ public class ButtonPlay : MonoBehaviour
             var aToken = Facebook.Unity.AccessToken.CurrentAccessToken;
             // Print current access token's User ID
             Debug.Log(aToken.UserId);
+            showToast(aToken.UserId,3);
+            txtMonitor.text = aToken.UserId;
             // Print current access token's granted permissions
             foreach (string perm in aToken.Permissions)
             {
@@ -100,7 +102,7 @@ public class ButtonPlay : MonoBehaviour
     }
 
 
-    private void btnConnectGoogle()
+    public void btnConnectGoogle()
     {
 #if !PLATFORM_IOS
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
@@ -110,7 +112,7 @@ public class ButtonPlay : MonoBehaviour
 #endif
     }
 
-    private void btnConnetcFacebook()
+    public void btnConnetcFacebook()
     {
         /*Routine di connessione con facebook*/
         var perms = new List<string>() { "public_profile", "email" };
