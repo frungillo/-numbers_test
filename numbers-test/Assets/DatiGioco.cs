@@ -9,4 +9,6 @@ public static class DatiGioco
     public static int LivelloCorrente { get; set; }
     public static int PuntiGiocatore { get; set; }
 
+    public static List<Solutions> SoluzioniTrovate { get; set; }
+
 }

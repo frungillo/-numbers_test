@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 4590395367845957849}
   - component: {fileID: 4590395367845957854}
   - component: {fileID: 4590395367845957855}
-  - component: {fileID: 4590395367845957848}
   - component: {fileID: 8757104946080433569}
-  - component: {fileID: 1635725702685756800}
+  - component: {fileID: 4390492733017998492}
   m_Layer: 0
   m_Name: Prefab_Box 1
   m_TagString: numbers
@@ -98,25 +97,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Selected: 0
   Number: 6
---- !u!95 &4590395367845957848
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4590395367845957852}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 77ba50b777b93f0498e36a3a213f42fe, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!82 &8757104946080433569
 AudioSource:
   m_ObjectHideFlags: 0
@@ -213,7 +193,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!60 &1635725702685756800
+--- !u!60 &4390492733017998492
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -238,14 +218,22 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.51, y: 0.98999995}
-      - {x: 0.45999998, y: 1}
-      - {x: -0.45, y: 1}
-      - {x: -1, y: 0.53}
-      - {x: -1, y: -0.47}
-      - {x: -0.51, y: -0.98999995}
-      - {x: -0.45999998, y: -1}
-      - {x: 0.45, y: -1}
-      - {x: 0.98999995, y: -0.51}
-      - {x: 1, y: -0.45999998}
-      - {x: 1, y: 0.45}
+    - - {x: -0.91, y: -0.395}
+      - {x: -0.91, y: -0.385}
+      - {x: -0.915, y: -0.38}
+      - {x: -0.915, y: 0.39}
+      - {x: -0.91, y: 0.395}
+      - {x: -0.905, y: 0.415}
+      - {x: -0.365, y: 0.96}
+      - {x: -0.35, y: 0.965}
+      - {x: 0.435, y: 0.965}
+      - {x: 0.45, y: 0.96}
+      - {x: 0.99, y: 0.415}
+      - {x: 0.995, y: 0.395}
+      - {x: 1, y: 0.39}
+      - {x: 1, y: -0.38}
+      - {x: 0.995, y: -0.395}
+      - {x: 0.45, y: -0.945}
+      - {x: 0.435, y: -0.95}
+      - {x: -0.35, y: -0.95}
+      - {x: -0.365, y: -0.945}

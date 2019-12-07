@@ -10,10 +10,7 @@ using Newtonsoft.Json;
 
 public class GameManagerScript : MonoBehaviour
 {
-    /// <summary>
-    /// Testo punteggio parziale
-    /// </summary>
-    //[Header("Provamia")]
+    
     [Tooltip("Testo punteggio parziale")]
     public Text txtParziale;
 
@@ -26,8 +23,6 @@ public class GameManagerScript : MonoBehaviour
     [Tooltip("Livello")]
     public Text txtLevel;
 
-
-
     [Header("Campi Soluzioni")]
     public List<Text> GoalsTexts;
 
@@ -36,6 +31,8 @@ public class GameManagerScript : MonoBehaviour
 
     [Header("Canvas disegno Proposta di Game Over")]
     public GameObject CanvasGameOver;
+
+    
 
     /// <summary>
     /// Griglia di gioco
@@ -104,7 +101,9 @@ public class GameManagerScript : MonoBehaviour
     void Start()
     {
         CanvasGameOver.SetActive(false);
-        
+
+        DatiGioco.SoluzioniTrovate = new List<Solutions>();
+
         /*Elemento Bonus_spc*/
         bonusSpc = GameObject.Find("bonus_spc");
         SpriteRenderer spr_bonus = bonusSpc.GetComponent<SpriteRenderer>();
@@ -331,13 +330,21 @@ public class GameManagerScript : MonoBehaviour
         return operazione;
     }
 
+
+
+    #region Comportamento Bottoni Scena
     public void btnAbbandonaClick()
     {
         DatiGioco.LivelloCorrente = 0;
         SceneManager.LoadScene("ScenaMenu");
     }
 
-    
+
+
+    #endregion
+
+
+    private bool inWarningTime = false;
     // Update is called once per frame
     void Update()
     {
@@ -346,12 +353,13 @@ public class GameManagerScript : MonoBehaviour
         SpriteRenderer timerSpr = timerGraph.GetComponent<SpriteRenderer>();
         
         Animator timerAnim = txtTimer.GetComponent<Animator>();
-        if (!overTime && !levelWin) {
-            timeleft -= Time.deltaTime;
-            txtTimer.text = Math.Truncate((timeleft)).ToString();
+
+        if (!overTime && !levelWin) { /*Si non si è superato il tempo limite e se non hai vinto il livello*/
+            timeleft -= Time.deltaTime; // decremento il contatore del tempo della porzione di tempo trascorsa nel frame
+            txtTimer.text = Mathf.FloorToInt(timeleft).ToString(); //passo solo la parte intera al campo testo
         }
         
-        if(soluzioniTrovate.Count == 5 && !levelWin)
+        if(soluzioniTrovate.Count == 5 && !levelWin) //se sono state trovate le 5 soluzioni e il livello non è stato dichiarato vinto ancora.
         {
 
             audio_s.PlayOneShot(EffettiSonori[3], 1F);
@@ -361,36 +369,40 @@ public class GameManagerScript : MonoBehaviour
             if (!pointAdded)
                 DatiGioco.PuntiGiocatore += Mathf.FloorToInt(timeleft);
             pointAdded = true;
-            //SceneManager.LoadScene("EndGame");
+            
         }
-        if(Mathf.FloorToInt(timeleft) % 12 == 0 )
+
+        if (Mathf.FloorToInt(timeleft) % 12 == 0 ) /*Animazione timer*/
         {
             timerSpr.sprite = Resources.Load<Sprite>("Sprites/TimerAnim/t_" + (Mathf.FloorToInt(timeleft)/12).ToString());
             if (Mathf.FloorToInt(timeleft) / 12 == 0)
                 txtTimer.text = "";
         }
 
-        if (timeleft>20 )
+        if (timeleft>20 ) //effetto rimbalzo del tempo
         {
             timerAnim.SetTrigger("tick");
-            
-
         }
+
         if (timeleft<10)
         {
             if (!overTime)
             {
                 timerAnim.SetBool("warn", true);
-                if (!audio_s.isPlaying)
+                if (!inWarningTime)
+                {
+                    inWarningTime = true;
                     audio_s.PlayOneShot(EffettiSonori[0], 1F);
+                }
             }
         }
+
         if(timeleft <= 0 && !levelWin)
         {
             txtTimer.text = "";
             overTime = true;
             CanvasGameOver.SetActive(true);
-            //SceneManager.LoadScene("EndGame");
+            
         }
         
         /*****************Valutazione in caso di stato SCHIACCIATO del dito giocatore*****************/
@@ -426,36 +438,13 @@ public class GameManagerScript : MonoBehaviour
             }
             
 
-            /*
-            foreach (GameObject itm in esagoniSelezionati)
-            {
-                Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
-                SpriteRenderer spr = itm.GetComponent<SpriteRenderer>();
-                
-                //Disattivato il cambio di esagoni al rilascio del mouse
-                // if (scr_e.Selected)
-                
-
-                scr_e.Selected = false;
-
-                //box_anim.Play("exs_idle");
-                if (itm.tag != "op")
-                {
-                    spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_g");
-                } else
-                {
-                    spr.sprite = Resources.Load<Sprite>("Sprites/operand/" + scr_e.Number.ToString());
-                }
-
-            }
-            */
-            //esagoniSelezionati.Clear();
+           
         }
-
+        /***********************************************************************************************/
 
         
 
-        //txtParziale.text = PlayerPrefs.GetString("tots");
+        
     }
 
 
@@ -500,6 +489,8 @@ public class GameManagerScript : MonoBehaviour
         {
             
             soluzioniTrovate.Add(SoluzioneTrovata);
+            DatiGioco.SoluzioniTrovate.Add(SoluzioneTrovata);
+
             punteggioAssegnatoAlGiocatore += BASE_POINTS*BONUS_X;
             GameObject box = GameObject.Find("Goal_"+SoluzioneTrovata.Id_solution.ToString());
             SpriteRenderer spr = box.GetComponent<SpriteRenderer>();
@@ -541,13 +532,8 @@ public class GameManagerScript : MonoBehaviour
             Comp_Esagono scr_e = itm.GetComponent<Comp_Esagono>();
             SpriteRenderer spr = itm.GetComponent<SpriteRenderer>();
 
-            /*Disattivato il cambio di esagoni al rilascio del mouse*/
-            /* if (scr_e.Selected)
-            /*******************************************************/
-
             scr_e.Selected = false;
 
-            //box_anim.Play("exs_idle");
             if (itm.tag != "op")
             {
                 spr.sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + scr_e.Number.ToString() + "_"+col);

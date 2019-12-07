@@ -12,8 +12,7 @@ GameObject:
   - component: {fileID: 4590395367845957854}
   - component: {fileID: 4590395367845957855}
   - component: {fileID: 8757104946080433569}
-  - component: {fileID: 5792763147874684427}
-  - component: {fileID: -1359728991802841046}
+  - component: {fileID: 3907741096025628205}
   m_Layer: 0
   m_Name: Prefab_op
   m_TagString: op
@@ -194,8 +193,8 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!61 &5792763147874684427
-BoxCollider2D:
+--- !u!60 &3907741096025628205
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -217,25 +216,14 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 2, y: 2}
-  m_EdgeRadius: 0
---- !u!95 &-1359728991802841046
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4590395367845957852}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fecd30446dab65640b119955c348c4e9, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.815, y: -0.525}
+      - {x: -0.815, y: 0.625}
+      - {x: -0.685, y: 0.845}
+      - {x: -0.575, y: 0.895}
+      - {x: 0.595, y: 0.895}
+      - {x: 0.825, y: 0.695}
+      - {x: 0.825, y: -0.615}
+      - {x: 0.595, y: -0.755}
+      - {x: -0.645, y: -0.755}
