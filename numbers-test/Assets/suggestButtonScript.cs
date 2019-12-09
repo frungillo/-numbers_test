@@ -23,17 +23,20 @@ public class suggestButtonScript : MonoBehaviour
         }
 
         string[] tmp = solToSuggetst.Sequence.Split(new string[] { ";" }, System.StringSplitOptions.RemoveEmptyEntries);
+
         foreach (string item in tmp)
         {
 
-            StartCoroutine(Attesa(item));
+            StartCoroutine(MostraTile(item));
 
         }
         
 
     }
 
-    IEnumerator Attesa(string item)
+   
+
+    IEnumerator MostraTile(string item)
     {
         yield return new WaitForSeconds(1);
 
