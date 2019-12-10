@@ -404,6 +404,7 @@ public class GameManagerScript : MonoBehaviour
             CanvasGameOver.SetActive(true);
             
         }
+        
         /*Soluzione suggerita*/
         if (DatiGioco.PercorsoSoluzioneDaSuggerire.Count > 1 && !MostraTilesBusy)
         {
@@ -416,6 +417,7 @@ public class GameManagerScript : MonoBehaviour
         if (PlayerPrefs.GetString("Stato") == "G") /*dito sullo schermo*/
         {
            numeroTrovatoDalGiocatore= Calcolo();
+            StopAllCoroutines();
             
         }
         /*********************************************************************************************/
@@ -545,9 +547,11 @@ public class GameManagerScript : MonoBehaviour
             spr.sprite = Resources.Load<Sprite>("Sprites/boxes/box_v");
             BONUS_X *= 2;
             audio_s.PlayOneShot(EffettiSonori[1], 1F);
-
+            /**/
             DatiGioco.PercorsoSoluzioneDaSuggerire = new List<string>();
             MostraTilesBusy = false;
+            StopAllCoroutines();
+            /**/
             colora("v");
             StartCoroutine(ColoraSelezionati(.5F, "g"));
             if (BONUS_X > 1)
