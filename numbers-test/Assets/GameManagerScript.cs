@@ -89,7 +89,7 @@ public class GameManagerScript : MonoBehaviour
         esagoniSelezionati = new List<GameObject>();
         inError = false;
         griglia = DatiGioco.GrigliaDiGioco;
-
+        DatiGioco.PercorsoSoluzioneDaSuggerire = new List<string>();
     
 
 
@@ -404,11 +404,19 @@ public class GameManagerScript : MonoBehaviour
             CanvasGameOver.SetActive(true);
             
         }
+        /*Soluzione suggerita*/
+        if (DatiGioco.PercorsoSoluzioneDaSuggerire.Count > 1 && !MostraTilesBusy)
+        {
+            MostraTilesBusy = true;
+            StartCoroutine(MostraTile(DatiGioco.PercorsoSoluzioneDaSuggerire.ToArray()));
+        }
+        /*********************/
         
         /*****************Valutazione in caso di stato SCHIACCIATO del dito giocatore*****************/
         if (PlayerPrefs.GetString("Stato") == "G") /*dito sullo schermo*/
         {
            numeroTrovatoDalGiocatore= Calcolo();
+            
         }
         /*********************************************************************************************/
 
@@ -423,6 +431,7 @@ public class GameManagerScript : MonoBehaviour
             {
                 DatiGioco.PuntiGiocatore += (int)double.Parse(CalcolaPunteggio(numeroTrovatoDalGiocatore, soluzioniGriglia));
                 txtPunteggio.text = DatiGioco.PuntiGiocatore.ToString();
+                
                 
             }
             catch { }
@@ -447,8 +456,47 @@ public class GameManagerScript : MonoBehaviour
         
     }
 
+    private bool MostraTilesBusy = false; /*flag di controllo per non ripetere l'animazione del suggerimento prima della sua fine.*/
+    IEnumerator MostraTile(string[] tmp)
+    {
+        foreach (string item in tmp)
+        {
+            yield return new WaitForSeconds(0.1F);
 
-   
+            GameObject tile = GameObject.Find(item);
+            int num = tile.GetComponent<Comp_Esagono>().Number;
+            bool sel = tile.GetComponent<Comp_Esagono>().Selected;
+            if (tile.tag == "op")
+            {
+                if (!sel) tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/operand/" + num.ToString());
+            }
+            else
+            {
+                if (!sel) tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + num.ToString() + "_g");
+            }
+        }
+
+        foreach (string item in tmp)
+        {
+            yield return new WaitForSeconds(0.2F);
+
+            GameObject tile = GameObject.Find(item);
+            int num = tile.GetComponent<Comp_Esagono>().Number;
+            bool sel = tile.GetComponent<Comp_Esagono>().Selected;
+            if (tile.tag == "op")
+            {
+                if (!sel) tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/operand/" + num.ToString() + "_v");
+            }
+            else
+            {
+                if (!sel) tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + num.ToString() + "_v");
+            }
+        }
+        MostraTilesBusy = false;
+    }
+
+
+
     private double Eval(string expression)  
     {
         expression = expression.Replace(",", ".");
@@ -498,6 +546,8 @@ public class GameManagerScript : MonoBehaviour
             BONUS_X *= 2;
             audio_s.PlayOneShot(EffettiSonori[1], 1F);
 
+            DatiGioco.PercorsoSoluzioneDaSuggerire = new List<string>();
+            MostraTilesBusy = false;
             colora("v");
             StartCoroutine(ColoraSelezionati(.5F, "g"));
             if (BONUS_X > 1)
@@ -509,6 +559,7 @@ public class GameManagerScript : MonoBehaviour
                 bonus_anim.SetTrigger("test");
                 spr_bonus.sprite = Resources.Load<Sprite>("Sprites/bonus/" + spr_bonus_name);
             }
+            
 
         } else
         {

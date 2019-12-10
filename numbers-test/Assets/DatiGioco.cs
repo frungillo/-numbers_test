@@ -11,4 +11,6 @@ public static class DatiGioco
 
     public static List<Solutions> SoluzioniTrovate { get; set; }
 
+    public static List<string> PercorsoSoluzioneDaSuggerire { get; set; }
+
 }

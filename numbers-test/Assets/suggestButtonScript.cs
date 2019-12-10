@@ -12,6 +12,7 @@ public class suggestButtonScript : MonoBehaviour
         /**/
         Solutions[] s = DatiGioco.soluzioni;
         Solutions solToSuggetst = null;
+        DatiGioco.PercorsoSoluzioneDaSuggerire = new List<string>();
 
         foreach(Solutions itm in s)
         {
@@ -23,31 +24,32 @@ public class suggestButtonScript : MonoBehaviour
         }
 
         string[] tmp = solToSuggetst.Sequence.Split(new string[] { ";" }, System.StringSplitOptions.RemoveEmptyEntries);
-
-        foreach (string item in tmp)
-        {
-
-            StartCoroutine(MostraTile(item));
-
-        }
         
+        StartCoroutine(MostraTile(tmp));
+
+        DatiGioco.PercorsoSoluzioneDaSuggerire.AddRange(tmp);
 
     }
 
    
 
-    IEnumerator MostraTile(string item)
+    IEnumerator MostraTile(string[] tmp)
     {
-        yield return new WaitForSeconds(1);
+        foreach (string item in tmp)
+        {
+            yield return new WaitForSeconds(0.2F);
 
-        GameObject tile = GameObject.Find(item);
-        int num = tile.GetComponent<Comp_Esagono>().Number;
-        if (tile.tag == "op")
-        {
-            tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/operand/" + num.ToString() + "_v");
-        } else
-        {
-            tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + num.ToString() + "_v");
+            GameObject tile = GameObject.Find(item);
+            int num = tile.GetComponent<Comp_Esagono>().Number;
+            if (tile.tag == "op")
+            {
+                tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/operand/" + num.ToString() + "_v");
+            }
+            else
+            {
+                tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Exs_Numbers/" + num.ToString() + "_v");
+            }
         }
+
     }
 }
