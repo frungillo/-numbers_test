@@ -3,6 +3,7 @@
 //using Boo.Lang;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class Solutions {
@@ -51,6 +52,8 @@ public  class Users {
     private float bonus1Field;
     
     private float bonus2Field;
+    private Image _userProfileImage;
+
     
     /// <remarks/>
     public int Id_user {
@@ -171,6 +174,8 @@ public  class Users {
             this.bonus2Field = value;
         }
     }
+
+    public Image UserProfileImage { get => _userProfileImage; set => _userProfileImage = value; }
 }
 
 [Serializable]

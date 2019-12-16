@@ -135,6 +135,7 @@
     <Compile Include="Assets\GooglePlayGames\PluginVersion.cs" />
     <Compile Include="Assets\GPGSIds.cs" />
     <Compile Include="Assets\helpButtonScript.cs" />
+    <Compile Include="Assets\scene_0_script.cs" />
     <Compile Include="Assets\suggestButtonScript.cs" />
     <Compile Include="Assets\WebClient\NumberServiceGen.cs" />
     <None Include="Assets\WanzyeeStudio\ThirdParty\SaladLab\Json.Net.Unity3D\link.xml" />

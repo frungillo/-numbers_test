@@ -13,4 +13,8 @@ public static class DatiGioco
 
     public static List<string> PercorsoSoluzioneDaSuggerire { get; set; }
 
+    public static Users user;
+  
+    
+
 }
