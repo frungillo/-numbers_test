@@ -83,9 +83,7 @@ public class scene_0_script : MonoBehaviour
 
     private void GetUserData_Face(IGraphResult result)
     {
-        Debug.Log("RES1:" + result.RawResult);
-        Debug.Log("Res2:" + result.ResultDictionary.ToJson());
-        Debug.Log("Res3:" + result.ResultDictionary.Count);
+        
     }
 
 
