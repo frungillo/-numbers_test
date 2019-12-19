@@ -2,6 +2,7 @@
 
 //using Boo.Lang;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -208,4 +209,24 @@ public class versus
     public DateTime DataStart;
     public int IdGrid;
     public DateTime DataStop;
+}
+
+
+public class Summary
+{
+    public int total_count { get; set; }
+}
+
+public class Friends
+{
+    public List<object> data { get; set; }
+    public Summary summary { get; set; }
+}
+
+public class FacebookUser
+{
+    public string birthday { get; set; }
+    public Friends friends { get; set; }
+    public string name { get; set; }
+    public string id { get; set; }
 }

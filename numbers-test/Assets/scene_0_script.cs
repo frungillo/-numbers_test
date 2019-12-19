@@ -83,7 +83,11 @@ public class scene_0_script : MonoBehaviour
 
     private void GetUserData_Face(IGraphResult result)
     {
-        
+        FacebookUser u = JsonUtility.FromJson<FacebookUser>(result.RawResult);
+        DatiGioco.user.Nickname = u.name;
+        DatiGioco.user.Id_user = int.Parse( u.id);
+        DatiGioco.user.Uuid = SystemInfo.deviceUniqueIdentifier;
+        DatiGioco.user.Note = "Facebook User";
     }
 
 
