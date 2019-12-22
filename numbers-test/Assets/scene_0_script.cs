@@ -19,17 +19,27 @@ public class scene_0_script : MonoBehaviour
 
     private void Awake()
     {
+        
         DatiGioco.user = new Users();
+        DatiGioco.user.Imei = SystemInfo.deviceUniqueIdentifier;
+        Debug.Log($"ID_Device:{DatiGioco.user.Imei}");
+        StartCoroutine(CheckUserByDevice())
+;        /*
         if (!FB.IsInitialized)
         {
+            Debug.Log("Facebook non inizializzato...");
             FB.Init(InitCallback, OnHideUnity);
         }
         else
         {
             FB.ActivateApp();
-            FB.API("me/picture?type=med", HttpMethod.GET, GetUserPhoto_Face);
+            //FB.API("me/picture?type=med", HttpMethod.GET, GetUserPhoto_Face);
+            //è necessario capire se il giocatore gia ha fatto una login social.
+            Debug.Log("ApiFacebook inizializata");
+            //CreateFacebookUser();
 
         }
+        */
     }
 
     void GetUserPhoto_Face(IGraphResult result)
@@ -85,9 +95,10 @@ public class scene_0_script : MonoBehaviour
     {
         FacebookUser u = JsonUtility.FromJson<FacebookUser>(result.RawResult);
         DatiGioco.user.Nickname = u.name;
-        DatiGioco.user.Id_user = int.Parse( u.id);
-        DatiGioco.user.Uuid = SystemInfo.deviceUniqueIdentifier;
-        DatiGioco.user.Note = "Facebook User";
+        DatiGioco.user.Service_id = SystemInfo.deviceUniqueIdentifier; // u.id //int.Parse( u.id);
+        DatiGioco.user.Uuid = u.id;//SystemInfo.deviceUniqueIdentifier;
+        
+        StartCoroutine(SetUser(DatiGioco.user, "Facebook User"));
     }
 
 
@@ -226,6 +237,30 @@ public class scene_0_script : MonoBehaviour
     }
 #endif
 
+    /**/
+    private IEnumerator CheckUserByDevice()
+    {
+        int state;
+        using (UnityWebRequest request = UnityWebRequest.Get("http://numbers.jemaka.it/api/Utenti?imei=" + SystemInfo.deviceUniqueIdentifier))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.isNetworkError || request.isHttpError)
+            {
+                Debug.LogError("Request Error: " + request.error);
+            }
+            else
+            {
+                yield return new WaitForSeconds(1);
+                string JsonText = request.downloadHandler.text;
+                state = JsonConvert.DeserializeObject<Int32>(JsonText);
+                Debug.Log($"Id_Giocatore:{state.ToString()}");
+
+            }
+
+        }
+    }
+
     private IEnumerator SetUser(Users u, String platform)
     {
         bool state = false;
@@ -277,5 +312,7 @@ public class scene_0_script : MonoBehaviour
 
             }
         }
+        DatiGioco.user = u;
+       // SceneManager.LoadScene("ScenaMenu");
     }
 }
