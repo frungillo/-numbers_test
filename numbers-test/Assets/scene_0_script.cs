@@ -23,8 +23,9 @@ public class scene_0_script : MonoBehaviour
         DatiGioco.user = new Users();
         DatiGioco.user.Imei = SystemInfo.deviceUniqueIdentifier;
         Debug.Log($"ID_Device:{DatiGioco.user.Imei}");
-        StartCoroutine(CheckUserByDevice())
-;        /*
+        StartCoroutine(CheckUserByDevice());
+
+        /*
         if (!FB.IsInitialized)
         {
             Debug.Log("Facebook non inizializzato...");
@@ -255,6 +256,12 @@ public class scene_0_script : MonoBehaviour
                 string JsonText = request.downloadHandler.text;
                 state = JsonConvert.DeserializeObject<Int32>(JsonText);
                 Debug.Log($"Id_Giocatore:{state.ToString()}");
+                if(state > -1)
+                {
+                    /*Gestione dello stato di attivazione social dell'utente*/
+                    /*è necessario disattivare i tasti social*/
+                    /*se invece non entra qui dentro, significa che nonn è attivo e bisogna attivare i tasti.*/
+                }
 
             }
 
