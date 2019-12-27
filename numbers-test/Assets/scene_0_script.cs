@@ -16,6 +16,9 @@ public class scene_0_script : MonoBehaviour
     public Text txtOutComic;
     public InputField txtNomeGiocatore;
     public Button btnInviaNome;
+    public Button btnFacebook;
+    public Button btnGoogle;
+
 
     private void Awake()
     {
@@ -261,10 +264,36 @@ public class scene_0_script : MonoBehaviour
                     /*Gestione dello stato di attivazione social dell'utente*/
                     /*è necessario disattivare i tasti social*/
                     /*se invece non entra qui dentro, significa che nonn è attivo e bisogna attivare i tasti.*/
+                    /*Il giocatore esiste gia. Va scaricato*/
+                    StartCoroutine(GetUserByID(state));
                 }
-
+                else
+                {
+                    /*Utente non registrato, attivo pulsanti e intefaccia.*/
+                }
             }
 
+        }
+    }
+
+    private IEnumerator GetUserByID(int idUser)
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get("http://numbers.jemaka.it/api/Utenti/"+idUser.ToString()))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.isNetworkError || request.isHttpError)
+            {
+                Debug.LogError("Request Error: " + request.error);
+            }
+            else
+            {
+                yield return new WaitForSeconds(1);
+                string JsonText = request.downloadHandler.text;
+                DatiGioco.user = JsonConvert.DeserializeObject<Users>(JsonText);
+                SceneManager.LoadScene("ScenaMenu");
+
+            }
         }
     }
 
