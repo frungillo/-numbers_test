@@ -22,13 +22,17 @@ public class scene_0_script : MonoBehaviour
 
     private void Awake()
     {
-        
+        txtNomeGiocatore.enabled = false;
+        btnInviaNome.enabled = false;
+        btnFacebook.enabled = false;
+        btnGoogle.enabled = false;
+
         DatiGioco.user = new Users();
         DatiGioco.user.Imei = SystemInfo.deviceUniqueIdentifier;
         Debug.Log($"ID_Device:{DatiGioco.user.Imei}");
         StartCoroutine(CheckUserByDevice());
 
-        /*
+        
         if (!FB.IsInitialized)
         {
             Debug.Log("Facebook non inizializzato...");
@@ -43,7 +47,7 @@ public class scene_0_script : MonoBehaviour
             //CreateFacebookUser();
 
         }
-        */
+        
     }
 
     void GetUserPhoto_Face(IGraphResult result)
@@ -66,7 +70,7 @@ public class scene_0_script : MonoBehaviour
             // Signal an app activation App Event
             FB.ActivateApp();
             // Continue with Facebook SDK
-            CreateFacebookUser();
+            //CreateFacebookUser();
             // ...
         }
         else
@@ -270,6 +274,10 @@ public class scene_0_script : MonoBehaviour
                 else
                 {
                     /*Utente non registrato, attivo pulsanti e intefaccia.*/
+                    txtNomeGiocatore.enabled = true;
+                    btnInviaNome.enabled = true;
+                    btnFacebook.enabled = true;
+                    btnGoogle.enabled = true;
                 }
             }
 
@@ -349,6 +357,6 @@ public class scene_0_script : MonoBehaviour
             }
         }
         DatiGioco.user = u;
-       // SceneManager.LoadScene("ScenaMenu");
+        SceneManager.LoadScene("ScenaMenu");
     }
 }
