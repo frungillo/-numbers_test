@@ -9,7 +9,8 @@ public class suggestButtonScript : MonoBehaviour
     // Start is called before the first frame update
     private void OnMouseDown()
     {
-        /**/
+        /*Qui va fatto subito il check dei gettoni disponibili*/
+
         Solutions[] s = DatiGioco.soluzioni;
         Solutions solToSuggetst = null;
         DatiGioco.PercorsoSoluzioneDaSuggerire = new List<string>();
@@ -26,6 +27,7 @@ public class suggestButtonScript : MonoBehaviour
         string[] tmp = solToSuggetst.Sequence.Split(new string[] { ";" }, System.StringSplitOptions.RemoveEmptyEntries);
         
         StartCoroutine(MostraTile(tmp));
+        DatiGioco.user.Bonus1 -= 1;
 
         DatiGioco.PercorsoSoluzioneDaSuggerire.AddRange(tmp);
 

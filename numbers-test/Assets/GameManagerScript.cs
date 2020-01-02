@@ -17,6 +17,8 @@ public class GameManagerScript : MonoBehaviour
     [Tooltip("Punteggio totale")]
     public Text txtPunteggio;
 
+    public Text txtCoins;
+
     [Tooltip("Timer")]
     public Text txtTimer;
 
@@ -90,7 +92,7 @@ public class GameManagerScript : MonoBehaviour
         inError = false;
         griglia = DatiGioco.GrigliaDiGioco;
         DatiGioco.PercorsoSoluzioneDaSuggerire = new List<string>();
-    
+        txtCoins.text = DatiGioco.user.Bonus1.ToString();
 
 
 
@@ -348,6 +350,8 @@ public class GameManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*Update del numero di coins disponibili*/
+        txtCoins.text = DatiGioco.user.Bonus1.ToString();
 
         GameObject timerGraph = GameObject.Find("timer");
         SpriteRenderer timerSpr = timerGraph.GetComponent<SpriteRenderer>();
