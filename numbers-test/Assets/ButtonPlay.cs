@@ -17,71 +17,21 @@ public class ButtonPlay : MonoBehaviour
 
     public Button btnSolo;
     public Button btnMultiPlay;
+    public Image imgProfilo;
+    public Text txtCoins;
+    public Text txtXp;
 
     private void Awake()
     {
-        if (!FB.IsInitialized)
-        {
-            FB.Init(InitCallback, OnHideUnity);
-        } else
-        {
-            FB.ActivateApp();
-        }
+        imgProfilo = DatiGioco.user.UserProfileImage;
+        txtMonitor.text = DatiGioco.user.Nickname;
+        txtCoins.text = DatiGioco.user.Bonus1.ToString();
+        txtXp.text = DatiGioco.user.Score1.ToString();
     }
 
-    /*FACEBOOK*/
-    private void InitCallback()
-    {
-        if (FB.IsInitialized)
-        {
-            // Signal an app activation App Event
-            FB.ActivateApp();
-            // Continue with Facebook SDK
-            // ...
-        }
-        else
-        {
-            Debug.Log("Impissibile inizializzare Facebook SDK");
-        }
-    }
+    
 
-    private void OnHideUnity(bool isGameShown)
-    {
-        if (!isGameShown)
-        {
-            // Pause the game - we will need to hide
-            Time.timeScale = 0;
-        }
-        else
-        {
-            // Resume the game - we're getting focus again
-            Time.timeScale = 1;
-        }
-    }
-
-
-    private void AuthCallback(ILoginResult result)
-    {
-        if (FB.IsLoggedIn)
-        {
-            // AccessToken class will have session details
-            var aToken = Facebook.Unity.AccessToken.CurrentAccessToken;
-            // Print current access token's User ID
-            Debug.Log(aToken.UserId);
-            showToast(aToken.UserId,3);
-            txtMonitor.text = aToken.UserId;
-            // Print current access token's granted permissions
-            foreach (string perm in aToken.Permissions)
-            {
-                Debug.Log(perm);
-            }
-        }
-        else
-        {
-            Debug.Log("User cancelled login");
-        }
-    }
-    /**********/
+   
 
     // Start is called before the first frame update
     void Start()
@@ -102,51 +52,13 @@ public class ButtonPlay : MonoBehaviour
     }
 
 
-    public void btnConnectGoogle()
-    {
-#if !PLATFORM_IOS
-        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
-        PlayGamesPlatform.InitializeInstance(config);
-        PlayGamesPlatform.Activate();
-        SignIn();
-#endif
-    }
+   
 
-    public void btnConnetcFacebook()
-    {
-        /*Routine di connessione con facebook*/
-        var perms = new List<string>() { "public_profile", "email" };
-        FB.LogInWithReadPermissions(perms, AuthCallback);
-
-    }
-
-#if !PLATFORM_IOS
-    void SignIn()
-    {
-        Social.localUser.Authenticate(success => {
-            showToast("Stato connessione:" + success.ToString(), 2);
-            
-            PlayGamesPlatform.Instance.Authenticate(suc => {
-                showToast("Stato Play auth:" + suc.ToString(), 2);
-                txtMonitor.text = "USER: " + PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper();
-                StartCoroutine(SetUser(PlayGamesPlatform.Instance.GetIdToken()));
-            });
-        });
-    }
-#endif
 
 #region Risultati
 
 #if !PLATFORM_IOS
-    public void SbloccaRisultati(string id)
-    {
-        Social.ReportProgress(id, 100, success => { });
-    }
-
-    public static void IncrementaRisultati(string id, int StepDaIncrementare)
-    {
-        PlayGamesPlatform.Instance.IncrementAchievement(id, StepDaIncrementare, success => { });
-    }
+  
 
     public static void MostraRisultatiUI()
     {
@@ -202,70 +114,7 @@ public class ButtonPlay : MonoBehaviour
 
     }
 
-    private IEnumerator SetUser(string uuid)
-    {
-        bool state = false;
-        using (UnityWebRequest request = UnityWebRequest.Get("http://numbers.jemaka.it/api/Utenti?uuid=" + uuid))
-        {
-            yield return request.SendWebRequest();
-
-            if (request.isNetworkError || request.isHttpError)
-            {
-                Debug.LogError("Request Error: " + request.error);
-            }
-            else
-            {
-                yield return new WaitForSeconds(1);
-                string JsonText = request.downloadHandler.text;
-                state = JsonConvert.DeserializeObject<bool>(JsonText);
-            }
-
-        }
-
-        if (!state)
-        {
-            WWWForm form = new WWWForm();
-            
-            form.AddField("Id_user", "");
-            form.AddField("Nickname", PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper());
-            form.AddField("Imei", "no");
-            form.AddField("Uuid", PlayGamesPlatform.Instance.GetIdToken());
-            form.AddField("Data_setup", DateTime.UtcNow.ToString());
-            form.AddField("Email", PlayGamesPlatform.Instance.GetUserEmail());
-            form.AddField("Service_id", PlayGamesPlatform.Instance.GetUserId());
-            form.AddField("Note", "Google Play User");
-            form.AddField("Score1", "0");
-            form.AddField("Score2", "0");
-            form.AddField("Bonus1", "0");
-            form.AddField("Bonus2", "0");
-            
-            /*
-            form.AddField("Id_user", "");
-            form.AddField("Nickname", "Genny Frungillo");
-            form.AddField("Imei", "no");
-            form.AddField("Uuid", "ABCDE13999293CFED39209mfds930192jd9832d21de");
-            form.AddField("Data_setup", DateTime.UtcNow.ToString() );
-            form.AddField("Email", "gennyfrungillo@gmail.com");
-            form.AddField("Service_id", "654465156516");
-            form.AddField("Note", "Google Play User");
-            form.AddField("Score1", "0");
-            form.AddField("Score2", "0");
-            form.AddField("Bonus1", "0");
-            form.AddField("Bonus2", "0");
-            */
-            using (UnityWebRequest request = UnityWebRequest.Post("http://numbers.jemaka.it/api/Utenti", form))
-            {
-                yield return request.SendWebRequest();
-
-                if (request.isNetworkError || request.isHttpError)
-                {
-                    Debug.LogError("Request Error: " + request.error);
-                }
-               
-
-            }
-        }
-    }
+  
 
 
 

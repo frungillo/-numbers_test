@@ -55,7 +55,7 @@ public class scene_0_script : MonoBehaviour
         if (result.Error==null)
         {
             DatiGioco.user.UserProfileImage.GetComponent<Image>().sprite = Sprite.Create(result.Texture, new Rect(0, 0, 128, 128), new Vector2());
-
+            Debug.Log("Immegine Profilo caricata");
         } else
         {
             Debug.Log("Errore FaceSDK:" + result.Error);
@@ -69,9 +69,7 @@ public class scene_0_script : MonoBehaviour
         {
             // Signal an app activation App Event
             FB.ActivateApp();
-            // Continue with Facebook SDK
-            //CreateFacebookUser();
-            // ...
+            Debug.Log("Facebook inizializzato");
         }
         else
         {
@@ -95,17 +93,21 @@ public class scene_0_script : MonoBehaviour
 
     private void CreateFacebookUser()
     {
-        FB.API("me/picture?type=med", HttpMethod.GET, GetUserPhoto_Face);
+       // FB.API("me/picture?type=med", HttpMethod.GET, GetUserPhoto_Face);
         FB.API("me?fields=address,birthday,friends{name},name", HttpMethod.GET, GetUserData_Face);
     }
 
     private void GetUserData_Face(IGraphResult result)
     {
+        Debug.Log("Inizio carticamento dati utente facebook");
         FacebookUser u = JsonUtility.FromJson<FacebookUser>(result.RawResult);
         DatiGioco.user.Nickname = u.name;
         DatiGioco.user.Service_id = SystemInfo.deviceUniqueIdentifier; // u.id //int.Parse( u.id);
         DatiGioco.user.Uuid = u.id;//SystemInfo.deviceUniqueIdentifier;
-        
+        Debug.Log("Dati Utente Facebook Scaricati");
+        Debug.Log($"Dati Utente{DatiGioco.user.Nickname}");
+        Debug.Log($"Dati Utente{DatiGioco.user.Service_id}");
+        Debug.Log($"Dati Utente{DatiGioco.user.Uuid}");
         StartCoroutine(SetUser(DatiGioco.user, "Facebook User"));
     }
 
@@ -122,10 +124,7 @@ public class scene_0_script : MonoBehaviour
             DatiGioco.user.Uuid = aToken.UserId;
             // Print current access token's granted permissions
             CreateFacebookUser();
-            foreach (string perm in aToken.Permissions)
-            {
-                Debug.Log(perm);
-            }
+            
         }
         else
         {
@@ -167,7 +166,17 @@ public class scene_0_script : MonoBehaviour
     }
     public void btnInviaNomeClick()
     {
-        SceneManager.LoadScene("ScenaMenu");
+        if(txtNomeGiocatore.text.Trim() =="")
+        {
+            ScriviComic("HEY! Dimmi almeno il tuo nome!");
+            return;
+        }
+        DatiGioco.user.Service_id = SystemInfo.deviceUniqueIdentifier;
+        DatiGioco.user.Nickname = txtNomeGiocatore.text;
+        DatiGioco.user.Note = "ND";
+        StartCoroutine(SetUser(DatiGioco.user, "ND"));
+
+        //SceneManager.LoadScene("ScenaMenu");
     }
 
 
@@ -230,8 +239,9 @@ public class scene_0_script : MonoBehaviour
             //showToast("Stato connessione:" + success.ToString(), 2);
 
             PlayGamesPlatform.Instance.Authenticate(suc => {
-               // showToast("Stato Play auth:" + suc.ToString(), 2);
+                // showToast("Stato Play auth:" + suc.ToString(), 2);
                 //DatiGioco.UserID= PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper();
+                StartCoroutine(LoadGooglePlayProfileImage(PlayGamesPlatform.Instance.GetUserImageUrl()));
                 Users us = new Users();
                 us.Nickname = PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper();
                 us.Uuid = PlayGamesPlatform.Instance.GetIdToken();
@@ -244,6 +254,17 @@ public class scene_0_script : MonoBehaviour
         });
     }
 #endif
+
+    private IEnumerator LoadGooglePlayProfileImage(string urlImage)
+    {
+        using (UnityWebRequest req  = UnityWebRequest.Get(urlImage))
+        {
+            yield return req.SendWebRequest();
+            DatiGioco.user.UserProfileImage.GetComponent<Image>().sprite = Sprite.Create( ((DownloadHandlerTexture)req.downloadHandler).texture, new Rect(0, 0, 128, 128), new Vector2());
+
+        }
+        
+    }
 
     /**/
     private IEnumerator CheckUserByDevice()
@@ -265,14 +286,17 @@ public class scene_0_script : MonoBehaviour
                 Debug.Log($"Id_Giocatore:{state.ToString()}");
                 if(state > -1)
                 {
+                    Debug.Log("Giocatore Esistente");
                     /*Gestione dello stato di attivazione social dell'utente*/
                     /*è necessario disattivare i tasti social*/
                     /*se invece non entra qui dentro, significa che nonn è attivo e bisogna attivare i tasti.*/
                     /*Il giocatore esiste gia. Va scaricato*/
+
                     StartCoroutine(GetUserByID(state));
                 }
                 else
                 {
+                    Debug.Log("Giocatore non esistente");
                     /*Utente non registrato, attivo pulsanti e intefaccia.*/
                     txtNomeGiocatore.enabled = true;
                     btnInviaNome.enabled = true;
@@ -299,6 +323,16 @@ public class scene_0_script : MonoBehaviour
                 yield return new WaitForSeconds(1);
                 string JsonText = request.downloadHandler.text;
                 DatiGioco.user = JsonConvert.DeserializeObject<Users>(JsonText);
+                if (DatiGioco.user.Note== "Google Play Games")
+                {
+                    StartCoroutine(LoadGooglePlayProfileImage(PlayGamesPlatform.Instance.GetUserImageUrl()));
+                    yield return new WaitForSeconds(3);
+                }
+                else if(DatiGioco.user.Note== "Facebook User")
+                {
+                    FB.API("me/picture?type=med", HttpMethod.GET, GetUserPhoto_Face);
+                    yield return new WaitForSeconds(3);
+                }
                 SceneManager.LoadScene("ScenaMenu");
 
             }
@@ -307,41 +341,34 @@ public class scene_0_script : MonoBehaviour
 
     private IEnumerator SetUser(Users u, String platform)
     {
-        bool state = false;
-        string uuid = u.Uuid;
-        using (UnityWebRequest request = UnityWebRequest.Get("http://numbers.jemaka.it/api/Utenti?uuid=" + uuid))
-        {
-            yield return request.SendWebRequest();
+          WWWForm form = new WWWForm();
 
-            if (request.isNetworkError || request.isHttpError)
-            {
-                Debug.LogError("Request Error: " + request.error);
-            }
-            else
-            {
-                yield return new WaitForSeconds(1);
-                string JsonText = request.downloadHandler.text;
-                state = JsonConvert.DeserializeObject<bool>(JsonText);
-            }
+        Debug.Log("1");
 
-        }
+        form.AddField("Id_user", "");
 
-        if (!state)
-        {
-            WWWForm form = new WWWForm();
-
-            form.AddField("Id_user", "");
-            form.AddField("Nickname", u.Nickname);
-            form.AddField("Imei", u.Imei);
-            form.AddField("Uuid", u.Uuid);
-            form.AddField("Data_setup", DateTime.UtcNow.ToString());
-            form.AddField("Email", u.Email);
-            form.AddField("Service_id", u.Service_id);
-            form.AddField("Note", platform);
-            form.AddField("Score1", "0");
-            form.AddField("Score2", "0");
-            form.AddField("Bonus1", "0");
-            form.AddField("Bonus2", "0");
+        Debug.Log("2");
+        form.AddField("Nickname", u.Nickname);
+        Debug.Log("3"); 
+        form.AddField("Imei", u.Imei);
+        Debug.Log("4");
+        form.AddField("Uuid", u.Uuid);
+        Debug.Log("5");
+        form.AddField("Data_setup", DateTime.UtcNow.ToString());
+        Debug.Log("6");
+        form.AddField("Email", u.Email);
+        Debug.Log("7");
+        form.AddField("Service_id", u.Service_id);
+        Debug.Log("8");
+        form.AddField("Note", platform);
+        Debug.Log("9");
+        form.AddField("Score1", "0");
+        Debug.Log("10");
+        form.AddField("Score2", "0");
+        Debug.Log("11");
+        form.AddField("Bonus1", "3");
+        Debug.Log("12");
+        form.AddField("Bonus2", "1");
 
            
             using (UnityWebRequest request = UnityWebRequest.Post("http://numbers.jemaka.it/api/Utenti", form))
@@ -355,7 +382,7 @@ public class scene_0_script : MonoBehaviour
 
 
             }
-        }
+        
         DatiGioco.user = u;
         SceneManager.LoadScene("ScenaMenu");
     }

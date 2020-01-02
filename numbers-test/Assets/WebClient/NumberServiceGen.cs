@@ -55,6 +55,22 @@ public  class Users {
     private float bonus2Field;
     private Image _userProfileImage;
 
+
+    public Users()
+    {
+        this.Id_user = 0;
+        this.Nickname = "";
+        this.Imei = "";
+        this.Uuid = "";
+        this.Data_setup = DateTime.Now;
+        this.Email = "";
+        this.Service_id = "";
+        this.Note = "";
+        this.Score1 = 0;
+        this.Score2 = 0;
+        this.Bonus1 = 0;
+        this.Bonus2 = 0;
+    }
     
     /// <remarks/>
     public int Id_user {

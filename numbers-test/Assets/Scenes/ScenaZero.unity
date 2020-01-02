@@ -1130,6 +1130,8 @@ MonoBehaviour:
   txtOutComic: {fileID: 871112048}
   txtNomeGiocatore: {fileID: 387918198}
   btnInviaNome: {fileID: 1127971752}
+  btnFacebook: {fileID: 185863076}
+  btnGoogle: {fileID: 2069473451}
 --- !u!4 &1754238714
 Transform:
   m_ObjectHideFlags: 0
