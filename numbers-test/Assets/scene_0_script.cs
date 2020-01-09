@@ -307,7 +307,6 @@ public class scene_0_script : MonoBehaviour
 
         }
     }
-
     private IEnumerator GetUserByID(int idUser)
     {
         using (UnityWebRequest request = UnityWebRequest.Get("http://numbers.jemaka.it/api/Utenti/"+idUser.ToString()))
@@ -323,10 +322,13 @@ public class scene_0_script : MonoBehaviour
                 yield return new WaitForSeconds(1);
                 string JsonText = request.downloadHandler.text;
                 DatiGioco.user = JsonConvert.DeserializeObject<Users>(JsonText);
+             
                 if (DatiGioco.user.Note== "Google Play Games")
                 {
+ #if !PLATFORM_IOS
                     StartCoroutine(LoadGooglePlayProfileImage(PlayGamesPlatform.Instance.GetUserImageUrl()));
                     yield return new WaitForSeconds(3);
+#endif
                 }
                 else if(DatiGioco.user.Note== "Facebook User")
                 {
@@ -338,6 +340,7 @@ public class scene_0_script : MonoBehaviour
             }
         }
     }
+
 
     private IEnumerator SetUser(Users u, String platform)
     {
