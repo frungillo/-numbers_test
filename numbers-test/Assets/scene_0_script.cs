@@ -12,12 +12,17 @@ using Facebook.Unity;
 
 public class scene_0_script : MonoBehaviour
 {
-
+    [Header("Campi Funzionali")]
     public Text txtOutComic;
     public InputField txtNomeGiocatore;
     public Button btnInviaNome;
     public Button btnFacebook;
     public Button btnGoogle;
+
+    [Header("Musica")]
+    public List<AudioClip> Temi;
+
+    AudioSource audioS;
 
 
     private void Awake()
@@ -47,6 +52,9 @@ public class scene_0_script : MonoBehaviour
             //CreateFacebookUser();
 
         }
+
+        audioS = GetComponent<AudioSource>();
+        audioS.PlayOneShot(Temi[0], 1F);
         
     }
 

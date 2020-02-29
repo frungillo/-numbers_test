@@ -21,12 +21,19 @@ public class ButtonPlay : MonoBehaviour
     public Text txtCoins;
     public Text txtXp;
 
+    [Header("TemaMenu")]
+    public List<AudioClip> Temi;
+
+    AudioSource audioS;
+
     private void Awake()
     {
         imgProfilo = DatiGioco.user.UserProfileImage;
         txtMonitor.text = DatiGioco.user.Nickname;
         txtCoins.text = DatiGioco.user.Bonus1.ToString();
         txtXp.text = DatiGioco.user.Score1.ToString();
+
+        audioS.Play();
     }
 
     
