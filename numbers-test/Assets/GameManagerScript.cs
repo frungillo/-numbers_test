@@ -105,6 +105,7 @@ public class GameManagerScript : MonoBehaviour
         CanvasGameOver.SetActive(false);
 
         DatiGioco.SoluzioniTrovate = new List<Solutions>();
+        DatiGioco.FreezeTime = false;
 
         /*Elemento Bonus_spc*/
         bonusSpc = GameObject.Find("bonus_spc");
@@ -122,7 +123,13 @@ public class GameManagerScript : MonoBehaviour
 
         audio_s = GetComponent<AudioSource>();
 
-        
+        System.Random rmt = new System.Random();
+        int temeMusic = rmt.Next(4, 5);
+
+        audio_s.clip = EffettiSonori[temeMusic];
+        audio_s.loop = true;
+        audio_s.Play();
+
 
         txtPunteggio.text = "0";
         if (DatiGioco.PuntiGiocatore > 0) txtPunteggio.text = DatiGioco.PuntiGiocatore.ToString();
@@ -347,9 +354,17 @@ public class GameManagerScript : MonoBehaviour
 
 
     private bool inWarningTime = false;
+    private int FreezeTime = 15;
     // Update is called once per frame
     void Update()
     {
+
+        if (DatiGioco.FreezeTime)
+        {
+            Time.timeScale = 0.5f;
+            FreezeTime -= Mathf.FloorToInt(timeleft);
+
+        }
         /*Update del numero di coins disponibili*/
         txtCoins.text = DatiGioco.user.Bonus1.ToString();
 
@@ -499,6 +514,12 @@ public class GameManagerScript : MonoBehaviour
             }
         }
         MostraTilesBusy = false;
+    }
+
+    IEnumerator SlowMotion()
+    {
+        /*SlowMotio*/
+        yield return new WaitForSeconds(0.2f);
     }
 
 

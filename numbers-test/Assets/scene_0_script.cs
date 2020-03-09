@@ -19,11 +19,7 @@ public class scene_0_script : MonoBehaviour
     public Button btnFacebook;
     public Button btnGoogle;
 
-    [Header("Musica")]
-    public List<AudioClip> Temi;
-
-    AudioSource audioS;
-
+   
 
     private void Awake()
     {
@@ -53,8 +49,6 @@ public class scene_0_script : MonoBehaviour
 
         }
 
-        audioS = GetComponent<AudioSource>();
-        audioS.PlayOneShot(Temi[0], 1F);
         
     }
 

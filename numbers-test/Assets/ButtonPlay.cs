@@ -21,11 +21,7 @@ public class ButtonPlay : MonoBehaviour
     public Text txtCoins;
     public Text txtXp;
 
-    [Header("TemaMenu")]
-    public List<AudioClip> Temi;
-
-    AudioSource audioS;
-
+    
     private void Awake()
     {
         imgProfilo = DatiGioco.user.UserProfileImage;
@@ -33,7 +29,7 @@ public class ButtonPlay : MonoBehaviour
         txtCoins.text = DatiGioco.user.Bonus1.ToString();
         txtXp.text = DatiGioco.user.Score1.ToString();
 
-        audioS.Play();
+        
     }
 
     
@@ -54,8 +50,10 @@ public class ButtonPlay : MonoBehaviour
                 //showToast("Connessione internet OK", 2);
             }
         }));
+        if (!MusicTemeScript.Instance.gameObject.GetComponent<AudioSource>().isPlaying)
+            MusicTemeScript.Instance.gameObject.GetComponent<AudioSource>().Play();
 
-        
+
     }
 
 
@@ -88,6 +86,7 @@ public class ButtonPlay : MonoBehaviour
     /*Pulsante SOLO*/
    public  void TaskOnClickPlaySolo()
     {
+        //MusicTemeScript.Instance.gameObject.GetComponent<AudioSource>().Stop();
         SceneManager.LoadScene("ScenaDownload");
     }
 

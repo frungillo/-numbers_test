@@ -66,6 +66,7 @@ public class DowloadGridData : MonoBehaviour
                 string JsonText = request.downloadHandler.text;
                 Solutions[] sols = JsonConvert.DeserializeObject<Solutions[]>(JsonText);
                 DatiGioco.soluzioni = sols;
+                MusicTemeScript.Instance.gameObject.GetComponent<AudioSource>().Stop();
                 SceneManager.LoadScene("ScenaDiGioco");
             }
         }
