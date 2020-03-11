@@ -5407,7 +5407,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e5cfd21a0bdb14d9283911328847b3fb, type: 3}
   - {fileID: 8300000, guid: a03b8238f3b1c4e13ae06424a6658139, type: 3}
   - {fileID: 8300000, guid: 728e1de77719f46f8ba2846263cb3ec4, type: 3}
-  - {fileID: 8300000, guid: 3aa8708d93f3346c589bff3aea4cece8, type: 3}
+  - {fileID: 8300000, guid: be4ef1082204448ee9f12cf3d3ed13a1, type: 3}
   CanvasGameOver: {fileID: 1020746895}
   griglia:
     Id_grid: 0
@@ -7217,3 +7217,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa20ab796e382460fb69b1de50849cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HelpMenu: {fileID: 5206030596320586692}
+--- !u!60 &5206030596320586695
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5206030596320586693}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.22, y: 2.08}
+    newSize: {x: 2.22, y: 2.08}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.71999997, y: 0.90999997}
+      - {x: -0.94, y: 0.38}
+      - {x: -0.94, y: -0.71999997}
+      - {x: -0.41, y: -0.94}
+      - {x: 0.39, y: -0.94}
+      - {x: 0.90999997, y: -0.39999998}
+      - {x: 0.90999997, y: 0.38}
+      - {x: 0.39, y: 0.90999997}

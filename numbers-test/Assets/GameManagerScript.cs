@@ -124,7 +124,7 @@ public class GameManagerScript : MonoBehaviour
         audio_s = GetComponent<AudioSource>();
 
         System.Random rmt = new System.Random();
-        int temeMusic = rmt.Next(4, 5);
+        int temeMusic = rmt.Next(5, 5);
 
         audio_s.clip = EffettiSonori[temeMusic];
         audio_s.loop = true;
@@ -354,17 +354,36 @@ public class GameManagerScript : MonoBehaviour
 
 
     private bool inWarningTime = false;
-    private int FreezeTime = 15;
+    private float FreezeTime = 16;
+    private bool startFreeze = true;
     // Update is called once per frame
     void Update()
     {
-
+        //Debug.Log("Time:" + Time.time);
         if (DatiGioco.FreezeTime)
         {
+            Debug.Log("FreetTime:" + FreezeTime.ToString());
+            
             Time.timeScale = 0.5f;
-            FreezeTime -= Mathf.FloorToInt(timeleft);
+            FreezeTime -= Time.deltaTime;
+            if (startFreeze)
+            {
+                audio_s.Stop();
+                audio_s.PlayOneShot(EffettiSonori[6]);
+                startFreeze = false;
+
+            }
+            if (Mathf.FloorToInt(FreezeTime) <= 0 )
+            {
+                DatiGioco.FreezeTime = false;
+                startFreeze = true;
+                FreezeTime = 30;
+                audio_s.Play();
+                Time.timeScale = 1f;
+            }
 
         }
+
         /*Update del numero di coins disponibili*/
         txtCoins.text = DatiGioco.user.Bonus1.ToString();
 
@@ -388,7 +407,12 @@ public class GameManagerScript : MonoBehaviour
             if (!pointAdded)
                 DatiGioco.PuntiGiocatore += Mathf.FloorToInt(timeleft);
             pointAdded = true;
-            
+            DatiGioco.FreezeTime = false;
+            startFreeze = true;
+            FreezeTime = 30;
+            audio_s.Play();
+            Time.timeScale = 1f;
+
         }
 
         if (Mathf.FloorToInt(timeleft) % 12 == 0 ) /*Animazione timer*/
@@ -420,6 +444,11 @@ public class GameManagerScript : MonoBehaviour
         {
             txtTimer.text = "";
             overTime = true;
+            DatiGioco.FreezeTime = false;
+            startFreeze = true;
+            FreezeTime = 30;
+            audio_s.Play();
+            Time.timeScale = 1f;
             CanvasGameOver.SetActive(true);
             
         }
@@ -455,7 +484,15 @@ public class GameManagerScript : MonoBehaviour
                 
                 
             }
-            catch { }
+            catch (Exception ex) 
+            {
+                Debug.Log("Erro:" + ex.Message);
+                /*
+                inError = false;
+                PlayerPrefs.DeleteAll();
+                ScriviParziale("", false);
+                */
+            }
             
             inError = false;
             PlayerPrefs.DeleteAll();
@@ -537,7 +574,7 @@ public class GameManagerScript : MonoBehaviour
         }
         catch (System.Exception ex)
         {
-
+            Debug.Log(ex.Message + "-->" + expression);
             throw new System.Exception(ex.Message + "-->" + expression); //("????");
         }
         
@@ -548,7 +585,7 @@ public class GameManagerScript : MonoBehaviour
     {
         risultatoOperazione = risultatoOperazione.Replace(",", ".");
         int punteggioAssegnatoAlGiocatore = 0;
-        if (!double.TryParse(risultatoOperazione, out double numeroTrovatoDalGiocatore)) { return "Hey!"; }
+        if (!double.TryParse(risultatoOperazione, out double numeroTrovatoDalGiocatore)) { numeroTrovatoDalGiocatore=0; }
         Solutions SoluzioneTrovata = null;
         foreach (Solutions item in soluzioni)
         {
