@@ -29,32 +29,21 @@ public class Solutions {
 }
 
 public  class Users {
-    
-    private int id_userField;
-    
-    private string nicknameField;
-    
-    private string imeiField;
-    
-    private string uuidField;
-    
-    private System.DateTime data_setupField;
-    
-    private string emailField;
-    
-    private string service_idField;
-    
-    private string noteField;
-    
-    private float score1Field;
-    
-    private float score2Field;
-    
-    private float bonus1Field;
-    
-    private float bonus2Field;
-    private Image _userProfileImage;
 
+    private int _id_user;
+    private string _nickname;
+    private string _imei;
+    private string _uuid;
+    private DateTime _data_setup;
+    private string _email;
+    private string _service_id;
+    private string _note;
+    private float _single_score;
+    private float _levels;
+    private float _money;
+    private float _match_score;
+    private Image _userProfileImage;
+    
 
     public Users()
     {
@@ -66,133 +55,29 @@ public  class Users {
         this.Email = "";
         this.Service_id = "";
         this.Note = "";
-        this.Score1 = 0;
-        this.Score2 = 0;
-        this.Bonus1 = 0;
-        this.Bonus2 = 0;
+        this.Single_score = 0;
+        this.Levels = 0;
+        this.Money = 0;
+        this.Match_score = 0;
+        
     }
-    
-    /// <remarks/>
-    public int Id_user {
-        get {
-            return this.id_userField;
-        }
-        set {
-            this.id_userField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Nickname {
-        get {
-            return this.nicknameField;
-        }
-        set {
-            this.nicknameField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Imei {
-        get {
-            return this.imeiField;
-        }
-        set {
-            this.imeiField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Uuid {
-        get {
-            return this.uuidField;
-        }
-        set {
-            this.uuidField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public System.DateTime Data_setup {
-        get {
-            return this.data_setupField;
-        }
-        set {
-            this.data_setupField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Email {
-        get {
-            return this.emailField;
-        }
-        set {
-            this.emailField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Service_id {
-        get {
-            return this.service_idField;
-        }
-        set {
-            this.service_idField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Note {
-        get {
-            return this.noteField;
-        }
-        set {
-            this.noteField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public float Score1 {
-        get {
-            return this.score1Field;
-        }
-        set {
-            this.score1Field = value;
-        }
-    }
-    
-    /// <remarks/>
-    public float Score2 {
-        get {
-            return this.score2Field;
-        }
-        set {
-            this.score2Field = value;
-        }
-    }
-    
-    /// <remarks/>
-    public float Bonus1 {
-        get {
-            return this.bonus1Field;
-        }
-        set {
-            this.bonus1Field = value;
-        }
-    }
-    
-    /// <remarks/>
-    public float Bonus2 {
-        get {
-            return this.bonus2Field;
-        }
-        set {
-            this.bonus2Field = value;
-        }
-    }
-
+    public int Id_user { get => _id_user; set => _id_user = value; }
+    public string Nickname { get => _nickname; set => _nickname = value; }
+    public string Imei { get => _imei; set => _imei = value; }
+    public string Uuid { get => _uuid; set => _uuid = value; }
+    public DateTime Data_setup { get => _data_setup; set => _data_setup = value; }
+    public string Email { get => _email; set => _email = value; }
+    public string Service_id { get => _service_id; set => _service_id = value; }
+    public string Note { get => _note; set => _note = value; }
+    public float Single_score { get => _single_score; set => _single_score = value; }
+    public float Levels { get => _levels; set => _levels = value; }
+    public float Money { get => _money; set => _money = value; }
+    public float Match_score { get => _match_score; set => _match_score = value; }
     public Image UserProfileImage { get => _userProfileImage; set => _userProfileImage = value; }
+
+
+
+
 }
 
 [Serializable]
@@ -215,6 +100,7 @@ public class Matchmaking
     public DateTime Data_matching;
     public int Level_match;
     public DateTime Data_waiting;
+    public Users UsersData;
 }
 [Serializable]
 public class versus
@@ -226,6 +112,7 @@ public class versus
     public int IdGrid;
     public DateTime DataStop;
 }
+
 
 
 public class Summary

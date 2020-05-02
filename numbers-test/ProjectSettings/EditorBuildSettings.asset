@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EndGame.unity
     guid: 75234b18d74b9774faeb25a4452b7e5d
+  - enabled: 1
+    path: Assets/Scenes/ScenaMatchMaking.unity
+    guid: a2a021bf4e67f411091cf7179c9bfc51
   m_configObjects: {}
