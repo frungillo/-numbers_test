@@ -28,6 +28,7 @@ public class matchmaking_script : MonoBehaviour
 
     private IEnumerator searchMatches()
     {
+        bool _giaAggiunto = false;
         while (!_trovato || !_annulla)
         {
 
@@ -64,6 +65,11 @@ public class matchmaking_script : MonoBehaviour
                     StartCoroutine(searchMatches());
                 }
 
+            }
+            if(!_trovato && !_giaAggiunto)
+            {
+                funzioni.SetMatch((int)DatiGioco.user.Levels, DatiGioco.user.Id_user);
+                _giaAggiunto = true;
             }
         }
     }

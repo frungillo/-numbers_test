@@ -47,5 +47,55 @@ public class funzioni : MonoBehaviour
     }
 
 
+    public static IEnumerator SetMatch(int IdPlayer, int level)
+    {
+
+        WWWForm form = new WWWForm();
+
+        form.AddField("level", level);
+
+        form.AddField("currentPlayerID", IdPlayer);
+
+        UnityWebRequest request = UnityWebRequest.Post($"http://numbers.jemaka.it//Matchmaking",form);
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        yield return request.SendWebRequest();
+        if (request.isNetworkError || request.isHttpError)
+        {
+            Debug.LogError("Request Error: " + request.error);
+        }
+
+
+
+
+       // DatiGioco.user = u;
+        
+    }
+
+    public static IEnumerator UpdateMatch(int IdPlayer, int level)
+    {
+
+        WWWForm form = new WWWForm();
+
+        form.AddField("level", level);
+
+        form.AddField("currentPlayerID", IdPlayer);
+
+        UnityWebRequest request = UnityWebRequest.Post($"http://numbers.jemaka.it//Matchmaking", form);
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        yield return request.SendWebRequest();
+        if (request.isNetworkError || request.isHttpError)
+        {
+            Debug.LogError("Request Error: " + request.error);
+        }
+
+
+
+
+        // DatiGioco.user = u;
+
+    }
+
 
 }
