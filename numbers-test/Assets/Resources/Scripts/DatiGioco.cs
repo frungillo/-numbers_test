@@ -18,7 +18,10 @@ public static class DatiGioco
 
     public static Users user;
 
-    public static Matchmaking matchCorrente { get; set; }
+    public static versus matchCorrente { get; set; }
+    public static bool isVersusStart { get; set; }
+    public static Users lastUserVerus { get; set; }
+
     public static int TempoPerLivelloCorrente { get; set; }
     public static int TempoAvanzato { get; set; }
 

@@ -15,7 +15,12 @@ public class DowloadGridData : MonoBehaviour
         if(DatiGioco.LivelloCorrente > 0)
         {
             GridSelection = "?idGrid=" + DatiGioco.GrigliaDiGioco.Id_grid;
-        } 
+        }
+        if (DatiGioco.isVersusStart)
+        {
+            GridSelection = "?idGrid=" + DatiGioco.matchCorrente.IdGrid;
+            DatiGioco.LivelloCorrente = 0;
+        }
         StartCoroutine(GetGrids("http://numbers.jemaka.it/api/grids" + GridSelection));
     }
 
@@ -42,7 +47,11 @@ public class DowloadGridData : MonoBehaviour
 
                 Grids gr = (Grids) JsonUtility.FromJson(JsonText, typeof(Grids) );
                 DatiGioco.GrigliaDiGioco = gr;
-                if (DatiGioco.LivelloCorrente == 0) DatiGioco.LivelloCorrente = 1;
+                if (DatiGioco.LivelloCorrente == 0) {
+                    DatiGioco.LivelloCorrente = 1;
+                    if (DatiGioco.isVersusStart) DatiGioco.LivelloCorrente = 100;
+
+                }
                 StartCoroutine(GetSolutions("http://numbers.jemaka.it/api/Soluzioni/" + gr.Id_grid.ToString()+"?liv="+DatiGioco.LivelloCorrente));
 
                

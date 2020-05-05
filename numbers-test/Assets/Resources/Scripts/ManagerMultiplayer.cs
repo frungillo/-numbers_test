@@ -46,9 +46,9 @@ public class ManagerMultiplayer : MonoBehaviour
 
     //private int BONUS_X=1;
     private bool userUpdated = false;
-    
-   
-    float timeleft = DatiGioco.TempoPerLivelloCorrente;
+
+
+    float timeleft = 120; //DatiGioco.TempoPerLivelloCorrente;
     private string numeroTrovatoDalGiocatore;
 
     /*Componenti Fumetto*/
@@ -349,6 +349,7 @@ public class ManagerMultiplayer : MonoBehaviour
     public void btnAbbandonaClick()
     {
         DatiGioco.LivelloCorrente = 0;
+        DatiGioco.isVersusStart = false;
         SceneManager.LoadScene("ScenaMenu");
     }
 
@@ -401,7 +402,7 @@ public class ManagerMultiplayer : MonoBehaviour
             txtTimer.text = Mathf.FloorToInt(timeleft).ToString(); //passo solo la parte intera al campo testo
         }
         
-        if(soluzioniTrovate.Count == 5 && !levelWin) //se sono state trovate le 5 soluzioni e il livello non è stato dichiarato vinto ancora.
+        if(soluzioniTrovate.Count == 5 && !levelWin) //se sono state trovate le 5 soluzioni e il livello non è stato dichiarato vinto ancora./***************/
         {
 
             audio_s.PlayOneShot(EffettiSonori[3], 1F);
@@ -701,7 +702,8 @@ public class ManagerMultiplayer : MonoBehaviour
         else
             DatiGioco.LivelloCorrente++;
         // Debug.Log("Livello_fine:" + DatiGioco.LivelloCorrente);
-        SceneManager.LoadScene("ScenaDownload");
+        DatiGioco.isVersusStart = false;
+        SceneManager.LoadScene("ScenaMenu"); /*CARICARE I CONSUNTIVI!!!!!!*/
     }
 
     IEnumerator ColoraSelezionati(float seconds, string col)

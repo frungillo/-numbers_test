@@ -28,11 +28,10 @@ public class matchmaking_script : MonoBehaviour
 
     private IEnumerator searchMatches()
     {
-        bool _giaAggiunto = false;
         while (!_trovato || !_annulla)
         {
 
-            string url = "http://numbers.jemaka.it/api/Matchmaking?level=" + DatiGioco.user.Levels + "&currentPlayerID=" + DatiGioco.user.Id_user;
+            string url = "http://numbers.jemaka.it/api/Versus?IdPlayer=" + DatiGioco.user.Id_user;
             UnityWebRequest request = UnityWebRequest.Get(url);
             if (_annulla)
                 SceneManager.LoadScene("ScenaMenu");
@@ -45,12 +44,20 @@ public class matchmaking_script : MonoBehaviour
             {
                 yield return new WaitForSeconds(1);
                 string JsonText = request.downloadHandler.text;
-                Matchmaking match = JsonConvert.DeserializeObject<Matchmaking>(JsonText);
-                DatiGioco.matchCorrente = match;
-                if (match.Id_matchmaking > 0)
+                versus match = JsonConvert.DeserializeObject<versus>(JsonText);
+               // DatiGioco.matchCorrente = match;
+                if (match.IdPlayer2 > 0) /*Se esiste anche il player 2*/
                 {
-
-                    txtGiocatoreTrovato.text = DatiGioco.matchCorrente.UsersData.Nickname;
+                    DatiGioco.matchCorrente = match;
+                    if (match.IdPlayer1 != DatiGioco.user.Id_user)
+                    {
+                        StartCoroutine(GetPlayerData(match.IdPlayer1));
+                       
+                    } else
+                    {
+                        StartCoroutine( GetPlayerData(match.IdPlayer2));
+                        
+                    }
                     btnGioca.gameObject.SetActive(true);
                     _trovato = true;
                     
@@ -59,19 +66,32 @@ public class matchmaking_script : MonoBehaviour
 
 
                 }
-                else
-                {
-                    yield return new WaitForSeconds(4);
-                    StartCoroutine(searchMatches());
-                }
+               
+               
+            }
+            yield return new WaitForSeconds(4);
 
-            }
-            if(!_trovato && !_giaAggiunto)
-            {
-                funzioni.SetMatch((int)DatiGioco.user.Levels, DatiGioco.user.Id_user);
-                _giaAggiunto = true;
-            }
         }
+    }
+
+    private IEnumerator GetPlayerData(int IDPlayer)
+    {
+        string url = "http://numbers.jemaka.it/api/Utenti/" + IDPlayer;
+        UnityWebRequest request = UnityWebRequest.Get(url);
+        request.SendWebRequest();
+        //string JsonText = request.downloadHandler.text;
+        yield return new WaitForSeconds(1);
+        Users ut = JsonConvert.DeserializeObject<Users>(request.downloadHandler.text);
+        txtGiocatoreTrovato.text = ut.Nickname;
+        DatiGioco.lastUserVerus = ut;
+
+        yield return ut;
+    }
+
+    public void onClickStartButton()
+    {
+        DatiGioco.isVersusStart = true;
+        SceneManager.LoadScene("ScenaDownload");
     }
 
 
