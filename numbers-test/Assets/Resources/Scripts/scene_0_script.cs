@@ -82,9 +82,9 @@ public class scene_0_script : MonoBehaviour
     public void btnPlayGameClick()
     {
       #if !PLATFORM_IOS
-        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
-        PlayGamesPlatform.InitializeInstance(config);
-        PlayGamesPlatform.Activate();
+      //  PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
+       // PlayGamesPlatform.InitializeInstance(config);
+       // PlayGamesPlatform.Activate();
         SignIn();
       #endif
 
@@ -162,7 +162,7 @@ public class scene_0_script : MonoBehaviour
     {
         Social.localUser.Authenticate(success => {
             //showToast("Stato connessione:" + success.ToString(), 2);
-            
+            /*
             PlayGamesPlatform.Instance.Authenticate(suc => {
                 // showToast("Stato Play auth:" + suc.ToString(), 2);
                 //DatiGioco.UserID= PlayGamesPlatform.Instance.GetUserDisplayName().ToUpper();
@@ -176,7 +176,7 @@ public class scene_0_script : MonoBehaviour
                 DatiGioco.user = us;
                 StartCoroutine(SetUser(us, "Google Play Games"));
             });
-            
+            */
         });
     }
 #endif
@@ -254,7 +254,7 @@ public class scene_0_script : MonoBehaviour
                 {
                     Debug.Log("GooglePlayUser");
  #if !PLATFORM_IOS
-                    StartCoroutine(LoadGooglePlayProfileImage(PlayGamesPlatform.Instance.GetUserImageUrl()));
+                  //  StartCoroutine(LoadGooglePlayProfileImage(PlayGamesPlatform.Instance.GetUserImageUrl()));
                     yield return new WaitForSeconds(3);
 #endif
                 }
