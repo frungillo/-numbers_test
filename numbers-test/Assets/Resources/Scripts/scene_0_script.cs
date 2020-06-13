@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Newtonsoft.Json;
+using UnityEngine.Advertisements;
 
 
 public class scene_0_script : MonoBehaviour
@@ -19,7 +20,9 @@ public class scene_0_script : MonoBehaviour
     public Button btnFacebook;
     public Button btnGoogle;
 
-   
+    string gameId = "3651885";
+    bool testMode = true;
+
 
     private void Awake()
     {
@@ -258,11 +261,17 @@ public class scene_0_script : MonoBehaviour
                     yield return new WaitForSeconds(3);
 #endif
                 }
-                
+                Advertisement.Initialize(gameId, testMode);
+                Advertisement.Show("video");
                 SceneManager.LoadScene("ScenaMenu");
 
             }
         }
+    }
+
+    public void onClikPolicyButton()
+    {
+        Application.OpenURL("http://www.obbar.it/homepage/number-privacy-policy/");
     }
 
 
@@ -299,6 +308,8 @@ public class scene_0_script : MonoBehaviour
             }
         
         DatiGioco.user = u;
+        Advertisement.Initialize(gameId, testMode);
+        Advertisement.Show("video");
         SceneManager.LoadScene("ScenaMenu");
     }
 }

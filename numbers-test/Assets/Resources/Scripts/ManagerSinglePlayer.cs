@@ -7,6 +7,7 @@ using System;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
+using UnityEngine.Advertisements;
 
 public class ManagerSinglePlayer : MonoBehaviour
 {
@@ -77,6 +78,11 @@ public class ManagerSinglePlayer : MonoBehaviour
     
     public static ManagerSinglePlayer Instance { get { return _instance; } }
 
+    /*ADV*/
+    string gameId = "3651885";
+    bool testMode = false;
+
+
     private void Awake()
     {
         
@@ -95,6 +101,7 @@ public class ManagerSinglePlayer : MonoBehaviour
         DatiGioco.PercorsoSoluzioneDaSuggerire = new List<string>();
         txtCoins.text = DatiGioco.user.Money.ToString();
 
+        
 
 
     }
@@ -103,6 +110,7 @@ public class ManagerSinglePlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Advertisement.Initialize(gameId, testMode);
         CanvasGameOver.SetActive(false);
         CanvasLevelWin.SetActive(false);
 
@@ -712,6 +720,8 @@ public class ManagerSinglePlayer : MonoBehaviour
         else
             DatiGioco.LivelloCorrente++;
         // Debug.Log("Livello_fine:" + DatiGioco.LivelloCorrente);
+        
+        if (Advertisement.IsReady()) Advertisement.Show("video");
         SceneManager.LoadScene("ScenaDownload");
     }
 
@@ -723,5 +733,55 @@ public class ManagerSinglePlayer : MonoBehaviour
         esagoniSelezionati.Clear();
     }
 
+    public void OnVideobtnClick()
+    {
+        ShowOptions sh = new ShowOptions();
+       
+        if (Advertisement.IsReady()) Advertisement.Show("rewardedVideo");
+    }
 
+
+}
+
+
+public class AdvList : IUnityAdsListener
+{
+    private returnStato st;
+    public void OnUnityAdsDidError(string message)
+    {
+        st.stato = false;
+        st.mess = message;
+
+    }
+
+    public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
+    {
+        if(showResult != ShowResult.Finished)
+        {
+            st.stato = false;
+            st.mess = "";
+        } else
+        {
+            st.stato = true;
+        }
+    }
+
+    public void OnUnityAdsDidStart(string placementId)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnUnityAdsReady(string placementId)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public returnStato status { get; set; }
+}
+
+public struct returnStato
+{
+  
+    public bool stato { get; set; }
+    public string mess { get; set; }
 }
