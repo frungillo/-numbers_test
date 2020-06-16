@@ -8,7 +8,6 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Newtonsoft.Json;
-using UnityEngine.Advertisements;
 
 public class ButtonPlay : MonoBehaviour
 {
@@ -21,8 +20,6 @@ public class ButtonPlay : MonoBehaviour
     public Text txtCoins;
     public Text txtXp;
 
-    string gameId = "3651885";
-    bool testMode = true;
 
     private void Awake()
     {
@@ -30,7 +27,7 @@ public class ButtonPlay : MonoBehaviour
         txtMonitor.text = DatiGioco.user.Nickname;
         txtCoins.text = DatiGioco.user.Money.ToString();
         txtXp.text = DatiGioco.user.Single_score.ToString();
-        Advertisement.Initialize(gameId, testMode);
+
         
 
     }

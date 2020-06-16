@@ -285,6 +285,15 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>/Users/genny/Documents/GitHub/numbers_test/numbers-test/Assets/WanzyeeStudio/ThirdParty/SaladLab/Json.Net.Unity3D/Plugins/Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>/Users/genny/Documents/GitHub/numbers_test/numbers-test/Assets/Plugins/Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="SilverlightANTLR-runtime-csharp">
+      <HintPath>/Users/genny/Documents/GitHub/numbers_test/numbers-test/Assets/Plugins/SilverlightANTLR-runtime-csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="NCalc">
+      <HintPath>/Users/genny/Documents/GitHub/numbers_test/numbers-test/Assets/Plugins/NCalc.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>/Users/genny/Documents/GitHub/numbers_test/numbers-test/Library/PackageCache/com.unity.ads@3.4.5/Editor/UnityEditor.Advertisements.dll</HintPath>
     </Reference>
@@ -648,11 +657,11 @@
     <Reference Include="Boo.Lang">
       <HintPath>/Applications/Unity/Hub/Editor/2019.4.0f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>/Users/genny/Documents/GitHub/numbers_test/numbers-test/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>/Users/genny/Documents/GitHub/numbers_test/numbers-test/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>/Users/genny/Documents/GitHub/numbers_test/numbers-test/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup></ItemGroup>

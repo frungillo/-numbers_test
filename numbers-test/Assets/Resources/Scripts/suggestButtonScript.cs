@@ -15,6 +15,8 @@ public class suggestButtonScript : MonoBehaviour
         if( DatiGioco.user.Money <= 0 )
         {
             /*comunicare all'utente che non ci sono monete disponibili*/
+            HelpMenu.SetActive(false);
+            return;
         }
         Solutions[] s = DatiGioco.soluzioni;
         Solutions solToSuggetst = null;
@@ -32,6 +34,7 @@ public class suggestButtonScript : MonoBehaviour
         string[] tmp = solToSuggetst.Sequence.Split(new string[] { ";" }, System.StringSplitOptions.RemoveEmptyEntries);
         
         StartCoroutine(MostraTile(tmp));
+        
         DatiGioco.user.Money -= 1;
 
         DatiGioco.PercorsoSoluzioneDaSuggerire.AddRange(tmp);

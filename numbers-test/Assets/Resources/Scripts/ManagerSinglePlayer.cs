@@ -8,6 +8,8 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using UnityEngine.Advertisements;
+using UnityEditor;
+using NCalc;
 
 public class ManagerSinglePlayer : MonoBehaviour
 {
@@ -110,7 +112,9 @@ public class ManagerSinglePlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*Iniziatore Pubblicità*/
         Advertisement.Initialize(gameId, testMode);
+
         CanvasGameOver.SetActive(false);
         CanvasLevelWin.SetActive(false);
 
@@ -217,7 +221,7 @@ public class ManagerSinglePlayer : MonoBehaviour
     {
         try
         {
-            double ev = Eval(txtParziale.text);
+            double ev = Eval2(txtParziale.text);
             if (!endSequence)
             {
                 txtPunteggio.text = ev.ToString("#.##");
@@ -319,7 +323,7 @@ public class ManagerSinglePlayer : MonoBehaviour
 
             if (cnt==3) {
                 operazione += toAdd;
-                tot = Eval(operazione);
+                tot = Eval2(operazione);
                 operazione = tot.ToString();
                 ScriviParziale("=" + operazione); // txtParziale.text += "="+operazione;
             }
@@ -335,7 +339,7 @@ public class ManagerSinglePlayer : MonoBehaviour
                     goto exit;
                 }
                 operazione +=  toAdd;
-                tot = Eval(operazione);
+                tot = Eval2(operazione);
                 operazione = tot.ToString("#.##");
                 ScriviParziale("=" + operazione); // txtParziale.text +="="+operazione;
             }
@@ -606,6 +610,7 @@ public class ManagerSinglePlayer : MonoBehaviour
 
     private double Eval(string expression)  
     {
+        
         expression = expression.Replace(",", ".");
         System.Data.DataTable table = new System.Data.DataTable();
         try
@@ -617,10 +622,26 @@ public class ManagerSinglePlayer : MonoBehaviour
         }
         catch (System.Exception ex)
         {
-            Debug.Log(ex.Message + "-->" + expression);
-            throw new System.Exception(ex.Message + "-->" + expression); //("????");
+            Debug.Log("errore:"+ex.Message + "-->" + expression);
+            throw new System.Exception("err:"+ex.Message + "-->" + expression); //("????");
         }
         
+    }
+
+    public static double Eval2(string expression)
+    {
+        //double test=0;
+        Expression exp = new Expression(expression, EvaluateOptions.IgnoreCase);
+        if (exp.Evaluate().GetType() == typeof(double)|| exp.Evaluate().GetType() == typeof(int))
+        {
+            try
+            {
+                return (double)exp.Evaluate();
+            } catch
+            {
+                return (int)exp.Evaluate();
+            } 
+        } else { return 0; }
     }
 
 
@@ -736,8 +757,13 @@ public class ManagerSinglePlayer : MonoBehaviour
     public void OnVideobtnClick()
     {
         ShowOptions sh = new ShowOptions();
-       
-        if (Advertisement.IsReady()) Advertisement.Show("rewardedVideo");
+        sh.resultCallback = (ShowResult res) =>
+        {
+            if(res == ShowResult.Finished)
+                SceneManager.LoadScene("ScenaDownload");
+        };
+        if (Advertisement.IsReady()) Advertisement.Show("rewardedVideo", sh);
+        
     }
 
 

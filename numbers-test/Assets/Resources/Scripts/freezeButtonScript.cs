@@ -10,7 +10,13 @@ public class freezeButtonScript : MonoBehaviour
     private void OnMouseDown()
     {
         /*Qui va fatto subito il check dei gettoni disponibili*/
-
+        if (DatiGioco.user.Money <= 0)
+        {
+            /*comunicare all'utente che non ci sono monete disponibili*/
+            HelpMenu.SetActive(false);
+            return;
+        }
+        DatiGioco.user.Money -= 1;
         DatiGioco.FreezeTime = true;
         
         HelpMenu.SetActive(false);
